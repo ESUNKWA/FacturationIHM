@@ -48,12 +48,12 @@ export class UtilisateurComponent implements OnInit {
             private partenaireServices: PartenairesService, private infosUtilisateur: UserInfosService,private modalService: NgbModal ) { }
 
   ngOnInit() {
-    this.userInfos = this.infosUtilisateur.fs_informationUtilisateur()
+    this.userInfos = this.infosUtilisateur.fs_informationUtilisateur();
       this.fct_listUtilisateurs(this.userInfos.r_partenaire);
 
-    //this.fct_listProfil();
+    this.fct_listProfil();
 
-    //this.listPartenaire();
+    this.listPartenaire();
 
   }
 

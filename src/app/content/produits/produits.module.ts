@@ -6,6 +6,9 @@ import { ProduitsComponent } from "./produits.component";
 
 @NgModule({
     imports: [
+      CommonModule,
+      ReactiveFormsModule,
+      ProduitsRoutingModule
     ],
     declarations: [ProduitsComponent]
 })

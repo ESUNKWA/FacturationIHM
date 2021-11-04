@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CategorieService } from 'src/app/services/categorie/categorie.service';
 import { ModalService } from 'src/app/services/modal/modal.service';
 import { PartenairesService } from 'src/app/services/partenaires/partenaires.service';
@@ -11,11 +12,7 @@ import { UserInfosService } from 'src/app/services/userInfos/user-infos.service'
   styleUrls: ['./produits.component.scss']
 })
 export class ProduitsComponent implements OnInit {
-//Datatable variables
-public rowsOnPage = 5;
-public filterQuery = '';
-public sortBy = '';
-public sortOrder = 'desc';
+
 data: any[];
 modalTitle: string
 detailsProduit: any = {};
@@ -41,10 +38,11 @@ produitData = this.fb.group({
   categories: any = [];
   selectedLevel: any;
   hideLoder: boolean = true;
+  details: any = {};
 
   constructor( private fb: FormBuilder, private produitServices: ProduitService,
                 private swalServices: ModalService, private infosUtilisateur: UserInfosService,
-                private partenaireServices: PartenairesService, private categorieServices: CategorieService ) { }
+                private partenaireServices: PartenairesService, private categorieServices: CategorieService, private modalService: NgbModal ) { }
 
   ngOnInit() {
     this.userInfos = this.infosUtilisateur.fs_informationUtilisateur();
@@ -53,8 +51,36 @@ produitData = this.fb.group({
     this.listCategories();
   }
 
+
+  openVerticalCenteredModal(content) {
+    this.modalService.open(content, {centered: true, size:'lg'}).result.then((result) => {
+      console.log("Modal closed" + result);
+    }).catch((res) => {});
+  }
+
   selectProduitPartenaire(){
     this.list_produits(parseInt(this.selectedLevel));
+  }
+
+  action(data, mode){
+    this.modeAppel = 'modif';
+    this.details = data;
+    switch( mode ){
+      case 'edit':
+        this.registerBtnEtat = false;
+        this.modalTitle = `Modification des informations du partenaire [ ${this.details.r_nom} ]`;
+        this.produitData.enable();
+        break;
+
+      case 'views':
+        this.registerBtnEtat = true;
+        this.modalTitle = `Condutation des informations du partenaire [ ${this.details.r_nom} ]`;
+        this.produitData.disable();
+        break;
+
+      default:
+        return;
+    }
   }
 
   list_produits(val){
@@ -115,7 +141,7 @@ produitData = this.fb.group({
     }
   }
 
-  registerProduit(){
+  resgister(){
     // Control des champs
     if( this.userInfos.r_profil == 4 && this.produitData.value.p_partenaire == null){
       this.swalServices.fs_modal('Sélectionnez le partenaire', 'warning');

@@ -18,11 +18,11 @@ export const MENU: MenuItem[] = [
     subItems: [
       {
         label: 'Catégories',
-        link: '/apps/email/inbox',
+        link: '/categories',
       },
       {
         label: 'Produits',
-        link: '/apps/email/read'
+        link: '/produits'
       }
     ]
   },
@@ -36,7 +36,7 @@ export const MENU: MenuItem[] = [
   {
     label: 'Partenanaire',
     icon: 'user-plus',
-    link: '/apps/chat',
+    link: '/partenaires',
   },
 
 

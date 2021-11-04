@@ -1,179 +1,120 @@
-<div class="loader-block" *ngIf="hideLoder === true" >
-  <div class="preloader6">
-      <hr>
+<div class="row" >
+  <div class="col-md-12">
+  <!-- Button trigger modal -->
+  <button class="btn btn-primary"
+  (click)="addPartenaire();openVerticalCenteredModal(verticalCenteredModal)"
+  style="float: right;">Nouveau</button>
+  <!-- Modal -->
   </div>
-</div>
+  </div>
 
-<div class="page-body" *ngIf="hideLoder === false" >
-  <div class="row">
-    <div class="col-sm-12">
-      <app-card [title]="'Liste des partenaires'">
+  <div class="row mt-2" >
+    <div class="col-md-12 stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <h6 class="card-title">Liste des partenaires</h6>
+          <div class="table-responsive">
+            <table class="table" >
+              <thead>
+                <tr>
+                  <th>Code</th>
+                  <th>Nom</th>
+                  <th>Ville</th>
+                  <th>Quartier</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of data" >
+                  <td>{{item.r_code}}</td>
+                  <td>{{item.r_nom}}</td>
+                  <td>{{(item.r_ville == 1)? 'Abidjan': 'Intérieur'}}</td>
+                  <td>{{item.r_quartier}}</td>
+                  <td *ngIf=" item.r_status == 0" ><span class="badge badge-pill badge-warning">Compté désactivé</span></td>
+                  <td *ngIf=" item.r_status == 1" ><span class="badge badge-pill badge-success">Compté Activé</span></td>
+                  <td>
+                      <button (click)="openVerticalCenteredModal(verticalCenteredModal);action(item,'edit');" class="btn btn-primary btn-icon"><i class="feather icon-edit"></i></button>&nbsp;
+                      <button (click)="openVerticalCenteredModal(verticalCenteredModal);action(item,'views');" class="btn btn-info btn-icon"><i class="feather icon-info"></i></button>&nbsp;
+                      <button class="btn btn-danger btn-icon"><i class="feather icon-trash-2"></i></button>
 
-        <div class="dt-responsive" *ngIf="data">
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-          <div class="row mb-2" >
-            <div class="col" >
-               <!-- Bouton ajout nouveau catégorie -->
-                <button style="float: right;" 
-                        title="Ajouter un nouveau produit" 
-                        type="button" class="btn btn-primary btn-round" 
-                        (click)="modalLarge.show();addPartenaire();">Nouveau&nbsp;<i class="fa fa-plus"></i></button>
+
+  <ng-template #verticalCenteredModal let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title" id="exampleModalLabel">{{ modalTitle }}</h5>
+      <button type="button" class="close" (click)="modal.close('by: close icon')" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+
+      <form [formGroup]="partenaireData">
+        <div class="form-group row">
+            <div class="col-sm-12">
+              <label class="col-form-label">Nom </label>
+                <input type="text" class="form-control"
+                formControlName="p_nom" [(ngModel)]="details.r_nom" style="text-transform: uppercase;">
             </div>
-          </div>
-
-          <div [ngSwitch]="data.length" >
-
-              <div *ngSwitchCase="0" >
-                <div class="well well-lg text-center">
-                 <h1>Pas de données</h1>
-                </div>
-              </div>
-
-              <div *ngSwitchDefault >
-
-                <div class="row">
-                  <div class="col-xs-12 col-sm-12 col-sm-12 col-md-6">
-                    <div>
-                      <label class="label-control">Voir
-                        <select class="form-control input-sm full-data-show-entry" [(ngModel)]="rowsOnPage">
-                          <option [ngValue]="05">05</option>
-                          <option [ngValue]="10">10</option>
-                          <option [ngValue]="25">25</option>
-                          <option [ngValue]="50">50</option>
-                        </select>
-                        ligne(s)
-                      </label>
-                    </div>
-                  </div>
-                  <div class="col-xs-12 col-sm-12 col-md-6">
-                    <div style="text-align: right;">
-                      <label>
-                        <input type="search" [(ngModel)]="filterQuery" class="form-control input-sm full-data-search" placeholder="Recherche">
-                      </label>
-                    </div>
-                  </div>
-                </div>
-               
-                <div class="table-responsive">
-                  <table class="table table-striped table-bordered full-data-table" [mfData]="data | dataFilter : filterQuery" #mf="mfDataTable"
-                         [mfRowsOnPage]="rowsOnPage" [(mfSortBy)]="sortBy" [(mfSortOrder)]="sortOrder">
-                    <thead>
-                    <tr>
-                      <th style="width: 10%;">
-                        <mfDefaultSorter  by="name">Code</mfDefaultSorter>
-                      </th>
-                      <th style="width: 25%;">
-                        <mfDefaultSorter  by="position">Nom</mfDefaultSorter>
-                      </th>
-                      <th style="width: 15%;">
-                        <mfDefaultSorter  by="position">Ville</mfDefaultSorter>
-                      </th>
-                      <th style="width: 20%;">
-                        <mfDefaultSorter  by="position">Quartier</mfDefaultSorter>
-                      </th>
-                      <th style="width: 20%;">
-                        <mfDefaultSorter  by="position">Status</mfDefaultSorter>
-                      </th>
-                      <th style="width: 15%;" >
-                        <mfDefaultSorter by="office">Action</mfDefaultSorter>
-                      </th>
-                    </tr>
-                    <tr>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr *ngFor="let item of mf.data">
-                      <td>{{item.r_code}}</td>
-                      <td>{{item.r_nom}}</td>
-                      <td>{{(item.r_ville == 1)? 'Abidjan': 'Intérieur'}}</td>
-                      <td>{{item.r_quartier}}</td>
-                      <td *ngIf="item.r_status==0" ><label class="label label-danger" style="width: 100%;">Désactivé</label></td>
-      
-                     
-                      <td>
-                          <button (click)="action(item,'edit');modalLarge.show();" class="btn btn-primary btn-outline-primary btn-icon ripple"><i class="icofont icofont-ui-edit"></i></button>&nbsp;
-                          <button (click)="action(item,'views');modalLarge.show();" class="btn btn-info btn-outline-info btn-icon ripple"><i class="icofont icofont-info-square"></i></button>&nbsp;
-                          <button class="btn btn-danger btn-outline-danger btn-icon ripple"><i class="icofont icofont-trash"></i></button>
-                      </td>
-                    </tr>
-                    </tbody>
-                    <tfoot>
-                    
-                    <tr>
-                      <td colspan="6">
-                        <mfBootstrapPaginator class="pagination-main f-right"></mfBootstrapPaginator>
-                      </td>
-                    </tr>
-                    </tfoot>
-                  </table>
-                </div>
-              </div>
-
-          </div>
-
         </div>
-      </app-card>
-    </div>
-  </div>
-</div>
 
+        <div class="form-group row">
 
-
-<!-- modal large-->
-<app-modal-basic #modalLarge [dialogClass]="'modal-lg'">
-  <div class="app-modal-header">
-    <h4 class="modal-title">{{ modalTitle }}</h4>
-    <button type="button" class="close basic-close" (click)="modalLarge.hide()">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="app-modal-body">
-    <form [formGroup]="partenaireData">
-      <div class="form-group row">
-          <div class="col-sm-12">
-            <label class="col-form-label">Nom </label>
-              <input type="text" class="form-control" 
-              formControlName="p_nom" [(ngModel)]="details.r_nom" style="text-transform: uppercase;">
+          <div class="col-sm-6">
+            <label class="col-form-label">Sélectionnez la ville </label>
+            <select class="form-control"
+                        aria-label=".form-select-lg example"
+                        formControlName="p_ville" [(ngModel)]="selectedLevel" >
+                  <option value="0" selected>---Sélectionnez la ville---</option>
+                  <option value="{{ value.id }}"  *ngFor=" let value of villes " >{{ value.nom }}</option>
+                </select>
           </div>
+          <div class="col-sm-6">
+            <label class="col-form-label">Quartier</label>
+            <input type="text" class="form-control"
+            formControlName="p_quartier" [(ngModel)]="details.r_quartier">
+          </div>
+        </div>
+
+
+      <div class="form-group row">
+        <div class="col-sm-12">
+          <label class="col-form-label">Situation géographique</label>
+            <textarea rows="1" cols="5" class="form-control" [(ngModel)]="details.r_situation_geo" formControlName="p_stua_geo" placeholder=""></textarea>
+        </div>
       </div>
 
       <div class="form-group row">
-        
-        <div class="col-sm-6">
-          <label class="col-form-label">Sélectionnez la ville </label>
-          <select class="form-control" 
-                      aria-label=".form-select-lg example"
-                      formControlName="p_ville" [(ngModel)]="selectedLevel" >
-                <option value="0" selected>---Sélectionnez la ville---</option>
-                <option value="{{ value.id }}"  *ngFor=" let value of villes " >{{ value.nom }}</option>
-              </select>
-        </div>
-        <div class="col-sm-6">
-          <label class="col-form-label">Quartier</label>
-          <input type="text" class="form-control" 
-          formControlName="p_quartier" [(ngModel)]="details.r_quartier">
+        <div class="col-sm-12">
+          <label class="col-form-label">Description</label>
+            <textarea rows="2" cols="5" class="form-control" [(ngModel)]="details.r_description" formControlName="p_description" placeholder=""></textarea>
         </div>
       </div>
 
-    
-    <div class="form-group row">
-      <div class="col-sm-12">
-        <label class="col-form-label">Situation géographique</label>
-          <textarea rows="1" cols="5" class="form-control" [(ngModel)]="details.r_situation_geo" formControlName="p_stua_geo" placeholder=""></textarea>
-      </div>
-    </div>
+    </form>
 
-    <div class="form-group row">
-      <div class="col-sm-12">
-        <label class="col-form-label">Description</label>
-          <textarea rows="2" cols="5" class="form-control" [(ngModel)]="details.r_description" formControlName="p_description" placeholder=""></textarea>
-      </div>
     </div>
-
-  </form>
-  </div>
-  <div class="app-modal-footer">
-    <button type="button" class="btn btn-default ripple" (click)="modalLarge.hide()">Fermer</button>
-    <button type="submit" class="btn btn-primary" [hidden]="registerBtnEtat" (click)="resgister()" >Enregistrer</button>
-  </div>
-</app-modal-basic>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="modal.close('by: close button')">Fermer</button>
+      <button type="button" class="btn btn-primary" (click)="resgister()">Enregistrer</button>
+    </div>
+  </ng-template>

@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CategorieService } from 'src/app/services/categorie/categorie.service';
 import { ModalService } from 'src/app/services/modal/modal.service';
 //import Swal from 'sweetalert2';
@@ -10,11 +11,6 @@ import { ModalService } from 'src/app/services/modal/modal.service';
   styleUrls: ['./categories.component.scss'],
 })
 export class CategoriesComponent implements OnInit {
-  //Datatable variables
-  public rowsOnPage = 5;
-  public filterQuery = '';
-  public sortBy = '';
-  public sortOrder = 'desc';
   ////////////
   dataRetour: any = {};
   data: any[];
@@ -29,9 +25,11 @@ export class CategoriesComponent implements OnInit {
   });
 
   registerBtnEtat: boolean = false;
+  modeAppel: string;
+  details: any;
 
   constructor( private categorieServices: CategorieService, private http: HttpClient,
-                private fb: FormBuilder, private swalServices: ModalService ) {
+                private fb: FormBuilder, private swalServices: ModalService,  private modalService: NgbModal ) {
 
                 }
 
@@ -40,11 +38,20 @@ export class CategoriesComponent implements OnInit {
     this.list_categorie();
   }
 
+  openVerticalCenteredModal(content) {
+    this.modalService.open(content, {centered: true, size:'lg'}).result.then((result) => {
+      console.log("Modal closed" + result);
+    }).catch((res) => {});
+  }
+
   list_categorie(){
     this.categorieServices.fs_listCategorie().subscribe(
       (res) => {
         this.dataRetour = res,
         this.data = this.dataRetour.result;
+
+        console.log(this.data);
+
       },
       (err) => console.log(err),
     );
@@ -78,8 +85,38 @@ export class CategoriesComponent implements OnInit {
 
   }
 
+  addPartenaire(){
+    this.registerBtnEtat = false;
+    this.modeAppel = 'creation';
+    this.modalTitle = 'Saisir un nouveau partenaire';
 
-  registerCategorie(){
+    this.categorieData.enable();
+  }
+  action(data, mode){
+    this.modeAppel = 'modif';
+    this.details = data;
+    switch( mode ){
+      case 'edit':
+        this.registerBtnEtat = false;
+        this.modalTitle = `Modification des informations du partenaire [ ${this.details.r_nom} ]`;
+        this.categorieData.enable();
+        break;
+
+      case 'views':
+        this.registerBtnEtat = true;
+        this.modalTitle = `Condutation des informations du partenaire [ ${this.details.r_nom} ]`;
+        this.categorieData.disable();
+        break;
+
+      default:
+        return;
+    }
+  }
+
+  resgister(){
+
+    console.log(this.categorieData.value);
+
 
     //Controlle des champs
     if( this.categorieData.value.r_libelle === '' ){

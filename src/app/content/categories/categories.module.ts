@@ -8,6 +8,7 @@ import { CategoriesComponent } from "./categories.component";
     imports: [
         CommonModule,
         CategorieRoutingModule,
+        ReactiveFormsModule
 
     ],
     declarations: [CategoriesComponent]

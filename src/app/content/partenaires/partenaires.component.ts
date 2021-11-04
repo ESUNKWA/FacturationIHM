@@ -1,23 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalService } from 'src/app/services/modal/modal.service';
 import { PartenairesService } from 'src/app/services/partenaires/partenaires.service';
+import { UserInfosService } from 'src/app/services/userInfos/user-infos.service';
+
+
 @Component({
   selector: 'app-partenaires',
   templateUrl: './partenaires.component.html',
   styleUrls: ['./partenaires.component.scss']
 })
 export class PartenairesComponent implements OnInit {
-//Datatable variables
-public rowsOnPage = 5;
-public filterQuery = '';
-public sortBy = '';
-public sortOrder = 'desc';
+
 data: any[];
 ////////////
 modalTitle: string;
 inputFormat: any = "red";
-villes: any = [];
+
 selectedLevel: any;
 partenaireData = this.fb.group({
   p_nom: [],
@@ -30,24 +30,40 @@ details: any = {};
 modeAppel: any;
 registerBtnEtat: boolean = false;
 
-hideLoder: boolean = true;
+villes: any = [
+  {
+      "id":1,
+      "nom":"Abidjan"
+  },
+  {
+      "id":2,
+      "nom":"Bouaké"
+  }
+];
+  userInfos: any = {};
 
-  constructor( private fb: FormBuilder, private swalServices: ModalService, private partenaireServices: PartenairesService) { }
+  constructor( private fb: FormBuilder, private swalServices: ModalService, private partenaireServices: PartenairesService,
+    private modalService: NgbModal, private infosUtilisateur: UserInfosService) { }
 
   ngOnInit() {
-    //this.villes = villes['default']
+    this.userInfos = this.infosUtilisateur.fs_informationUtilisateur()
 
     this.listPartenaires();
+  }
+
+  openVerticalCenteredModal(content) {
+    this.modalService.open(content, {centered: true, size:'lg'}).result.then((result) => {
+      console.log("Modal closed" + result);
+    }).catch((res) => {});
   }
 
   listPartenaires(){
     this.partenaireServices.listPartenaires().subscribe(
       (res: any = {}) =>{
-        this.data = res.result;
-        setTimeout(()=>{
-          this.hideLoder = false;
-        }, 2000);
 
+        this.data = res.result;
+
+        console.log(this.data)
       },
       (error) => this.swalServices.fs_modal(error,'error')
     )
@@ -58,6 +74,7 @@ hideLoder: boolean = true;
     this.partenaireData.reset();
     this.modeAppel = 'creation';
     this.modalTitle = 'Saisir un nouveau partenaire';
+
     this.partenaireData.enable();
   }
   action(data, mode){
@@ -102,7 +119,7 @@ hideLoder: boolean = true;
       return;
     }
 
-    console.log(this.partenaireData.value);
+    this.partenaireData.value.p_utilisateur = this.userInfos.r_i;
 
 
     switch( this.modeAppel ){

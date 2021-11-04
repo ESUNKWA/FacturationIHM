@@ -19,21 +19,21 @@ export class PartenairesService {
   constructor( private http: HttpClient ) { }
 
   listPartenaires(){
-    return this.http.get(api.url+'/partenaire', this.httpOptions).pipe(
+    return this.http.get(api.url+'/partenaires', this.httpOptions).pipe(
       retry(1),
       catchError(this.handleError)
     )
   }
 
   saisiePartenaire(data){
-    return this.http.post(api.url+'/partenaire', JSON.stringify(data), this.httpOptions).pipe(
+    return this.http.post(api.url+'/partenaires', JSON.stringify(data), this.httpOptions).pipe(
       retry(1),
       catchError(this.handleError)
     )
   }
 
   updatePartenaire(data, idpartenaire){
-    return this.http.put(api.url+'/partenaire/'+idpartenaire, JSON.stringify(data), this.httpOptions).pipe(
+    return this.http.put(api.url+'/partenaires/'+idpartenaire, JSON.stringify(data), this.httpOptions).pipe(
       retry(1),
       catchError(this.handleError)
     )

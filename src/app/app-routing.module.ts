@@ -25,6 +25,21 @@ const routes: Routes = [
         loadChildren: () => import('./content/profil-utilisateurs/profilutilisateur.module').then(m => m.ProfilUtilisateursModule)
       },
       {
+        path: 'partenaires',
+        loadChildren: () => import('./content/partenaires/partenaires.module').then(m => m.PartenairesModule)
+      },
+      {
+        path: 'categories',
+        loadChildren: () => import('./content/categories/categories.module').then(m => m.CategoriesModule)
+      },
+      {
+        path: 'produits',
+        loadChildren: () => import('./content/produits/produits.module').then(m => m.ProduitsModule)
+      },
+
+
+
+      {
         path: 'apps',
         loadChildren: () => import('./views/pages/apps/apps.module').then(m => m.AppsModule)
       },
