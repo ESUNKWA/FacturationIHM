@@ -1,0 +1,69 @@
+// Plugin: Ngx-chips
+// github: https://github.com/Gbuomprisco/ngx-chips
+
+tag-input {
+  .ng2-tag-input {
+    @extend .border-bottom;
+    @extend .pb-0;
+    tag {
+      height: 26px;
+      line-height: 25px;
+      border-radius: 2px;
+      background: theme-color(light);
+      color: $body-color;
+      &:not(.readonly):not(.tag--editing):active,
+      &:not(.readonly):not(.tag--editing):focus,
+      &:not(.readonly):not(:focus):not(.tag--editing):not(:active):hover {
+        background: theme-color(primary);
+        color: #fff;
+      }
+      .tag-wrapper {
+        delete-icon {
+          svg {
+            height: 14px;
+            vertical-align: text-bottom;
+          }
+          &:hover {
+            transform: scale(1.3) translateY(-2px);
+          }
+        }
+      }
+    }
+    tag-input-form {
+      form {
+        .ng2-tag-input__text-input {
+          height: 34px;
+        }
+      }
+    }
+    &.bootstrap {
+      .ng2-tags-container {
+        tag {
+          background: theme-color(primary);
+          height: 26px;
+          line-height: 25px;
+          border-radius: 2px;
+          &.tag--editing {
+            background: #fff;
+            color: $body-color;
+            border: 1px solid $border-color;
+            padding-right: 18px;
+          }
+          &:not(.readonly):not(.tag--editing):active,
+          &:not(.readonly):not(.tag--editing):focus,
+          &:not(.readonly):not(:focus):not(.tag--editing):not(:active):hover {
+            background: darken(theme-color(primary), 6%);
+          }
+          .tag-wrapper {
+            delete-icon {
+              svg {
+                height: 14px;
+                vertical-align: text-bottom;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,84 @@
+<div class="email-head">
+  <div class="email-head-title d-flex align-items-center">
+    <span data-feather="edit" class="icon-md mr-2"></span>
+    New message
+  </div>
+</div>
+<div class="email-compose-fields">
+  <div class="to">
+    <div class="form-group row py-0">
+      <label class="col-md-1 control-label">To:</label>
+      <div class="col-md-11">
+          <div class="form-group">
+            <ng-select 
+              [items]="peoples" 
+              [multiple]=true
+              bindLabel="name"
+              bindValue="id"
+              [hideSelected]="true"
+              [(ngModel)]="selectedTo">
+              
+              <ng-template ng-label-tmp let-item="item" let-clear="clear">
+                <span class="ng-value-label"><img [src]="item.picture" width="20px" height="20px"> {{item.name}}</span>
+                <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+              </ng-template>
+          
+              <ng-template ng-option-tmp let-item="item">
+                <img [src]="item.picture" width="20px" height="20px"> {{item.name}}
+              </ng-template>
+
+            </ng-select>
+          </div>
+      </div>
+    </div>
+  </div>
+  <div class="to cc">
+    <div class="form-group row pt-1 pb-3">
+      <label class="col-md-1 control-label">Cc</label>
+      <div class="col-md-11">
+        <ng-select 
+          [items]="peoples"
+          [multiple]=true
+          bindLabel="name"
+          bindValue="id"
+          [hideSelected]="true"
+          [(ngModel)]="selectedCc">
+
+          <ng-template ng-label-tmp let-item="item" let-clear="clear">
+            <span class="ng-value-label"><img [src]="item.picture" width="20px" height="20px"> {{item.name}}</span>
+            <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+          </ng-template>
+      
+          <ng-template ng-option-tmp let-item="item">
+            <img [src]="item.picture" width="20px" height="20px"> {{item.name}}
+          </ng-template>
+          
+        </ng-select>
+      </div>
+    </div>
+  </div>
+  <div class="subject">
+    <div class="form-group row py-0">
+      <label class="col-md-1 control-label">Subject</label>
+      <div class="col-md-11">
+        <input class="form-control" type="text">
+      </div>
+    </div>
+  </div>
+</div>
+<div class="email editor">
+  <div class="col-md-12">
+    <div class="form-group">
+      <label class="control-label sr-only" for="simpleMdeEditor">Descriptions </label>
+      <simplemde [(ngModel)]="messageValue" [options]="{ autosave: { enabled: true, uniqueId: 'MyUniqueID' } }" [codemirror]="{ lineNumbers: false }"></simplemde>
+    </div>
+  </div>
+  <div class="email action-send">
+    <div class="col-md-12">
+      <div class="form-group mb-0">
+        <button class="btn btn-primary btn-space" type="submit"><i class="icon s7-mail"></i> Send</button>
+        <button class="btn btn-secondary btn-space" type="button"><i class="icon s7-close"></i> Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

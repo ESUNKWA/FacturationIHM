@@ -1,0 +1,122 @@
+
+<div class="page-body">
+  <div class="row">
+    <div class="col-sm-12">
+      <app-card [title]="'Liste des catégories'">
+
+        <div class="dt-responsive" *ngIf="data">
+
+          <div class="row mb-2" >
+            <div class="col" >
+               <!-- Bouton ajout nouveau catégorie -->
+                <button style="float: right;" 
+                        title="Ajouter un nouveau produit" 
+                        type="button" class="btn btn-primary btn-round" 
+                        (click)="modalLarge.show(); fc_add_categorie()">Nouveau&nbsp;<i class="fa fa-plus"></i></button>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-xs-12 col-sm-12 col-sm-12 col-md-6">
+              <div>
+                <label class="label-control">Voir
+                  <select class="form-control input-sm full-data-show-entry" [(ngModel)]="rowsOnPage">
+                    <option [ngValue]="05">05</option>
+                    <option [ngValue]="10">10</option>
+                    <option [ngValue]="25">25</option>
+                    <option [ngValue]="50">50</option>
+                  </select>
+                  ligne(s)
+                </label>
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-6">
+              <div style="text-align: right;">
+                <label>
+                  <input type="search" [(ngModel)]="filterQuery" class="form-control input-sm full-data-search" placeholder="Recherche">
+                </label>
+              </div>
+            </div>
+          </div>
+         
+          <div class="table-responsive">
+            <table class="table table-striped table-bordered full-data-table" [mfData]="data | dataFilter : filterQuery" #mf="mfDataTable"
+                   [mfRowsOnPage]="rowsOnPage" [(mfSortBy)]="sortBy" [(mfSortOrder)]="sortOrder">
+              <thead>
+              <tr>
+                <th style="width: 40%;">
+                  <mfDefaultSorter  by="name">Libellé</mfDefaultSorter>
+                </th>
+                <th style="width: 40%;">
+                  <mfDefaultSorter  by="position">Description</mfDefaultSorter>
+                </th>
+                <th style="width: 20%;" >
+                  <mfDefaultSorter by="office">Action</mfDefaultSorter>
+                </th>
+              </tr>
+              <tr>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let item of mf.data">
+                <td>{{item.r_libelle}}</td>
+                <td>{{item.r_description}}</td>
+                <td>
+                    <button (click)="modalLarge.show(); fc_details_categorie(item, 1)" class="btn btn-primary btn-outline-primary btn-icon ripple"><i class="icofont icofont-ui-edit"></i></button>&nbsp;
+                    <button (click)="modalLarge.show(); fc_details_categorie(item, 2)" class="btn btn-info btn-outline-info btn-icon ripple"><i class="icofont icofont-info-square"></i></button>&nbsp;
+                    <button class="btn btn-danger btn-outline-danger btn-icon ripple"><i class="icofont icofont-trash"></i></button>
+                </td>
+              </tr>
+              </tbody>
+              <tfoot>
+              
+              <tr>
+                <td colspan="6">
+                  <mfBootstrapPaginator class="pagination-main f-right"></mfBootstrapPaginator>
+                </td>
+              </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      </app-card>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- modal large-->
+<app-modal-basic #modalLarge [dialogClass]="'modal-lg'">
+  <div class="app-modal-header">
+    <h4 class="modal-title">{{ modalTitle }}</h4>
+    <button type="button" class="close basic-close" (click)="modalLarge.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="app-modal-body">
+    <form [formGroup]="categorieData">
+      <div class="form-group row">
+          <label class="col-sm-2 col-form-label">Libellé </label>
+          <div class="col-sm-10">
+              <input type="text" class="form-control" 
+              [(ngModel)]="detailsCategories.r_libelle" 
+              formControlName="r_libelle">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Description</label>
+        <div class="col-sm-10">
+            <textarea rows="5" cols="5" class="form-control" [(ngModel)]="detailsCategories.r_description" formControlName="p_description" placeholder=""></textarea>
+        </div>
+      </div>
+  </form>
+  </div>
+  <div class="app-modal-footer">
+    <button type="button" class="btn btn-default ripple" (click)="modalLarge.hide()">Fermer</button>
+    <button type="submit" class="btn btn-primary" (click)="registerCategorie()" [hidden]="registerBtnEtat" >Register</button>
+  </div>
+</app-modal-basic>
+
+
+

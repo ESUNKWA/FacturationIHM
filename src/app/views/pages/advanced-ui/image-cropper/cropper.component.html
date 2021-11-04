@@ -1,0 +1,55 @@
+<nav class="page-breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink=".">Advanced UI</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Cropper</li>
+  </ol>
+</nav>
+
+<div class="row">
+  <div class="col-md-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Angular CropperJs</h4>
+        <p class="card-description mb-0">Read the <a href="https://github.com/matheusdavidson/angular-cropperjs" target="_blank"> Official Angular-CropperJs Documentation </a>for a full list of instructions and other options.</p>                  
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-8">
+            <div class="form-group">
+              <input (change)="handleFileInput($event)" type="file" name="img[]" class="file-upload-default" id="cropperImageUpload">
+              <div class="input-group col-xs-12" (click)="openFileBrowser($event)">
+                <input type="text" class="form-control file-upload-info" disabled="" placeholder="Upload Image">
+                <span class="input-group-append">
+                  <button class="file-upload-browse btn btn-primary" type="button">Upload</button>
+                </span>
+              </div>
+            </div>
+
+            <div>
+              <angular-cropper #angularCropper [cropperOptions]="config" [imageUrl]="imageUrl"></angular-cropper>
+            </div>
+            <div class="d-flex justify-content-between align-items-center flex-wrap">
+              <div class="form-group d-flex align-items-center flex-wrapp mb-0 mr-2 mt-3">
+                <button class="btn btn-primary crop mb-2 mb-md-0" (click)="cropImage()">Crop me</button>
+              </div>
+              <div class="mb-4 mb-md-0 mt-3">
+                <a href="" class="btn btn-outline-primary download" download="imageName.png">Download croped image</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 ml-auto">
+            <h6 class="card-description mb-2 mb-md-4">Cropped Image: </h6>
+            <img class="w-100 cropped-img mt-2" src="{{resultImage}}" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

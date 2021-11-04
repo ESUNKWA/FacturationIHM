@@ -1,0 +1,149 @@
+<div class="loader-block" *ngIf="hideLoder === true" >
+  <div class="preloader6">
+      <hr>
+  </div>
+</div>
+
+<div class="page-body" *ngIf="hideLoder === false">
+  <div class="row">
+    <div class="col-sm-12">
+
+      <app-card [title]="modalTitle">
+        <div class="dt-responsive">
+
+          <div class="row" >
+            <div class="col-3" >
+              <label class="col-form-label">Période du </label>
+              <input class="form-control" type="date" [(ngModel)]="date1">
+            </div>
+            <div class="col-3" >
+              <label class="col-form-label">Au </label>
+              <input class="form-control" type="date" [(ngModel)]="date2">
+            </div>
+            <div class="col-2" >
+              <label class="col-form-label" style="color:white" >Au </label><br>
+              <button class="btn waves-effect waves-light btn-primary btn-icon"
+                      (click)="checkVenteCmd()" ><i class="icofont icofont-search"></i></button>
+              </div>
+          </div>
+
+          <div class="clearfix" >&nbsp;</div>
+        
+    
+          <div [ngSwitch]="dataRetour" >
+            <div *ngSwitchCase = '0' >
+              <div class="well well-lg text-center">
+                <h1>Pas de données</h1>
+               </div>
+            </div>
+            <div *ngSwitchCase = '1' >
+
+              <div class="row mb-2" >
+                <div class="col" >
+                  <button><i class="fa fa-file-excel-o" style="font-size:48px;color:blue"></i></button>
+                </div>
+              </div>
+              
+
+              <div class="row">
+                <div class="col-xs-12 col-sm-12 col-sm-12 col-md-6">
+                  <div>
+                    <label class="label-control">Voir
+                      <select class="form-control input-sm full-data-show-entry" [(ngModel)]="rowsOnPage">
+                        <option [ngValue]="02">02</option>
+                        <option [ngValue]="10">10</option>
+                        <option [ngValue]="25">25</option>
+                        <option [ngValue]="50">50</option>
+                      </select>
+                      ligne(s)
+                    </label>
+                  </div>
+                </div>
+                
+                <div class="col-xs-12 col-sm-12 col-md-6">
+                  <div style="text-align: right;">
+                    <label>
+                      <input type="search" [(ngModel)]="filterQuery" class="form-control input-sm full-data-search" placeholder="Recherche par le nom">
+                    </label>
+                  </div>
+                </div>
+              </div>
+            
+              <div class="row" >
+                
+                <div class="col-md-12" >
+                  <div class="table-responsive">
+                    <table class="table table-striped table-bordered full-data-table" [mfData]="data | dataFilter : filterQuery" #mf="mfDataTable"
+                           [mfRowsOnPage]="rowsOnPage" [(mfSortBy)]="sortBy" [(mfSortOrder)]="sortOrder">
+                      <thead>
+                      <tr>
+                        <th style="width: 50%;">
+                          <mfDefaultSorter  by="name">Produits</mfDefaultSorter>
+                        </th>
+                        <th style="width: 25%;">
+                          <mfDefaultSorter  by="position">Quantité vendu</mfDefaultSorter>
+                        </th>
+                        <th style="width: 25%;">
+                          <mfDefaultSorter  by="position">Monatnt total</mfDefaultSorter>
+                        </th>
+                        
+                      </tr>
+                      <tr>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <tr #tr *ngFor="let item of mf.data; let i = index;"  >
+                        
+                        <td>{{item.r_libelle}}</td>
+                        <td>{{item.totalVendu}}</td>
+                        <td>{{ item.r_total }}</td>
+                       <!-- <td>
+                           <button  class="btn btn-primary btn-outline-primary btn-icon ripple" (click)="modalLarge.show();showDetailsClient(item,'edit')"><i class="icofont icofont-ui-edit"></i></button>&nbsp; 
+                          <button title="Consultation des informations de {{item.r_nom}} {{item.r_prenoms}}" class="btn btn-info btn-outline-info btn-icon ripple" (click)="modalLarge.show();" ><i class="icofont icofont-info-square"></i></button>&nbsp;
+                          <button title="Voir les factures de {{item.r_nom}} {{item.r_prenoms}}" class="btn btn-warning btn-outline-warning btn-icon ripple"><i class="icofont icofont-paper"></i></button>
+                      </td>-->
+                      </tr>
+                      </tbody>
+                      <tfoot>
+                      
+                      <tr>
+                        <td colspan="6">
+                          <mfBootstrapPaginator class="pagination-main f-right"></mfBootstrapPaginator>
+                        </td>
+                      </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+         
+        </div>
+       </app-card>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+ <!-- modal large-->
+<app-modal-basic #modalLarge [dialogClass]="'modal-lg'">
+  <div class="app-modal-header">
+    <h4 class="modal-title">{{ modalTitle }}</h4>
+    <button type="button" class="close basic-close" (click)="modalLarge.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="app-modal-body">
+    
+   
+
+  </div>
+  <div class="app-modal-footer">
+    <button type="button" class="btn btn-default ripple" (click)="modalLarge.hide()">Fermer</button>
+  </div>
+</app-modal-basic>
+

@@ -1,0 +1,39 @@
+.apexcharts-canvas {
+  .apexcharts-toolbar {
+    @media(max-width: 767px) {
+      display: none;
+    }
+  }
+  .apexcharts-tooltip {
+    &.apexcharts-theme-light {
+      border-color: $border-color;
+      .apexcharts-tooltip-title {
+        background: #fff;
+        border-bottom-color: $border-color;
+      }
+    }
+  }
+  .apexcharts-xaxistooltip {
+    background: #fff;
+    padding: 6px;
+    border-color: $border-color;
+    box-shadow: $card-box-shadow;
+    &.apexcharts-xaxistooltip-bottom {
+      .apexcharts-xaxistooltip-text {
+        font-weight: bold;
+      }
+      &::before {
+        border-bottom-color: $border-color;
+      }
+      &::after {
+        border-bottom-color: #fff;
+      }
+    }
+  }
+}
+
+.rtl {
+  .apexcharts-canvas {
+    direction: ltr;
+  }
+}

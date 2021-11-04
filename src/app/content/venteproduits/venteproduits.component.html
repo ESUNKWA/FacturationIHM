@@ -1,0 +1,526 @@
+
+
+<div class="row mb-2" >
+  <div class="col" >
+    <button (click)="exportAsXLSX()"><i class="fa fa-file-excel-o" style="font-size:48px;color:blue"></i></button>
+  </div>
+  <div class="col" >
+    <button style="float: right;" 
+                title="Ajouter un nouveau produit" 
+                type="button" class="btn btn-primary btn-round"
+                id="btnVentes"
+                (click)="views()">Effectuer une vente
+        </button>
+  </div>
+</div>
+
+<!------------------------------------------- Loder ------------------------------------->
+<div class="loader-block" *ngIf="hideLoder === true" >
+  <div class="preloader6">
+      <hr>
+  </div>
+</div>
+<!------------------------------------------- Loder ------------------------------------->
+
+ <!-- Liste des ventes -->
+ <ng-template [ngIf]="viewsListeVente" >
+  <app-card [title]="'Liste des ventes'">
+    <div class="dt-responsive">
+    
+      <div class="row" *ngIf="userInfos.r_profil == 4" >
+        <div class="col-4" >
+          <select class="form-control" 
+                  aria-label=".form-select-lg example"
+                  (change)="selectProduitPartenaire();" [(ngModel)]="selectedLevel" >
+            <option value="0" selected>---Sélectionnez le partenaire---</option>
+            <option value="{{ value.r_i }}"  *ngFor=" let value of partenaires " >{{ value.r_nom }}</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="row" >
+        <div class="col-2" >
+          <label class="col-form-label">Période du </label>
+          <input class="form-control" type="date">
+        </div>
+        <div class="col-2" >
+          <label class="col-form-label">Au </label>
+          <input class="form-control" type="date">
+        </div>
+        <div class="col-2" >
+          <label class="col-form-label" style="color:white" >Au </label><br>
+          <button class="btn waves-effect waves-light btn-primary btn-icon"><i class="icofont icofont-search"></i></button>
+          </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-sm-12 col-md-6">
+          <div>
+            <label class="label-control">Voir
+              <select class="form-control input-sm full-data-show-entry" [(ngModel)]="rowsOnPage">
+                <option [ngValue]="02">02</option>
+                <option [ngValue]="10">10</option>
+                <option [ngValue]="25">25</option>
+                <option [ngValue]="50">50</option>
+              </select>
+              ligne(s)
+            </label>
+          </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-6">
+          <div style="text-align: right;">
+            <label>
+              <input type="search" [(ngModel)]="filterQuery" class="form-control input-sm full-data-search" placeholder="Recherche">
+            </label>
+          </div>
+        </div>
+      </div>
+    
+      <div class="row" >
+        
+        <div class="col-md-12" >
+          <div class="table-responsive">
+            <table class="table table-striped table-bordered nowrap dataTable" [mfData]="data | dataFilter : filterQuery" #mf="mfDataTable"
+                   [mfRowsOnPage]="rowsOnPage" [(mfSortBy)]="sortBy" [(mfSortOrder)]="sortOrder">
+              <thead>
+              <tr>
+                <th style="width: 25%;">
+                  <mfDefaultSorter  by="name">Date de création</mfDefaultSorter>
+                </th>
+                <th style="width: 7%;">
+                  <mfDefaultSorter  by="position">Numéro de facture</mfDefaultSorter>
+                </th>
+                <th style="width: 7%;">
+                  <mfDefaultSorter  by="position">Montant total</mfDefaultSorter>
+                </th>
+                <th style="width: 7%;">
+                  <mfDefaultSorter  by="position">Status</mfDefaultSorter>
+                </th>
+                <th style="width: 7%;">
+                  <mfDefaultSorter  by="position">Actions</mfDefaultSorter>
+                </th>
+                
+              </tr>
+              <tr>
+              </tr>
+              </thead>
+              <tbody>
+              <tr #tr *ngFor="let item of mf.data; let i = index;"  >
+                
+                <td>{{item.created_at | date: 'dd/MM/yyyy à hh:mm:ss' }}</td>
+                <td>{{item.r_num}}</td>
+                <td>{{item.r_mnt}}</td>
+                <td *ngIf = " item.r_status == 0 " ><label class="label label-danger" style="width: 100%;" >Non reglée</label></td>
+                <td *ngIf = " item.r_status == 1 " ><label class="label label-success" style="width: 100%;">Payée</label></td>
+                <td>
+                  <button  class="btn btn-primary btn-outline-primary btn-icon ripple" (click)="detailsVente(item,'edit');modalLarge.show()"><i class="icofont icofont-ui-edit"></i></button>&nbsp;
+                  <button  class="btn btn-info btn-outline-info btn-icon ripple" (click)="detailsVente(item,'views');modalLarge.show();" ><i class="icofont icofont-info-square"></i></button>&nbsp;
+                  <button class="btn btn-danger btn-outline-danger btn-icon ripple"><i class="icofont icofont-trash"></i></button>
+              </td>
+              </tr>
+              </tbody>
+              <tfoot>
+              
+              <tr>
+                <td colspan="6">
+                  <mfBootstrapPaginator class="pagination-main f-right"></mfBootstrapPaginator>
+                </td>
+              </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      </div>
+     
+    </div>
+   </app-card>
+ </ng-template>
+
+
+
+<!-- Saisie de vente -->
+<ng-template [ngIf]="viewsSaisieVente" >
+  <app-card [title]="'Effectuer une vente'">
+ 
+    <wizard #wizard class="arc-wizard arc-custom" navBarLayout="large-filled-symbols">
+       <!-- Step 1 -->
+      <wizard-step stepTitle="Choix des produits" navigationSymbol="&#xf0b1;" navigationSymbolFontFamily="FontAwesome">
+        <div class="centered-content">
+          <div class="dt-responsive">
+  
+            <div class="row">
+              <div class="col-xs-12 col-sm-12 col-sm-12 col-md-6">
+                <div>
+                  <label class="label-control">Voir
+                    <select class="form-control input-sm full-data-show-entry" [(ngModel)]="rowsOnPage">
+                      <option [ngValue]="02">02</option>
+                      <option [ngValue]="10">10</option>
+                      <option [ngValue]="25">25</option>
+                      <option [ngValue]="50">50</option>
+                    </select>
+                    ligne(s)
+                  </label>
+                </div>
+              </div>
+              <div class="col-xs-12 col-sm-12 col-md-6">
+                <div style="text-align: right;">
+                  <label>
+                    <input type="search" [(ngModel)]="filterQuery" class="form-control input-sm full-data-search" placeholder="Recherche">
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="row" >
+              <!-- Table listant les produits -->
+              <div class="col-md-8" >
+                <div class="table-responsive">
+                  <table class="table table-striped table-bordered full-data-table" [mfData]="data | dataFilter : filterQuery" #mf="mfDataTable"
+                         [mfRowsOnPage]="rowsOnPage" [(mfSortBy)]="sortBy" [(mfSortOrder)]="sortOrder">
+                    <thead>
+                    <tr>
+                      <th style="width: 10%;">
+                        <mfDefaultSorter  by="name">Choix</mfDefaultSorter>
+                      </th>
+                      <th style="width: 25%;">
+                        <mfDefaultSorter  by="name">Libellé</mfDefaultSorter>
+                      </th>
+                      <th style="width: 7%;">
+                        <mfDefaultSorter  by="position">Stock</mfDefaultSorter>
+                      </th>
+                      <th style="width: 7%;">
+                        <mfDefaultSorter  by="position">Prix Unitaire</mfDefaultSorter>
+                      </th>
+                      <th style="width: 13%;">
+                        <mfDefaultSorter  by="position">Quantité</mfDefaultSorter>
+                      </th>
+                      <th style="width: 18%;">
+                        <mfDefaultSorter  by="position">Total</mfDefaultSorter>
+                      </th>
+                      
+                    </tr>
+                    <tr>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr #tr *ngFor="let item of mf.data; let i = index;"  >
+                      <td>
+                        <div class="border-checkbox-group border-checkbox-group-primary">
+                          <input #choix class="border-checkbox" (change)="isCheck(choix.checked, item, i)" type="checkbox" [id]="'checkbox1'+i">
+                      </div>
+                      </td>
+                      <td>{{item.r_libelle}}</td>
+                      <td>{{item.r_stock}}</td>
+                      <td>{{item.r_prix_vente}}</td>
+                      <td>
+                        <input #QteSelect type="number" [disabled]="true" [id]="'qte-'+i" min="0" [value]="0" (change)="choixqteProduit(QteSelect, i, item)" class="form-control" placeholder="">
+                      </td>
+                      <td>
+                        <input type="number" data-a-sign="fcfa" value="0" [id]="'produit-'+i" disabled class="form-control" placeholder="">
+                      </td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    
+                    <tr>
+                      <td colspan="6">
+                        <mfBootstrapPaginator class="pagination-main f-right"></mfBootstrapPaginator>
+                      </td>
+                    </tr>
+                    </tfoot>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Sélection des prouits -->
+              <div class="col-xl-4 col-md-6">
+                <div class="card feed-card">
+                  <div class="card-header">
+                      <h5>Sélections ( {{ choixProduits.length }} )</h5>
+                  </div>
+                  <div class="card-block">
+                      <div class="row m-b-25" *ngFor="let produitAjoute of choixProduits || choixProduitsFinal" >
+                          <div class="col">
+                              <h5 class="m-b-5">{{ produitAjoute.r_libelle }}</h5>
+                              <p class="text-c-red m-b-0">{{ produitAjoute.p_quantite }} x {{ produitAjoute.r_prix_vente }} = {{ produitAjoute.p_total }}</p>
+                          </div>
+                      </div>
+  
+                      <div class="text-center">
+                          <h4 class="text-c-red"  >{{ sommes || 'Panier vide' }}</h4>
+                      </div>
+                      <hr>
+                      <!-- Paiement partiel -->
+                      <div class="form-row">
+                        <div class="col-md-12" >
+                          <label class="col-form-label">Paiement partiel </label>&nbsp;&nbsp;
+                          <input #paiement class="border-checkbox" (change)="isCheckPaiement(paiement.checked)" type="checkbox" id="checkbox1">
+                        </div>
+                      </div>
+
+                      <ng-template [ngIf]=" InputPaiementPartiel === true " >
+                        <div class="form-row" >
+                          <div class="col-md-12" >
+                            <label class="col-form-label">Montant </label>
+                            <input #paiementPartielMnt (keyup)="valMntPartiel()" class="form-control" type="text" placeholder="Ex: 150 000">
+                          </div>
+                        </div>
+                      </ng-template>
+                      
+                  </div>
+              </div>
+              </div>
+            </div>
+           
+          </div>
+  
+          <div class="btn-group mt-10">
+            <button type="button" class="btn btn-primary btn-sm " (click)="step1()" id="continue" nextStep>Continue</button>
+            <button type="button" class="btn btn-primary btn-sm" (click)="stepControl1()">Continue</button>
+          </div>
+        </div>
+      </wizard-step>
+      <!-- Step 2 -->
+      <wizard-step stepTitle="Signalitique du client" navigationSymbol="&#xf085;" navigationSymbolFontFamily="FontAwesome">
+        <div class="centered-content">
+          <div>
+            <form [formGroup]="infosClient">
+              <div class="form-group row">
+                  
+                  <div class="col-sm-4">
+                    <label class="col-form-label styleInput" >Type de client </label>
+                    <select class="form-control" aria-label=".form-select-lg example" formControlName="p_type_person" >
+                      <option selected>---Sélectionnez---</option>
+                      <option value="1">Personne physique</option>
+                      <option value="2">Personne morale</option>
+                    </select>
+                     <span class="messages"></span>
+                  </div>
+  
+                  <div class="col-sm-4">
+                    <label class="col-form-label styleInput" >Nom </label>
+                      <input type="text" class="form-control" formControlName="p_nom" placeholder="">
+                      <span class="messages"></span>
+                  </div>
+  
+                  <div class="col-sm-4">
+                    <label class="col-form-label styleInput" >Prenoms </label>
+                      <input type="text" class="form-control" formControlName="p_prenoms" placeholder="">
+                      <span class="messages"></span>
+                  </div>
+              </div>
+  
+              <div class="form-group row">
+                  
+                <div class="col-sm-4">
+                  <label class="col-form-label styleInput" >Numéro de téléphone 1 </label>
+                    <input type="text" [textMask]="{mask: maskUsMobile}" placeholder="00-00-00-00-00" class="form-control" formControlName="p_phone">
+                    <span class="messages"></span>
+                </div>
+  
+                <div class="col-sm-4">
+                  <label class="col-form-label styleInput" >Numéro de téléphone 2 </label>
+                    <input type="text" class="form-control" formControlName="p_phone2" [textMask]="{mask: maskUsMobile}" placeholder="00-00-00-00-00">
+                    <span class="messages"></span>
+                </div>
+  
+                <div class="col-sm-4">
+                  <label class="col-form-label styleInput" >Adresse email </label>
+                    <input type="text" class="form-control" formControlName="p_email"  placeholder="">
+                    <span class="messages"></span>
+                </div>
+              </div>
+  
+              <div class="form-group row">
+                <div class="col-sm-12">
+                  <label class="col-form-label styleInput">Description</label>
+                    <textarea rows="5" cols="5" class="form-control" formControlName="p_description" placeholder=""></textarea>
+                </div>
+              </div>
+          </form>
+          </div>
+  
+          <div class="btn-group mt-10">
+            <button type="button" class="btn btn-secondary btn-sm" previousStep>Revenir</button>
+            <button type="button" class="btn btn-primary btn-sm" (click)="step2()" nextStep>Continue</button>
+          </div>
+        </div>
+      </wizard-step>
+      <!-- Step 3 -->
+      <wizard-step stepTitle="Récapitulatif" navigationSymbol="&#xf00c;" navigationSymbolFontFamily="FontAwesome">
+        <div class="centered-content">
+          <div>
+            <h3>Récapitulatif</h3>
+          </div>
+  
+          <div class="btn-group mt-10" id="btns" >
+            <button type="button" class="btn btn-secondary btn-sm" previousStep>Revenir</button>
+            <!-- <button type="button" class="btn btn-danger btn-sm" resetWizard>Reset</button> -->
+            <button type="button" class="btn btn-success btn-sm" id="reset" (click)="registerVente()" >Valider</button>
+          </div>
+        </div>
+      </wizard-step>
+    </wizard>
+  </app-card>
+</ng-template>
+
+
+<!-- modal large détails des ventes-->
+<app-modal-basic #modalLarge [dialogClass]="'modal-lg'">
+  <div class="app-modal-header">
+    <h4 class="modal-title">{{ modalTitle }}</h4>
+    <button type="button" class="close basic-close" (click)="modalLarge.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="app-modal-body">
+
+    <div class="row">
+      <div class="col-md-12 col-lg-12">
+        <div class="md-tabs">
+          <ngb-tabset>
+            <ngb-tab>
+              <ng-template ngbTabTitle><i class="icofont icofont-ui-user"></i>Signalitique du client</ng-template>
+              <ng-template ngbTabContent>
+                <div  class="m-t-15">
+                  <form [formGroup]="formDetailsfacture" >
+
+                    <div class="form-group row">
+                      <div class="col-sm-6">
+                        <label class="col-form-label">Nom </label>
+                          <input type="text" class="form-control" formControlName="p_nom" [value]="detailsFacture.r_nom" >
+                          <span class="messages"></span>
+                      </div>
+    
+                      <div class="col-sm-6">
+                        <label class="col-form-label">Prenoms </label>
+                          <input type="text" class="form-control" formControlName="p_prenoms" [value]="detailsFacture.r_prenoms" >
+                          <span class="messages"></span>
+                      </div>
+                    </div>
+    
+                    <div class="form-group row">
+                      <div class="col-sm-6">
+                        <label class="col-form-label">Numéro de téléphone </label>
+                          <input type="text" class="form-control" formControlName="p_phone" [value]="detailsFacture.r_phone" >
+                          <span class="messages"></span>
+                      </div>
+    
+                      <div class="col-sm-6">
+                        <label class="col-form-label">Adresse email </label>
+                          <input type="text" class="form-control" formControlName="p_email" [value]="detailsFacture.r_email" >
+                          <span class="messages"></span>
+                      </div>
+                    </div>
+    
+                    <div class="form-group row">
+                      <div class="col-sm-12">
+                        <label class="col-form-label">Description </label>
+                          <textarea  class="form-control" id="" rows="3" formControlName="p_description" [value]="detailsFacture.r_description"></textarea>
+                      </div>
+                    </div>
+    
+                  </form>                
+                </div>
+              </ng-template>
+            </ngb-tab>
+
+            <ngb-tab>
+              <ng-template ngbTabTitle><i class="icofont icofont-ui-user "></i>Détails des ventes</ng-template>
+              <ng-template ngbTabContent>
+                <div  class="m-t-15">
+                  <div class="table-responsive" >
+                    <table class="table table-striped table-bordered full-data-table" [mfData]="data | dataFilter : filterQuery" #mf="mfDataTable"
+                           [mfRowsOnPage]="rowsOnPage" [(mfSortBy)]="sortBy" [(mfSortOrder)]="sortOrder">
+                      <thead>
+                      <tr>
+                        <th style="width: 25%;">
+                          <mfDefaultSorter  by="name">Date de création</mfDefaultSorter>
+                        </th>
+                        <th style="width: 7%;">
+                          <mfDefaultSorter  by="position">Numéro de facture</mfDefaultSorter>
+                        </th>
+                        <th style="width: 7%;">
+                          <mfDefaultSorter  by="position">Article</mfDefaultSorter>
+                        </th>
+                        <th style="width: 7%;">
+                          <mfDefaultSorter  by="position">Quantité</mfDefaultSorter>
+                        </th>
+                        <th style="width: 7%;">
+                          <mfDefaultSorter  by="position">Montant</mfDefaultSorter>
+                        </th>
+                        <th style="width: 7%;">
+                          <mfDefaultSorter  by="position">Actions</mfDefaultSorter>
+                        </th>
+                        
+                      </tr>
+                      <tr>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <tr #tr *ngFor="let item of ligneVentes; let i = index;"  >
+                        
+                        <td>{{item.created_at | date: 'dd/MM/yyyy à hh:mm'}}</td>
+                        <td>{{item.r_num}}</td>
+                        <td>{{item.libelle_produit}}</td>
+                        <td>{{item.r_quantite}}</td>
+                        <td>{{item.r_total}}</td>
+                        <td>
+                          <button  class="btn btn-primary btn-outline-primary btn-icon ripple" (click)="modalLarge.show();"><i class="icofont icofont-ui-edit"></i></button>&nbsp;
+                          <button class="btn btn-danger btn-outline-danger btn-icon ripple"><i class="icofont icofont-trash"></i></button>
+                      </td>
+                      </tr>
+                      </tbody>
+                      <tfoot>
+                      
+                      <!-- <tr>
+                        <td colspan="6">
+                          <mfBootstrapPaginator class="pagination-main f-right"></mfBootstrapPaginator>
+                        </td>
+                      </tr> -->
+                      </tfoot>
+                    </table>
+                  </div>
+                  <div class="row card-block" style="text-align: center;">
+                    <div class="col-md-12 col-lg-6">
+                        <h6 class="sub-title text-center">Montant payé</h6>
+                        <h5 class="text-primary text-center" >{{ ( ligneVentes[0].mnt_paye == null )? detailsFacture.r_mnt + this.devise : +ligneVentes[0].mnt_paye + this.devise || 'Facture soldé' }}</h5>
+                    </div>
+                    <div class="col-md-12 col-lg-6">
+                         <h6 class="sub-title text-center">Montant restant</h6>
+                         <h5 class="text-danger text-center">{{ ( ligneVentes[0].mnt_paye == null )? 0 + this.devise : detailsFacture.r_mnt - +ligneVentes[0].mnt_paye + this.devise}}</h5>
+                    </div>
+                  </div>
+                  <!-- Formulaire de saisir pour solder la facture -->
+                  <div class="form-group row" *ngIf=" ligneVentes[0].r_status === 0 " >
+                    <div class="col-sm-8">
+                      <label class="col-form-label">Montant à solder </label>
+                        <input #mntRgl type="text" class="form-control" 
+                                [value]="detailsFacture.r_mnt - +ligneVentes[0].mnt_paye">
+                    </div>
+  
+                    <div class="col-sm-4">
+                      <label class="col-form-label text-white">Montant à solder </label>
+                      <button class="btn btn-primary btn-block" (click)="reglemntPartiel()" >Valider</button>
+                    </div>
+                  </div>
+
+                </div>
+              </ng-template>
+            </ngb-tab>
+          </ngb-tabset>
+        </div>
+      </div>
+    </div>
+    
+  
+
+  </div>
+  <div class="app-modal-footer">
+    <button type="button" class="btn btn-default ripple" (click)="modalLarge.hide()">Fermer</button>
+    <button class="btn btn-primary" *ngIf="viewsBtnUpdate == 'edit'" >Enregistrer</button>
+
+  </div>
+</app-modal-basic>
+
+

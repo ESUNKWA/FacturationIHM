@@ -1,0 +1,54 @@
+<div class="email-head">
+  <div class="email-head-subject">
+    <div class="title d-flex align-items-center justify-content-between">
+      <div class="d-flex align-items-center">
+        <a class="active" href="" (click)="false"><span class="icon"><i class="feather icon-star text-primary-muted"></i></span></a> 
+        <span>New Project</span>
+      </div>
+      <div class="icons">
+        <a href="" (click)="false" class="icon"><i class="feather icon-share text-muted hover-primary-muted" ngbTooltip="Forward"></i></a>
+        <a href="" (click)="false" class="icon"><i class="feather icon-printer text-muted" ngbTooltip="Print"></i></a>
+        <a href="" (click)="false" class="icon"><i class="feather icon-trash text-muted" ngbTooltip="Delete"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="email-head-sender d-flex align-items-center justify-content-between flex-wrap">
+    <div class="d-flex align-items-center">
+      <div class="avatar">
+        <img src="https://via.placeholder.com/36x36" alt="Avatar" class="rounded-circle user-avatar-md">
+      </div>
+      <div class="sender d-flex align-items-center">
+        <a href="" (click)="false">John Doe</a> <span>to</span><a href="" (click)="false">me</a>
+        <div class="actions" ngbDropdown>
+          <a class="no-dropdown-toggle-icon icon" id="mailReadDropdown1" ngbDropdownToggle><i class="feather icon-chevron-down"></i></a>
+          <div class="dropdown-menu" aria-labelledby="mailReadDropdown1" ngbDropdownMenu>
+            <a ngbDropdownItem href="" (click)="false">Mark as read</a>
+            <a ngbDropdownItem href="" (click)="false">Mark as unread</a>
+            <a ngbDropdownItem href="" (click)="false">Spam</a>
+            <div class="dropdown-divider"></div>
+            <a class="text-danger" ngbDropdownItem href="" (click)="false">Delete</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="date">Nov 20, 11:20</div>
+  </div>
+</div>
+<div class="email-body">
+  <p>Hello,</p>
+  <br>
+  <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</p>
+  <br>
+  <p>Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna.</p>
+  <br>
+  <p><strong>Regards</strong>,<br> John Doe</p>
+</div>
+<div class="email-attachments">
+  <div class="title">Attachments <span>(3 files, 12,44 KB)</span></div>
+  <ul>
+    <li><a href="" (click)="false"><span class="feather icon-file"></span> Reference.zip <span class="text-muted tx-11">(5.10 MB)</span></a></li>
+    <li><a href="" (click)="false"><span class="feather icon-file"></span> Instructions.zip <span class="text-muted tx-11">(3.15 MB)</span></a></li>
+    <li><a href="" (click)="false"><span class="feather icon-file"></span> Team-list.pdf <span class="text-muted tx-11">(4.5 MB)</span></a></li>
+  </ul>
+</div>

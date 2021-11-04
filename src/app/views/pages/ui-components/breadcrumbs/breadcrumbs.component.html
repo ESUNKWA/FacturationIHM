@@ -1,0 +1,154 @@
+<div class="row">
+  <div class="col-xl-10 main-content pl-xl-4 pr-xl-5">
+    <h1 class="page-title">Breadcrumbs</h1>
+    <p class="lead">Indicate the current page’s location within a navigational hierarchy that automatically adds separators via CSS. Read the <a href="https://getbootstrap.com/docs/4.4/components/breadcrumb/" target="_blank">Official Bootstrap Documentation</a> for a full list of instructions and other options.</p>
+    <hr>
+    <h4 #default>Defalult breadcrumb</h4>
+    <div class="example">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a routerLink=".">Home</a></li>
+          <li class="breadcrumb-item"><a routerLink=".">Library</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Data</li>
+        </ol>
+      </nav>
+    </div>
+    <app-code-preview [codeContent]="defaultBreadcrumbCode"></app-code-preview>
+
+    <hr>
+
+    <h4 #variations>Breadcrumb variations</h4>
+    <p class="mb-3">Add class <code>.bg-*</code> for solid colored breadcrumb.</p>
+    <div class="example">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb bg-primary">
+          <li class="breadcrumb-item"><a routerLink=".">Home</a></li>
+          <li class="breadcrumb-item"><a routerLink=".">Library</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Data</li>
+        </ol>
+      </nav>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb bg-info">
+          <li class="breadcrumb-item"><a routerLink=".">Home</a></li>
+          <li class="breadcrumb-item"><a routerLink=".">Library</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Data</li>
+        </ol>
+      </nav>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb bg-danger">
+          <li class="breadcrumb-item"><a routerLink=".">Home</a></li>
+          <li class="breadcrumb-item"><a routerLink=".">Library</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Data</li>
+        </ol>
+      </nav>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb bg-success">
+          <li class="breadcrumb-item"><a routerLink=".">Home</a></li>
+          <li class="breadcrumb-item"><a routerLink=".">Library</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Data</li>
+        </ol>
+      </nav>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb bg-warning">
+          <li class="breadcrumb-item"><a routerLink=".">Home</a></li>
+          <li class="breadcrumb-item"><a routerLink=".">Library</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Data</li>
+        </ol>
+      </nav>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb bg-light">
+          <li class="breadcrumb-item"><a routerLink=".">Home</a></li>
+          <li class="breadcrumb-item"><a routerLink=".">Library</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Data</li>
+        </ol>
+      </nav>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb bg-dark">
+          <li class="breadcrumb-item"><a routerLink=".">Home</a></li>
+          <li class="breadcrumb-item"><a routerLink=".">Library</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Data</li>
+        </ol>
+      </nav>
+    </div>
+    <app-code-preview [codeContent]="breadcrumbVariationsCode"></app-code-preview>
+    
+    <hr>
+    
+    <h4 #inverse>Inverse breadcrumbs</h4>
+    <p class="mb-3">Add class <code>.bg-inverse-*</code> for inverse skin.</p>
+    <div class="example">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb bg-inverse-primary">
+          <li class="breadcrumb-item"><a routerLink=".">Home</a></li>
+          <li class="breadcrumb-item"><a routerLink=".">Library</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Data</li>
+        </ol>
+      </nav>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb bg-inverse-info">
+          <li class="breadcrumb-item"><a routerLink=".">Home</a></li>
+          <li class="breadcrumb-item"><a routerLink=".">Library</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Data</li>
+        </ol>
+      </nav>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb bg-inverse-danger">
+          <li class="breadcrumb-item"><a routerLink=".">Home</a></li>
+          <li class="breadcrumb-item"><a routerLink=".">Library</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Data</li>
+        </ol>
+      </nav>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb bg-inverse-success">
+          <li class="breadcrumb-item"><a routerLink=".">Home</a></li>
+          <li class="breadcrumb-item"><a routerLink=".">Library</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Data</li>
+        </ol>
+      </nav>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb bg-inverse-warning">
+          <li class="breadcrumb-item"><a routerLink=".">Home</a></li>
+          <li class="breadcrumb-item"><a routerLink=".">Library</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Data</li>
+        </ol>
+      </nav>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb bg-inverse-dark">
+          <li class="breadcrumb-item"><a routerLink=".">Home</a></li>
+          <li class="breadcrumb-item"><a routerLink=".">Library</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Data</li>
+        </ol>
+      </nav>
+    </div>
+    <app-code-preview [codeContent]="inverseBreadcrumbCode"></app-code-preview>
+    
+    <hr>
+    
+    <h4 #changingSeperator>Changing the separator</h4>
+    <p class="mb-3">Separators are automatically added in CSS through <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/::before"><code>::before</code></a> and <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/content"><code>content</code></a>. They can be changed by changing <code>$breadcrumb-divider</code>. The <a href="https://sass-lang.com/documentation/Sass/Script/Functions.html#quote-instance_method">quote</a> function is needed to generate the quotes around a string, so if you want <code>&gt;</code> as separator, you can use this:</p>
+    <app-code-preview [codeContent]="changingSeperatorCode"></app-code-preview>
+
+    <p class="mb-3">It’s also possible to use a base64 embedded SVG icon:</p>
+    <app-code-preview [codeContent]="changingSeperatorSvgCode"></app-code-preview>
+
+    <p class="mb-3">The separator can be removed by setting <code>$breadcrumb-divider</code> to <code>none</code>:</p>
+    <app-code-preview [codeContent]="changingSeperatorNoneCode"></app-code-preview>
+
+  </div>
+  <div class="col-xl-2 content-nav-wrapper">
+    <ul class="nav content-nav d-flex flex-column">
+      <li class="nav-item">
+        <a (click)="scrollTo(default)" class="nav-link">Default breadcrumb</a>
+      </li>
+      <li class="nav-item">
+        <a (click)="scrollTo(variations)" class="nav-link">Breadcrumb variations</a>
+      </li>
+      <li class="nav-item">
+        <a (click)="scrollTo(inverse)" class="nav-link">Inverse breadcrumb</a>
+      </li>
+      <li class="nav-item">
+        <a (click)="scrollTo(changingSeperator)" class="nav-link">Changing seperator</a>
+      </li>
+    </ul>
+  </div>
+</div>

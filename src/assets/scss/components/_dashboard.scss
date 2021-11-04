@@ -1,0 +1,53 @@
+.dashboard-date {
+  width: 211px;
+    &.input-group {
+      input {
+        background: transparent;
+        width: 140px;
+        color: $text-muted;
+        border: 1px solid theme-color(primary);
+      }
+    }
+}
+
+#flotChart1 {
+  height: 350px;
+  @media(max-width: 767px) {
+    height: 200px;
+  }
+}
+#progressbar1 {
+  width: 200px;
+  height: 200px;
+  position: relative;
+  svg {
+    height: 200px;
+    width: 200px;
+    fill: none;
+    stroke-width: 10;
+    stroke-linecap: round;
+  }
+}
+
+.monthly-sales-chart-wrapper {
+  height: 270px;
+  @media(max-width: 767px) {
+    height: 200px;
+  }
+}
+
+
+// RTL changes
+.rtl {
+  .dashboard-date {
+      .input-group-prepend {
+        button {
+          border-top-right-radius: $btn-border-radius;
+          border-bottom-right-radius: $btn-border-radius;
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
+          border-left: 0;
+        }
+      }
+  }
+}

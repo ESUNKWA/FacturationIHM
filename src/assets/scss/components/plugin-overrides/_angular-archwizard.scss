@@ -1,0 +1,40 @@
+aw-wizard {
+  aw-wizard-navigation-bar.horizontal.small {
+    ul.steps-indicator {
+      li {
+        a {
+          .label {
+            color: $text-muted;
+          }
+          .step-indicator {
+            background-color: theme-color(light);
+          }
+        }
+        &.done {
+          a {
+            .step-indicator {
+              background-color: theme-color(success);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.rtl {
+  aw-wizard {
+    aw-wizard-navigation-bar.horizontal.small {
+      ul.steps-indicator {
+        li {
+          &:not(:last-child) {
+            &::after {
+              left: auto;
+              right: calc(50% + 7px);
+            }
+          }
+        }
+      }
+    }
+  }
+}

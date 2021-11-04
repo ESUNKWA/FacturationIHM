@@ -1,0 +1,150 @@
+
+
+
+<div class="row" >
+<div class="col-md-12">
+<!-- Button trigger modal -->
+<button class="btn btn-primary"
+(click)="addProfil();openVerticalCenteredModal(verticalCenteredModal)"
+style="float: right;">Nouveau</button>
+<!-- Modal -->
+</div>
+</div>
+
+<div class="row mt-2" >
+  <div class="col-md-12 stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h6 class="card-title">Liste des utiliateurs</h6>
+        <div class="table-responsive">
+          <table class="table" >
+            <thead>
+              <tr>
+                <th>Nom</th>
+                <th>Prenoms</th>
+                <th>Partenaire</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of data" >
+                <td>{{item.r_nom}}</td>
+                <td>{{item.r_prenoms}}</td>
+                <td>{{item.r_partenaire}}</td>
+                <td *ngIf=" item.r_status == 0" ><span class="badge badge-pill badge-warning">Compté désactivé</span></td>
+                <td *ngIf=" item.r_status == 1" ><span class="badge badge-pill badge-success">Compté Activé</span></td>
+                <td>
+                    <button (click)="openVerticalCenteredModal(verticalCenteredModal);action(item,'edit');" class="btn btn-primary btn-icon"><i class="feather icon-edit"></i></button>&nbsp;
+                    <button (click)="openVerticalCenteredModal(verticalCenteredModal);action(item,'views');" class="btn btn-info btn-icon"><i class="feather icon-info"></i></button>&nbsp;
+                    <button class="btn btn-danger btn-icon"><i class="feather icon-trash-2"></i></button>
+
+                </td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<ng-template #verticalCenteredModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">{{ modalTitle }}</h5>
+    <button type="button" class="close" (click)="modal.close('by: close icon')" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+
+      <form [formGroup]="utilisateurData">
+
+
+        <div class="form-group row">
+          <div class="col-sm-6">
+            <label class="" >Profil utilisateur </label>
+            <select class="form-control" [(ngModel)]="details.r_profil" formControlName="p_profil">
+              <option value="0" selected>---Sélectionnez le profil---</option>
+              <option value="{{ value.r_i }}"  *ngFor=" let value of dataProfil " >{{ value.r_libelle }}</option>
+            </select>
+            <span class="messages"></span>
+          </div>
+          <div class="col-sm-6">
+            <label class="" >Partenaire</label>
+            <select class="form-control"
+            [(ngModel)]="details.r_partenaire"
+            formControlName="p_partenaire" (change)="selectProduitPartenaire1();">
+              <option value="0" selected>---Sélectionnez le partenaire---</option>
+              <option value="{{ value.r_i }}"  *ngFor=" let value of partenaires " >{{ value.r_nom }}</option>
+            </select>
+            <span class="messages"></span>
+          </div>
+
+        </div>
+        <div class="form-group row">
+          <div class="col-sm-6">
+            <label class="">Nom </label>
+              <input type="text" class="form-control" [(ngModel)]="details.r_nom" formControlName="p_nom"
+            >
+          </div>
+          <div class="col-sm-6">
+            <label class="">Prenoms </label>
+              <input type="text" class="form-control" [(ngModel)]="details.r_prenoms" formControlName="p_prenoms"
+            >
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-sm-6">
+            <label class="">Numéro de téléphone </label>
+              <input type="text" class="form-control" placeholder="00-00-00-00-00" [(ngModel)]="details.r_phone" formControlName="p_phone"
+            >
+          </div>
+          <div class="col-sm-6">
+            <label class="">Adresse email </label>
+              <input type="email" class="form-control" [(ngModel)]="details.r_email" formControlName="p_email"
+            >
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-sm-4">
+            <label class="">Identifiant</label>
+              <input type="text" class="form-control" autocomplete="off" [(ngModel)]="details.r_login" formControlName="p_login"
+            >
+          </div>
+          <div class="col-sm-4">
+            <label class="">Mot de passe</label>
+              <input type="password" class="form-control" formControlName="password"
+            >
+          </div>
+          <div class="col-sm-4">
+            <label class="">Confirmation du mot de passe</label>
+              <input type="password" class="form-control" formControlName="password_confirmation">
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-sm-12">
+            <label class="ol-form-label">Description</label>
+              <textarea rows="3" cols="5" class="form-control" placeholder=""></textarea>
+          </div>
+        </div>
+    </form>
+
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.close('by: close button')">Fermer</button>
+    <button type="button" class="btn btn-primary" (click)="modal.close('by: save button')" [hidden]="registerBtnEtat" (click)="resgister()">Enregistrer</button>
+  </div>
+</ng-template>

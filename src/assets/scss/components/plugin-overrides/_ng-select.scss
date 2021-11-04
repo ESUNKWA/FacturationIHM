@@ -1,0 +1,45 @@
+// Plugin: Ng-select
+// github: https://github.com/ng-select/ng-select
+
+.ng-select {
+  .ng-select-container {
+    @extend .form-control;
+    padding: 0;
+  }
+  &.ng-select-multiple {
+    .ng-select-container {
+      height: auto;
+      .ng-value-container {
+        .ng-placeholder {
+          top: 10px;
+        }
+        .ng-value {
+          background-color: theme-color(primary);
+          color: #fff;
+          .ng-value-icon {
+            padding: 6px 7px;
+            &:hover {
+              background-color: darken(theme-color(primary), 5%);
+            }
+            &.left {
+              border-right: 1px solid rgba(#fff, .3);
+            }
+          }
+          .ng-value-lable {
+            padding: 6px 7px;
+          }
+        }
+      }
+    }
+  }
+  .ng-dropdown-panel {
+    .ng-dropdown-panel-items {
+      .ng-option {
+        &.ng-option-marked {
+          background-color: lighten(theme-color(primary), 0%);
+          color: #fff;
+        }
+      }
+    }
+  }
+}

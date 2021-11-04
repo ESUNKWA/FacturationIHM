@@ -1,0 +1,115 @@
+/* Dropdowns */
+
+.dropdown,
+.btn-group {
+  .dropdown-toggle {
+    &.no-dropdown-toggle-icon {
+      &::after {
+        display: none;
+      }
+    }
+  }
+  .dropdown-menu {
+    padding: .35rem;
+    margin-top: 0;
+    box-shadow: $dropdown-box-shadow; 
+    border-radius: 0;   
+    .dropdown-item {
+      font-size: .812rem;
+      padding: .25rem .875rem;
+      transition: all .2s ease-in-out;
+      border-radius: 2px;
+      i, svg {
+        color: $text-muted;
+        transition: all .2s ease-in-out;
+      }
+      &:not(.active) {
+        &:hover {
+          background-color: rgba(theme-color(primary), .1);
+          &, i, svg {
+            color: theme-color(primary);
+          }        
+        }
+      }
+      &:active {
+        background: initial;
+      }
+      &.active {
+        background-color: theme-color(primary);
+      }
+    }
+  }
+}
+
+.dropdown, 
+.dropup, 
+.dropright {
+  .dropdown-toggle {
+    &::after {
+      border: 0;
+      font: normal normal normal 24px/1 "feather";
+      content: "";  
+      // width: auto;
+      // height: auto;
+      vertical-align: middle;
+      line-height: .625rem;
+      font-size: .875rem;
+      margin-left: .3rem; 
+    }
+  }
+}
+
+.dropup {
+  .dropdown-toggle {
+    &::after {
+      content: '';
+    }
+  }
+}
+
+.dropright {
+  .dropdown-toggle {
+    &::after {
+      content: '';
+    }
+  }
+}
+
+.dropleft {
+  .dropdown-toggle {
+    &::before {
+      border: 0;
+      font: normal normal normal 24px/1 "feather";
+      content: "";  
+      // width: auto;
+      // height: auto;
+      vertical-align: middle;
+      line-height: .625rem;
+      font-size: .875rem;
+      margin-right: .3rem; 
+    }
+  }
+}
+
+.dropdown-menu-right {
+  right: 0 !important;
+  left: auto !important;
+}
+
+.rtl {
+  .dropdown,
+  .btn-group {
+    .dropdown-toggle {
+      &::after {
+        margin-left: 0;
+        margin-right: .3rem;
+      }
+    }
+  }
+  .dropdown-menu {
+    text-align: right;
+  }
+  ngb-typeahead-window {
+    @extend .dropdown-menu-right;
+  }
+}

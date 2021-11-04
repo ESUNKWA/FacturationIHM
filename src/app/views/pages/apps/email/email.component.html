@@ -1,0 +1,46 @@
+<div class="row inbox-wrapper">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-lg-3 email-aside border-lg-right">
+            <div class="aside-content">
+              <div class="aside-header">
+                <button type="button" class="navbar-toggle" (click)="isAsideNavCollapsed = !isAsideNavCollapsed" [attr.aria-expanded]="!isAsideNavCollapsed" aria-controls="asideNav">
+                  <span class="icon"><i class="feather icon-chevron-down"></i></span>
+                </button>
+                <span class="title">Mail Service</span>
+                <p class="description">amiahburton@gmail.com</p>
+              </div>
+              <div class="aside-compose"><a class="btn btn-primary btn-block" routerLink="/apps/email/compose">Compose Email</a></div>
+              <div class="aside-nav" id="asideNav" [ngbCollapse]="isAsideNavCollapsed">
+                <ul class="nav">
+                  <li [ngClass]="{'active': inbox.isActive}"><a routerLink="/apps/email/inbox" routerLinkActive="active" #inbox="routerLinkActive"><span class="icon"><i class="feather icon-inbox"></i></span>Inbox<span class="badge badge-danger-muted text-white font-weight-bold float-right">2</span></a></li>
+                  <li><a href="" (click)="false"><span class="icon"><i class="feather icon-mail"></i></span>Sent Mail</a></li>
+                  <li><a href="" (click)="false"><span class="icon"><i class="feather icon-briefcase"></i></span>Important<span class="badge badge-info-muted text-white font-weight-bold float-right">4</span></a></li>
+                  <li><a href="" (click)="false"><span class="icon"><i class="feather icon-file"></i></span>Drafts</a></li>
+                  <li><a href="" (click)="false"><span class="icon"><i class="feather icon-star"></i></span>Tags</a></li>
+                  <li><a href="" (click)="false"><span class="icon"><i class="feather icon-trash"></i></span>Trash</a></li>
+                </ul>
+                <span class="title">Labels</span>
+                <ul class="nav nav-pills nav-stacked">
+                  <li>
+                    <a href="" (click)="false"><i class="feather icon-tag text-warning"></i> Important </a>
+                  </li>
+                  <li class="active"><a href="" (click)="false"><i class="feather icon-tag text-primary"></i> Business </a>
+                  </li>
+                  <li>
+                    <a href="" (click)="false"> <i class="feather icon-tag text-info"></i> Inspiration </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-9 email-content">
+            <router-outlet></router-outlet>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

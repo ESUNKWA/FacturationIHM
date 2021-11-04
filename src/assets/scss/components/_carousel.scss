@@ -1,0 +1,15 @@
+.carousel {
+  outline: none;
+  &.carousel-fade {
+    .carousel-item {
+      transition: opacity 0.7s ease !important;
+      position: absolute !important;
+      display: block !important;
+      opacity: 0;
+    }
+    .carousel-item.active {
+      position: relative !important;
+      opacity: 1;
+    }
+  }
+}
