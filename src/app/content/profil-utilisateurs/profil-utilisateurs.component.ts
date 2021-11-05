@@ -126,4 +126,12 @@ export class ProfilUtilisateursComponent implements OnInit {
     )
   }
 
+
+
+
+
+  /* ----------------------------------Datatable------------------------ */
+
+
+
 }

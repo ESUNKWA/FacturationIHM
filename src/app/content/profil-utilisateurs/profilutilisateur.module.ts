@@ -1,3 +1,4 @@
+import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -8,7 +9,9 @@ import { ProfilutilisateurRouting } from "./profilutilisateur-routing.module";
     imports: [
       ProfilutilisateurRouting,
       CommonModule,
-      ReactiveFormsModule
+      ReactiveFormsModule,
+      NgbNavModule
+
     ],
     declarations: [ProfilUtilisateursComponent]
 })
