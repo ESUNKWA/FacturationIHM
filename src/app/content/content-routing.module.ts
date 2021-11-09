@@ -63,7 +63,7 @@ const routes: Routes = [
             title: 'Profils utilisateurs',
             status: false
         },
-        loadChildren: './profil-utilisateurs/profilutilisateur.module#ProfilUtilisateursModule' 
+        loadChildren: './profil-utilisateurs/profilutilisateur.module#ProfilUtilisateursModule'
     },
     {
         path: 'partenaires',
@@ -71,7 +71,7 @@ const routes: Routes = [
             title: 'Profils utilisateurs',
             status: false
         },
-        loadChildren: './partenaires/partenaires.module#PartenairesModule' 
+        loadChildren: './partenaires/partenaires.module#PartenairesModule'
     },
     {
         path: 'ventes',
@@ -79,9 +79,9 @@ const routes: Routes = [
             title: 'Détails ventes',
             status: false
         },
-        loadChildren: './detailsventes/detailsventes.module#DetailsventesModule' 
+        loadChildren: './detailsventes/detailsventes.module#DetailsventesModule'
     }
-    
+
 ];
 
 @NgModule({

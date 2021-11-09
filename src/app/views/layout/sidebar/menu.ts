@@ -55,7 +55,7 @@ export const MENU: MenuItem[] = [
       },
       {
         label: 'Commandes',
-        link: '/apps/email/read'
+        link: '/commandes'
       }
     ]
   },

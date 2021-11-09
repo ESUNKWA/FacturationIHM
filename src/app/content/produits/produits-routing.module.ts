@@ -11,13 +11,7 @@ const routes: Routes = [
       },
     {
         path:'liste',
-        component: ProduitsComponent,
-        data: {
-            title: 'Gestion des produits',
-            icon: 'icon-layout-cta-right',
-            caption: 'Produits',
-            status: true
-        }
+        component: ProduitsComponent
     }
 ];
 

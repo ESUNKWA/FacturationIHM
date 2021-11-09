@@ -1,8 +1,8 @@
-<ng-template [ngIf]=" saisieVente === true " > 
+<ng-template [ngIf]=" saisieVente === true " >
   <div class="row">
     <div class="col-md-12">
-      <button style="float: right;" 
-                  title="Ajouter un nouveau produit" 
+      <button style="float: right;"
+                  title="Ajouter un nouveau produit"
                   type="button" class="btn btn-primary btn-round"
                   id="btnVentes"
                   (click)="viewsVentes()">Liste des ventes
@@ -12,11 +12,11 @@
   <div class="card">
     <div class="card-body">
       <h6 class="card-title">Formulaire de saisie des ventes</h6>
-  
+
       <aw-wizard>
         <aw-wizard-step stepTitle="Produits">
-  
-  
+
+
           <div class="row mt-2" >
             <div class="col-md-9 stretch-card">
               <div class="card">
@@ -32,7 +32,7 @@
                           <th style="width: 15%;">Prix Unitaire</th>
                           <th style="width: 10%;">Quantité</th>
                           <th style="width: 20%;">Total</th>
-                          
+
                         </tr>
                       </thead>
                       <tbody>
@@ -52,7 +52,7 @@
                           <td>
                             <input type="number" data-a-sign="fcfa" value="0" [id]="'produit-'+i" disabled class="form-control" placeholder="">
                           </td>
-                         
+
                         </tr>
                       </tbody>
                       <tfoot>
@@ -70,7 +70,7 @@
                 </div>
               </div>
             </div>
-  
+
             <!-- Sélection des prouits -->
           <div class="col-xl-3 col-md-6">
             <div class="card feed-card">
@@ -82,7 +82,7 @@
                     <h5 class="m-b-1">{{ produitAjoute.r_libelle }}</h5>&nbsp;
                     <p class="text-c-red m-b-0">{{ produitAjoute.p_quantite }} x {{ produitAjoute.r_prix_vente }} = {{ produitAjoute.p_total }}</p>
                   </div>
-  
+
                   <div class="text-center">
                       <h4 class="text-c-red"  >{{ sommes || 'Panier vide' }}</h4>
                   </div>
@@ -94,7 +94,7 @@
                       <input #paiement class="border-checkbox" (change)="isCheckPaiement(paiement.checked)" type="checkbox" id="checkbox1">
                     </div>
                   </div>
-  
+
                   <ng-template [ngIf]=" InputPaiementPartiel === true " >
                     <div class="form-row" >
                       <div class="col-md-12" >
@@ -103,25 +103,25 @@
                       </div>
                     </div>
                   </ng-template>
-                  
+
               </div>
             </div>
           </div>
-  
+
           </div>
-        
-          
+
+
           <div class="d-flex justify-content-center mt-2">
             <button class="btn btn-primary" type="button" (click)="step1()" awNextStep>Continue</button>
           </div>
         </aw-wizard-step>
-  
+
         <aw-wizard-step stepTitle="Infos client">
-          
-  
+
+
           <form [formGroup]="infosClient">
             <div class="form-group row">
-                
+
                 <div class="col-sm-4">
                   <label class="col-form-label styleInput" >Type de client </label>
                   <select class="form-control" aria-label=".form-select-lg example" formControlName="p_type_person" >
@@ -131,41 +131,41 @@
                   </select>
                    <span class="messages"></span>
                 </div>
-  
+
                 <div class="col-sm-4">
                   <label class="col-form-label styleInput" >Nom </label>
                     <input type="text" class="form-control" formControlName="p_nom" placeholder="">
                     <span class="messages"></span>
                 </div>
-  
+
                 <div class="col-sm-4">
                   <label class="col-form-label styleInput" >Prenoms </label>
                     <input type="text" class="form-control" formControlName="p_prenoms" placeholder="">
                     <span class="messages"></span>
                 </div>
             </div>
-  
+
             <div class="form-group row">
-                
+
               <div class="col-sm-4">
                 <label class="col-form-label styleInput" >Numéro de téléphone 1 </label>
                   <input type="text" placeholder="00-00-00-00-00" class="form-control" formControlName="p_phone">
                   <span class="messages"></span>
               </div>
-  
+
               <div class="col-sm-4">
                 <label class="col-form-label styleInput" >Numéro de téléphone 2 </label>
                   <input type="text" class="form-control" formControlName="p_phone2" placeholder="00-00-00-00-00">
                   <span class="messages"></span>
               </div>
-  
+
               <div class="col-sm-4">
                 <label class="col-form-label styleInput" >Adresse email </label>
                   <input type="text" class="form-control" formControlName="p_email"  placeholder="">
                   <span class="messages"></span>
               </div>
             </div>
-  
+
             <div class="form-group row">
               <div class="col-sm-12">
                 <label class="col-form-label styleInput">Description</label>
@@ -173,14 +173,14 @@
               </div>
             </div>
         </form>
-  
-  
+
+
           <div class="d-flex justify-content-center mt-2">
             <button class="btn btn-light mr-2" type="button" awPreviousStep>Précédent</button>
             <button class="btn btn-primary" type="button" awNextStep>Suivant</button>
           </div>
         </aw-wizard-step>
-  
+
         <aw-wizard-step stepTitle="Récapitulatif">
           <div class="text-center">
             <i data-feather="check-circle" appFeatherIcon class="text-success mt-4 mb-2 icon-xxl"></i>
@@ -193,7 +193,7 @@
           </div>
         </aw-wizard-step>
       </aw-wizard>
-  
+
     </div>
   </div>
 </ng-template>
@@ -203,29 +203,29 @@
 
 
 <!-- Liste des ventes -->
-<ng-template [ngIf]=" afficheVente === true " > 
+<ng-template [ngIf]=" afficheVente === true " >
   <div class="row">
-  
-    <div class="col" >
-      <select class="form-control" 
+
+    <div class="col" *ngIf="userInfos.r_profil == 4" >
+      <select class="form-control"
               aria-label=".form-select-lg example"
               (change)="selectProduitPartenaire();" [(ngModel)]="selectedLevel" >
         <option value="0" selected>---Sélectionnez le partenaire---</option>
         <option value="{{ value.r_i }}"  *ngFor=" let value of partenaires " >{{ value.r_nom }}</option>
       </select>
     </div>
-  
-    <div class="col-md-6">
-      <button style="float: right;" 
-                  title="Ajouter un nouveau produit" 
+
+    <div class="col">
+      <button style="float: right;"
+                  title="Ajouter un nouveau produit"
                   type="button" class="btn btn-primary btn-round"
                   id="btnVentes"
                   (click)="saisieVentes()">Effectuer une vente
           </button>
     </div>
-  
+
   </div>
-    
+
   <div class="card">
     <div class="card-body">
       <h6 class="card-title">Liste des ventes</h6>
@@ -237,8 +237,8 @@
               <th style="width: 25%;" >Numéro de facture</th>
               <th style="width: 15%;">Montant total</th>
               <th style="width: 15%;">Status</th>
-              <th style="width: 10%;">Actions</th>
-              
+              <th style="width: 10%; text-align: center;">Actions</th>
+
             </tr>
           </thead>
           <tbody>
@@ -248,12 +248,12 @@
               <td><b>{{item.r_mnt}}</b></td>
               <td *ngIf = " item.r_status == 0 " ><label class="label label-danger" style="width: 100%;" >Non reglée</label></td>
                 <td *ngIf = " item.r_status == 1 " ><label class="label label-success" style="width: 100%;">Payée</label></td>
-                <td>
+                <td >
                   <button  class="btn btn-primary btn-icon" (click)="detailsVente(item,'edit');openVerticalCenteredModal(verticalCenteredModal)"><i class="feather icon-edit"></i></button>&nbsp;
-                  <button  class="btn btn-info btn-icon" (click)="detailsVente(item,'views');openVerticalCenteredModal(verticalCenteredModal);" ><i class="feather icon-eyes"></i></button>&nbsp;
-                  <button class="btn btn-danger btn-icon "><i class="icofont icofont-trash"></i></button>
+                  <button  class="btn btn-info btn-icon" (click)="detailsVente(item,'views');openVerticalCenteredModal(verticalCenteredModal);" ><i class="feather icon-eye"></i></button>&nbsp;
+                  <button class="btn btn-danger btn-icon "><i class="feather icon-trash"></i></button>
               </td>
-             
+
             </tr>
           </tbody>
           <tfoot>
@@ -285,7 +285,7 @@
 
     <div class="card">
       <div class="card-body">
-        
+
         <ul ngbNav #nav="ngbNav" class="nav-tabs">
 
           <li ngbNavItem>
@@ -299,35 +299,35 @@
                           <input type="text" class="form-control" formControlName="p_nom" [(ngModel)]="detailsFacture.r_nom" >
                           <span class="messages"></span>
                       </div>
-    
+
                       <div class="col-sm-6">
                         <label class="col-form-label">Prenoms </label>
                           <input type="text" class="form-control" formControlName="p_prenoms" [(ngModel)]="detailsFacture.r_prenoms" >
                           <span class="messages"></span>
                       </div>
                     </div>
-    
+
                     <div class="form-group row">
                       <div class="col-sm-6">
                         <label class="col-form-label">Numéro de téléphone </label>
                           <input type="text" class="form-control" formControlName="p_phone" [(ngModel)]="detailsFacture.r_phone" >
                           <span class="messages"></span>
                       </div>
-    
+
                       <div class="col-sm-6">
                         <label class="col-form-label">Adresse email </label>
                           <input type="text" class="form-control" formControlName="p_email" [(ngModel)]="detailsFacture.r_email" >
                           <span class="messages"></span>
                       </div>
                     </div>
-    
+
                     <div class="form-group row">
                       <div class="col-sm-12">
                         <label class="col-form-label">Description </label>
                           <textarea  class="form-control" id="" rows="3" formControlName="p_description" [(ngModel)]="detailsFacture.r_description"></textarea>
                       </div>
                     </div>
-    
+
               </form>
             </ng-template>
           </li>
@@ -335,7 +335,7 @@
           <li ngbNavItem>
             <a ngbNavLink>Détails des ventes</a>
             <ng-template ngbNavContent>
-             
+
               <table class="table" >
                 <thead>
                   <tr>
@@ -345,7 +345,7 @@
                     <th style="width: 15%;">Quantité</th>
                     <th style="width: 10%;">Montant</th>
                     <th style="width: 10%;">Actions</th>
-                    
+
                   </tr>
                 </thead>
                 <tbody>
@@ -359,7 +359,7 @@
                         <button  class="btn btn-primary btn-icon" (click)="detailsVente(item,'edit');openVerticalCenteredModal(verticalCenteredModal)"><i class="feather icon-edit"></i></button>&nbsp;
                         <button class="btn btn-danger btn-icon "><i class="feather icon-trash"></i></button>
                     </td>
-                   
+
                   </tr>
                 </tbody>
                 <tfoot>
@@ -388,7 +388,7 @@
               <div class="form-group row" *ngIf=" ligneVentes[0].r_status === 0 " >
                 <div class="col-md-8">
                   <label class="col-form-label">Montant à solder </label>
-                    <input #mntRgl type="text" class="form-control" 
+                    <input #mntRgl type="text" class="form-control"
                             [value]="detailsFacture.r_mnt - +ligneVentes[0].mnt_paye">
                 </div>
 
