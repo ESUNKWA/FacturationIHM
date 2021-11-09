@@ -45,7 +45,8 @@ export class LoginComponent implements OnInit {
 
           case 1:
             localStorage.setItem('isLoggedin', 'true');
-
+            localStorage.setItem('userInfos', JSON.stringify(res.result[0]));
+                        
             if (localStorage.getItem('isLoggedin')) {
               this.router.navigate([this.returnUrl]);
             }

@@ -54,7 +54,7 @@ produitData = this.fb.group({
 
   openVerticalCenteredModal(content) {
     this.modalService.open(content, {centered: true, size:'lg'}).result.then((result) => {
-      console.log("Modal closed" + result);
+      
     }).catch((res) => {});
   }
 
@@ -115,10 +115,11 @@ produitData = this.fb.group({
   }
 
   fc_add_produit(){
-    this.produitData.reset();
-    this.produitData.enable();
+    
     this.modeAppel = 'creation';
     this.modalTitle = 'Saisir une nouveau produit';
+    this.produitData.reset();
+    this.produitData.enable();
     this.registerBtnEtat = false;
   }
   fc_details_produit(data: any = {}, mode){
@@ -164,13 +165,14 @@ produitData = this.fb.group({
     if( this.userInfos.r_profil !== 4 ){
       this.produitData.value.p_partenaire = this.userInfos.r_partenaire;
     }
-
+console.log(this.produitData.value, this.modeAppel);
     switch( this.modeAppel ){
       case 'creation':
           this.produitServices.fs_saisieProduit(this.produitData.value).subscribe(
             (res: any = {}) =>{
               if( res.status === 1){
-                this.list_produits(this.userInfos.r_partenaire);
+                ( this.userInfos.r_profil == 4 )? this.list_produits(parseInt(this.produitData.value.p_partenaire, 10)) :  this.list_produits(this.userInfos.r_partenaire);
+               
                 this.produitData.reset();
                 this.swalServices.fs_modal(res.result, 'success');
               }else{
@@ -191,7 +193,7 @@ produitData = this.fb.group({
               this.produitServices.fs_update_produit(this.produitData.value).subscribe(
                 (res: any = {}) =>{
                   if( res.status === 1){
-                    this.list_produits(this.userInfos.r_partenaire);
+                    ( this.userInfos.r_profil == 4 )? this.list_produits(parseInt(this.detailsProduit.r_partenaire, 10)) :  this.list_produits(this.userInfos.r_partenaire);
                     this.produitData.reset();
                     this.swalServices.fs_modal(res.result, 'success');
                   }else{

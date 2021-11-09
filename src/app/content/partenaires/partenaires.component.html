@@ -31,12 +31,33 @@
                   <td>{{item.r_nom}}</td>
                   <td>{{(item.r_ville == 1)? 'Abidjan': 'Intérieur'}}</td>
                   <td>{{item.r_quartier}}</td>
-                  <td *ngIf=" item.r_status == 0" ><span class="badge badge-pill badge-warning">Compté désactivé</span></td>
-                  <td *ngIf=" item.r_status == 1" ><span class="badge badge-pill badge-success">Compté Activé</span></td>
+                  <td *ngIf=" item.r_status == 0" ><span class="badge badge-pill badge-warning" style="width: 100%;" >Compté désactivé</span></td>
+                  <td *ngIf=" item.r_status == 1" ><span class="badge badge-pill badge-success" style="width: 100%;" >Compté Activé</span></td>
                   <td>
                       <button (click)="openVerticalCenteredModal(verticalCenteredModal);action(item,'edit');" class="btn btn-primary btn-icon"><i class="feather icon-edit"></i></button>&nbsp;
                       <button (click)="openVerticalCenteredModal(verticalCenteredModal);action(item,'views');" class="btn btn-info btn-icon"><i class="feather icon-info"></i></button>&nbsp;
-                      <button class="btn btn-danger btn-icon"><i class="feather icon-trash-2"></i></button>
+                      <button class="btn btn-danger btn-icon"><i class="feather icon-trash-2"></i></button>&nbsp;
+                      <button *ngIf="item.r_status == 0" 
+                              class="btn btn-success btn-icon" 
+                              title="Activer le compte du partenaire {{ item.r_nom }}"
+                              (click)="activeDesactivePartenaire(item, 1)"
+                               ><i class="feather icon-check"></i></button>&nbsp;
+                      <button *ngIf="item.r_status == 1" 
+                      class="btn btn-warning btn-icon" 
+                      title="Désactiver le compte du partenaire {{ item.r_nom }}"
+                      (click)="activeDesactivePartenaire(item, 0)"
+                       ><i class="feather icon-slash"></i></button>
+
+
+                      <!-- <div class="btn-group" role="group" ngbDropdown>
+                        <button id="btnGroupDrop1" type="button" ngbDropdownToggle class="btn btn-info">
+                          Dropdown
+                        </button>
+                        <div ngbDropdownMenu aria-labelledby="btnGroupDrop1">
+                          <a ngbDropdownItem href="" (click)="false">Dropdown link</a>
+                          <a ngbDropdownItem href="" (click)="false">Dropdown link</a>
+                        </div>
+                      </div> -->
 
                   </td>
                 </tr>

@@ -8,7 +8,8 @@ import { ProduitsComponent } from "./produits.component";
     imports: [
       CommonModule,
       ReactiveFormsModule,
-      ProduitsRoutingModule
+      ProduitsRoutingModule,
+      FormsModule
     ],
     declarations: [ProduitsComponent]
 })

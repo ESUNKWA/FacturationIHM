@@ -11,6 +11,7 @@ import { FeahterIconModule } from 'src/app/core/feather-icon/feather-icon.module
 @NgModule({
     imports: [
       UtilisateurRoutingModule,
+      FormsModule,
       ReactiveFormsModule,
       CommonModule,
       NgxDatatableModule,

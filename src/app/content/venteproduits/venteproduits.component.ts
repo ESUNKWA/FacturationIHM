@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ExcelService } from 'src/app/services/excel/excel.service';
 import { FactureService } from 'src/app/services/facture/facture.service';
 import { ModalService } from 'src/app/services/modal/modal.service';
@@ -13,19 +14,7 @@ import { UserInfosService } from 'src/app/services/userInfos/user-infos.service'
   styleUrls: ['./venteproduits.component.scss']
 })
 export class VenteproduitsComponent implements OnInit {
-  public maskUsMobile = ['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
-
-  viewsSaisieVente: boolean = false;
-  viewsListeVente: boolean = false;
-  //Datatable variables
-  public rowsOnPage = 5;
-  public filterQuery = '';
-  public sortBy = '';
-  public sortOrder = 'desc';
-  data: any[];
-  filterData;
-
-  choixProduits: any = [];
+   choixProduits: any = [];
   desabledInputQteProduit: any = true;
   choixProduitsFinal: any = [];
   sommes: number = 0;
@@ -72,12 +61,15 @@ export class VenteproduitsComponent implements OnInit {
 
   myDate = new Date();
   today: any;
+  afficheVente: boolean = true;
+  saisieVente: boolean = false;
+  data: any;
 
 
   constructor( private produitServices: ProduitService, private excelService: ExcelService,
                 private fb: FormBuilder, private venteServices: FactureService,
                 private swalServices: ModalService, private infosUtilisateur: UserInfosService,
-                private partenaireServices: PartenairesService ) { }
+                private partenaireServices: PartenairesService, private modalService: NgbModal ) { }
 
   ngOnInit() {
     this.today = this.myDate.getFullYear()+'-'+ (this.myDate.getMonth() + 1) + '-'+ this.myDate.getDate();
@@ -85,39 +77,27 @@ export class VenteproduitsComponent implements OnInit {
     this.userInfos = this.infosUtilisateur.fs_informationUtilisateur();
     this.listVentes(this.userInfos.r_partenaire, this.today);
     this.listPartenaire();
+    //this.list_produits();
   }
 
-  search(term: string) {
-    if (!term) {
-      this.filterData = this.data;
-    } else {
-      this.filterData = this.data.filter(x =>
-        x.name.trim().toLowerCase().includes(term.trim().toLowerCase())
-      );
-    }
+
+  saisieVentes(){
+    this.list_produits();
+    this.saisieVente = true;
+    this.afficheVente = false;
   }
-
-  views(){
-    this.viewsSaisieVente = !this.viewsSaisieVente;
-    this.viewsListeVente = !this.viewsListeVente;
-
-    if( this.viewsListeVente === true ){
-      this.listVentes(this.userInfos.r_partenaire, this.today);
-      (<HTMLButtonElement>document.getElementById('btnVentes')).innerHTML = "Effectuer une vente";
-    }
-
-    if( this.viewsSaisieVente === true ){
-      this.list_produits();
-      (<HTMLButtonElement>document.getElementById('btnVentes')).innerHTML = "Voir les ventes";
-      this.resetventForm();
-    }
-
+  viewsVentes(){
+    this.listVentes(this.userInfos.r_partenaire, this.today);
+    this.saisieVente = false;
+    this.afficheVente = true;
   }
 
   list_produits(){
+    this.data = [];
     this.produitServices.fs_listProduit(this.userInfos.r_partenaire).subscribe(
       (res: any = {}) => {
         this.data = res.result;
+        
       },
       (err) => console.log(err),
     );
@@ -138,8 +118,6 @@ export class VenteproduitsComponent implements OnInit {
         this.data = res.result;
         setTimeout(()=>{
           this.hideLoder = false;
-          this.viewsListeVente = true;
-          this.viewsSaisieVente = false;
         }, 2000);
       },
       (err) => console.log(err),
@@ -152,6 +130,12 @@ export class VenteproduitsComponent implements OnInit {
         this.partenaires = res.result;
       }
     )
+  }
+
+  openVerticalCenteredModal(content) {
+    this.modalService.open(content, {centered: true, size:'lg'}).result.then((result) => {
+      
+    }).catch((res) => {});
   }
 
 
@@ -177,11 +161,15 @@ export class VenteproduitsComponent implements OnInit {
   }
 
   choixqteProduit(qte, indexLigne, ligneProduit){
+
+   
+    
     let total = (<HTMLInputElement>document.getElementById(`produit-${indexLigne}`)).value = (""+qte.value * ligneProduit.r_prix_vente);
 
     this.choixProduits.find( (produit)=>produit.r_i == ligneProduit.r_i);
     ligneProduit.p_quantite = +qte.value;
     ligneProduit.p_total = +total;
+
 
     this.calculMntTotalAchat(this.choixProduits, 'ajoutQte');
   }
@@ -244,6 +232,10 @@ export class VenteproduitsComponent implements OnInit {
     this.infosClient.value.p_mnt_partiel = this.mntPartiel;
     this.infosClient.value.p_cmd = 0;
     this.infosClient.value.p_partenaire = this.userInfos.r_partenaire;
+
+    console.log(this.infosClient.value);
+    
+
     this.venteServices.fs_saisie_facture(this.infosClient.value).subscribe(
       (res: any)=> {
         this.swalServices.fs_modal(res.result, 'success');
@@ -271,15 +263,15 @@ export class VenteproduitsComponent implements OnInit {
     );
   }
 
-  detailsVente(detailsFacture: any = {}, mode: string){
+  detailsVente(data: any = {}, mode: string){
 
     this.viewsBtnUpdate = mode;
 
-    this.detailsFacture = detailsFacture;
-    this.modalTitle = ( mode == 'edit' )?`Modification de la vente N° [ ${detailsFacture.r_num} ] _______ Montant : ${detailsFacture.r_mnt} ${this.devise}`:`Consultation de la vente N° [ ${detailsFacture.r_num} ] _______ Montant : ${detailsFacture.r_mnt} ${this.devise}`;
+    this.detailsFacture = data;
+    this.modalTitle = ( mode == 'edit' )?`Modification de la vente N° [ ${data.r_num} ] _______ Montant : ${data.r_mnt} ${this.devise}`:`Consultation de la vente N° [ ${data.r_num} ] _______ Montant : ${data.r_mnt} ${this.devise}`;
 
     //Récupération des détails de la facture
-    this.venteServices.fs_details_facture(detailsFacture.r_i).subscribe(
+    this.venteServices.fs_details_facture(data.r_i).subscribe(
       ( res: any = {} ) => {
         this.ligneVentes = res.result;
       },

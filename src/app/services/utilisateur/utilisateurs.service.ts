@@ -40,6 +40,13 @@ export class UtilisateursService {
     )
   }
 
+  updateStatusUser(data){
+    return this.http.put(url+'/utilisateur.activdesact', JSON.stringify(data), this.httpOptions).pipe(
+      retry(1),
+      catchError(this.handleError)
+    )
+  }
+
   handleError(error: { error: { message: string; }; status: any; message: any; }) {
     let errorMessage = '';
     if(error.error instanceof ErrorEvent) {

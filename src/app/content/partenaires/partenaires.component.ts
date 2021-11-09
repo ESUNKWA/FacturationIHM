@@ -42,8 +42,9 @@ villes: any = [
 ];
   userInfos: any = {};
 
-  constructor( private fb: FormBuilder, private swalServices: ModalService, private partenaireServices: PartenairesService,
-    private modalService: NgbModal, private infosUtilisateur: UserInfosService) { }
+  constructor( private fb: FormBuilder, private swalServices: ModalService, 
+              private partenaireServices: PartenairesService,private modalService: NgbModal, 
+              private infosUtilisateur: UserInfosService) { }
 
   ngOnInit() {
     this.userInfos = this.infosUtilisateur.fs_informationUtilisateur()
@@ -63,7 +64,6 @@ villes: any = [
 
         this.data = res.result;
 
-        console.log(this.data)
       },
       (error) => this.swalServices.fs_modal(error,'error')
     )
@@ -98,7 +98,19 @@ villes: any = [
     }
   }
 
+  activeDesactivePartenaire(data, status){
+    this.details.length = 0;
+    this.details.p_idpartenaire = data.r_i;
+    this.details.p_status = status;
+   
+    this.partenaireServices.updateStatusPartenaire(this.details).subscribe(
+      ( res: any = {} ) => {
+ 
+        this.listPartenaires();
 
+      }
+    )
+  }
 
   resgister(){
     //Validation du formulaire

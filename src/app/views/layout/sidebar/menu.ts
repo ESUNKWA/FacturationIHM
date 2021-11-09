@@ -51,7 +51,7 @@ export const MENU: MenuItem[] = [
     subItems: [
       {
         label: 'Ventes',
-        link: '/apps/email/inbox',
+        link: '/ventes',
       },
       {
         label: 'Commandes',

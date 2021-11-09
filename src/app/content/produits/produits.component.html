@@ -1,12 +1,22 @@
 <div class="row" >
-  <div class="col-md-12">
-  <!-- Button trigger modal -->
-  <button class="btn btn-primary"
-  (click)="openVerticalCenteredModal(verticalCenteredModal)"
-  style="float: right;">Nouveau</button>
-  <!-- Modal -->
+
+  <div class="col-md-6" >
+    <select class="form-control" 
+          (change)="selectProduitPartenaire();" [(ngModel)]="selectedLevel" >
+          <option value="0">---Sélectionnez le partenaire---</option>
+          <option value="{{ value.r_i }}"  *ngFor=" let value of partenaires " >{{ value.r_nom }}</option>
+    </select>
   </div>
+
+
+  <div class="col-md-6">
+    <!-- Button trigger modal -->
+    <button class="btn btn-primary"
+    (click)="fc_add_produit();openVerticalCenteredModal(verticalCenteredModal)"
+    style="float: right;">Nouveau</button>
+    <!-- Modal -->
   </div>
+</div>
 
   <div class="row mt-2" >
     <div class="col-md-12 stretch-card">
@@ -17,25 +27,20 @@
             <table class="table" >
               <thead>
                 <tr>
-                  <th>Code</th>
-                  <th>Nom</th>
-                  <th>Ville</th>
-                  <th>Quartier</th>
-                  <th>Status</th>
-                  <th>Action</th>
+                  <th style="width: 50%;" >Libellé</th>
+                  <th style="width: 15%;">Stock</th>
+                  <th style="width: 20%;">Prix Unitaire</th>
+                  <th style="width: 15%; text-align: center;">Action</th>
                 </tr>
               </thead>
               <tbody>
                 <tr *ngFor="let item of data" >
-                  <td>{{item.r_code}}</td>
-                  <td>{{item.r_nom}}</td>
-                  <td>{{(item.r_ville == 1)? 'Abidjan': 'Intérieur'}}</td>
-                  <td>{{item.r_quartier}}</td>
-                  <td *ngIf=" item.r_status == 0" ><span class="badge badge-pill badge-warning">Compté désactivé</span></td>
-                  <td *ngIf=" item.r_status == 1" ><span class="badge badge-pill badge-success">Compté Activé</span></td>
+                  <td>{{item.r_libelle}}</td>
+                  <td>{{item.r_stock}}</td>
+                  <td><b>{{item.r_prix_vente}}</b></td>
                   <td>
-                      <button (click)="openVerticalCenteredModal(verticalCenteredModal);action(item,'edit');" class="btn btn-primary btn-icon"><i class="feather icon-edit"></i></button>&nbsp;
-                      <button (click)="openVerticalCenteredModal(verticalCenteredModal);action(item,'views');" class="btn btn-info btn-icon"><i class="feather icon-info"></i></button>&nbsp;
+                      <button (click)="fc_details_produit(item, 1);openVerticalCenteredModal(verticalCenteredModal);" class="btn btn-primary btn-icon"><i class="feather icon-edit"></i></button>&nbsp;
+                      <button (click)="fc_details_produit(item, 2);openVerticalCenteredModal(verticalCenteredModal);" class="btn btn-info btn-icon"><i class="feather icon-info"></i></button>&nbsp;
                       <button class="btn btn-danger btn-icon"><i class="feather icon-trash-2"></i></button>
 
                   </td>

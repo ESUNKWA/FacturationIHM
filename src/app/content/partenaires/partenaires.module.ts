@@ -1,6 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { NgbDropdownModule } from "@ng-bootstrap/ng-bootstrap";
 import { PartenairesRoutingModule } from './partenaires-routing.module';
 import { PartenairesComponent } from "./partenaires.component";
 
@@ -8,7 +9,9 @@ import { PartenairesComponent } from "./partenaires.component";
     imports: [
       CommonModule,
       PartenairesRoutingModule,
-      ReactiveFormsModule
+      FormsModule,
+      ReactiveFormsModule,
+      NgbDropdownModule
     ],
     declarations: [PartenairesComponent]
 })

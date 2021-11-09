@@ -39,6 +39,13 @@ export class PartenairesService {
     )
   }
 
+  updateStatusPartenaire(data){
+    return this.http.put(api.url+'/partenaires.activdesact', JSON.stringify(data), this.httpOptions).pipe(
+      retry(1),
+      catchError(this.handleError)
+    )
+  }
+
 
   handleError(error) {
     let errorMessage = '';

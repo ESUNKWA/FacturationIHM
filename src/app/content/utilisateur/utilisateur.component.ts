@@ -39,8 +39,8 @@ export class UtilisateurComponent implements OnInit {
   data: any = [];
 
   dkem:any [];
-  datas: any = [];
-  dtOptions: any = {};
+  dataStatusUpdate: any = {};
+
   basicModalCloseResult: string = '';
 
   constructor( private utilisateurServices: UtilisateursService, private fb: FormBuilder,
@@ -70,10 +70,22 @@ export class UtilisateurComponent implements OnInit {
     this.modeAppel = 'creation';
     this.modalTitle = 'Saisir un nouvel utilisateur';
 
-    console.log(this.modeAppel)
   }
-  selectProduitPartenaire(){
-    //this.fct_listUtilisateurs(parseInt(this.selectedLevel));
+
+  activeDesactiveUser(data, status){
+
+    this.dataStatusUpdate.iduser = data.r_i;
+    this.dataStatusUpdate.p_status = status;
+   
+    this.utilisateurServices.updateStatusUser(this.dataStatusUpdate).subscribe(
+      ( res: any = {} ) => {
+        this.fct_listUtilisateurs(this.userInfos.r_partenaire);
+      }
+    )
+  }
+
+  selectUsersartenaire(){
+    this.fct_listUtilisateurs(parseInt(this.selectedLevel));
   }
   selectProduitPartenaire1(){
     this.utilisateurData.value.p_partenaire = +this.details.r_partenaire;

@@ -7,7 +7,7 @@ export class UserInfosService {
 
   constructor() { }
 
-  fs_informationUtilisateur<Observable>(){
+  fs_informationUtilisateur(){
     return JSON.parse(localStorage.getItem('userInfos'));
   }
 
