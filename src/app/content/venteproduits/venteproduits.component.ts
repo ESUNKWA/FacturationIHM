@@ -1,5 +1,5 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ExcelService } from 'src/app/services/excel/excel.service';
 import { FactureService } from 'src/app/services/facture/facture.service';
@@ -7,6 +7,7 @@ import { ModalService } from 'src/app/services/modal/modal.service';
 import { PartenairesService } from 'src/app/services/partenaires/partenaires.service';
 import { ProduitService } from 'src/app/services/produit/produit.service';
 import { UserInfosService } from 'src/app/services/userInfos/user-infos.service';
+import { WizardComponent as BaseWizardComponent } from 'angular-archwizard';
 
 @Component({
   selector: 'app-venteproduits',
@@ -48,6 +49,7 @@ export class VenteproduitsComponent implements OnInit {
 
   @ViewChild('paiementPartielMnt') paiementPartielMnt;
   @ViewChild('mntRgl') mntRgl;
+  @ViewChild('wizardForm') wizardForm: BaseWizardComponent;
   mntPartiel: any = 0;
   mntPayeRestant: any = {};
 
@@ -64,7 +66,8 @@ export class VenteproduitsComponent implements OnInit {
   afficheVente: boolean = true;
   saisieVente: boolean = false;
   data: any;
-
+  chargementEncours: boolean;
+  modifCmd: boolean = false;
 
   constructor( private produitServices: ProduitService, private excelService: ExcelService,
                 private fb: FormBuilder, private venteServices: FactureService,
@@ -85,11 +88,13 @@ export class VenteproduitsComponent implements OnInit {
     this.list_produits();
     this.saisieVente = true;
     this.afficheVente = false;
+    this.chargementEncours = false;
   }
   viewsVentes(){
     this.listVentes(this.userInfos.r_partenaire, this.today);
     this.saisieVente = false;
     this.afficheVente = true;
+    this.chargementEncours = true;
   }
 
   list_produits(){
@@ -109,6 +114,9 @@ export class VenteproduitsComponent implements OnInit {
   }
 
   listVentes(partenaireId, today){
+
+    this.chargementEncours = true;
+    
     if( this.userInfos.r_profil !== 4 ){
       partenaireId = this.userInfos.r_partenaire;
     }
@@ -117,7 +125,7 @@ export class VenteproduitsComponent implements OnInit {
       (res: any = {}) => {
         this.data = res.result;
         setTimeout(()=>{
-          this.hideLoder = false;
+          this.chargementEncours = false;
         }, 2000);
       },
       (err) => console.log(err),
@@ -142,6 +150,7 @@ export class VenteproduitsComponent implements OnInit {
   isCheck(checked, ligneProduit, indexLigne){
 
     let qte = (<HTMLInputElement>document.getElementById(`qte-${indexLigne}`)).value = ""+1;
+    (<HTMLInputElement>document.getElementById(`qte-${indexLigne}`)).disabled = false;
 
     if( checked === true ){
 
@@ -153,6 +162,8 @@ export class VenteproduitsComponent implements OnInit {
       this.choixProduits.push(ligneProduit);
 
     }else{
+      (<HTMLInputElement>document.getElementById(`qte-${indexLigne}`)).disabled = true;
+      (<HTMLInputElement>document.getElementById(`qte-${indexLigne}`)).value = ""+0;
       (<HTMLInputElement>document.getElementById(`produit-${indexLigne}`)).value = ""+0;
       this.choixProduits = this.choixProduits.filter((produit)=>produit.r_i !== ligneProduit.r_i );
     }
@@ -216,7 +227,13 @@ export class VenteproduitsComponent implements OnInit {
 
   step1(){
 
+    if( this.choixProduits.length == 0 ){
+      alert('Veuillez choix au moins 1 articles');
+      return;
+    }
+
     this.filterParmas(this.choixProduits);
+    this.wizardForm.goToNextStep();
 
   }
 
@@ -227,19 +244,24 @@ export class VenteproduitsComponent implements OnInit {
   }
 
   registerVente(){
+
     this.infosClient.value.p_mnt = this.sommes;
     this.infosClient.value.p_ligneFacture = this.choixProduits;
     this.infosClient.value.p_mnt_partiel = this.mntPartiel;
     this.infosClient.value.p_cmd = 0;
     this.infosClient.value.p_partenaire = this.userInfos.r_partenaire;
-
-    console.log(this.infosClient.value);
     
 
     this.venteServices.fs_saisie_facture(this.infosClient.value).subscribe(
       (res: any)=> {
         this.swalServices.fs_modal(res.result, 'success');
         this.resetventForm();
+
+        //Exécute automatiquement pour afficher la liste des commandes
+        var evt = document.createEvent("MouseEvents");
+        evt.initMouseEvent("click", true, true, window,0, 0, 0, 0, 0, false, false, false, false, 0, null);
+        (<HTMLButtonElement>document.getElementById('btnVentes')).dispatchEvent(evt);
+
       },
       (err)=> this.swalServices.fs_modal(err, 'success')
     );
@@ -251,8 +273,8 @@ export class VenteproduitsComponent implements OnInit {
     this.InputPaiementPartiel = false;
   }
 
-  reglemntPartiel(){
-    this.mntRgl = this.mntRgl.nativeElement.value;
+  reglemntPartiel(mntPartiel){
+    this.mntRgl = parseInt(mntPartiel, 10);
 
      this.mntRgl == (this.detailsFacture.r_mnt - +this.ligneVentes[0].mnt_paye)? this.solder = 1 : this.solder = 0;
 
@@ -277,8 +299,13 @@ export class VenteproduitsComponent implements OnInit {
       },
       ( err ) => console.log(err)
     );
-    ( mode !== 'edit' )? this.formDetailsfacture.disable() : this.formDetailsfacture.enable();
-
+    if( mode !== 'edit' ){
+      this.formDetailsfacture.disable();
+      this.modifCmd = true;
+    }else{
+      this.formDetailsfacture.enable();
+      this.modifCmd = false;
+    }
   }
 
   isCheckPaiement(data: any){

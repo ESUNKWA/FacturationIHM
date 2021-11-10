@@ -77,7 +77,7 @@ export class CommandesComponent implements OnInit {
   today: any;
 
   chargementEncours: boolean;
-
+  modifCmd: boolean = false;
 
   constructor( private produitServices: ProduitService, private excelService: ExcelService,
                 private fb: FormBuilder, private venteServices: FactureService,
@@ -90,12 +90,9 @@ export class CommandesComponent implements OnInit {
 
     this.userInfos = this.infosUtilisateur.fs_informationUtilisateur();
 
-    this.chargementEncours = true;
+    
 
     this.listVentes(this.userInfos.r_partenaire, this.today);
-
-
-
 
 
 
@@ -148,6 +145,7 @@ export class CommandesComponent implements OnInit {
 
   listVentes(partenaireId, today){
 
+    this.chargementEncours = true;
 
     if( this.userInfos.r_profil !== 4 ){
       partenaireId = this.userInfos.r_partenaire;
@@ -251,11 +249,6 @@ export class CommandesComponent implements OnInit {
 
   registerCmd(){
 
-//Exécute automatiquement pour afficher la liste des commandes
-var evt = document.createEvent("MouseEvents");
-evt.initMouseEvent("click", true, true, window,0, 0, 0, 0, 0, false, false, false, false, 0, null);
-(<HTMLButtonElement>document.getElementById('btnCmd')).dispatchEvent(evt);
-return;
     this.CmdData.value.p_mnt = this.sommes;
     this.CmdData.value.p_ligneFacture = this.choixProduits;
     this.CmdData.value.p_mnt_partiel = this.mntPartiel;
@@ -307,12 +300,17 @@ return;
     this.venteServices.fs_details_facture(detailsFacture.r_i).subscribe(
       ( res: any = {} ) => {
         this.ligneVentes = res.result;
-        console.log(this.ligneVentes);
 
       },
       ( err ) => console.log(err)
     );
-    ( mode !== 'edit' )? this.formDetailsfacture.disable() : this.formDetailsfacture.enable();
+    if( mode !== 'edit' ){
+      this.formDetailsfacture.disable();
+      this.modifCmd = true;
+    }else{
+      this.formDetailsfacture.enable();
+      this.modifCmd = false;
+    }  
 
   }
 
