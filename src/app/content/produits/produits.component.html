@@ -1,7 +1,7 @@
 <div class="row" >
 
-  <div class="col-md-6" >
-    <select class="form-control" 
+  <div class="col" *ngIf=" this.userInfos.r_profil == 4" >
+    <select class="form-control"
           (change)="selectProduitPartenaire();" [(ngModel)]="selectedLevel" >
           <option value="0">---Sélectionnez le partenaire---</option>
           <option value="{{ value.r_i }}"  *ngFor=" let value of partenaires " >{{ value.r_nom }}</option>
@@ -9,7 +9,7 @@
   </div>
 
 
-  <div class="col-md-6">
+  <div class="col">
     <!-- Button trigger modal -->
     <button class="btn btn-primary"
     (click)="fc_add_produit();openVerticalCenteredModal(verticalCenteredModal)"
@@ -73,25 +73,21 @@
     </div>
     <div class="modal-body">
 
-      <form [formGroup]="produitData">
+      <form [formGroup]="produitData" >
         <div class="form-group row" >
-          <div class="col-sm-6" *ngIf="userInfos.r_profil == 4" >
-            <label class="col-form-label styleInput" >Partenaire</label>
-            <select class="form-control" aria-label=".form-select-lg example" [(ngModel)]="detailsProduit.r_partenaire" formControlName="p_partenaire">
-              <option value="0" selected>---Sélectionnez le partenaire---</option>
-              <option value="{{ value.r_i }}"  *ngFor=" let value of partenaires " >{{ value.r_nom }}</option>
-            </select>
-             <span class="messages"></span>
-          </div>
-          <!-- <div class="col-sm-6">
-            <label class="col-form-label styleInput" >Catégorie</label>
-            <select class="form-control" aria-label=".form-select-lg example" formControlName="p_categorie">
-              <option value="0" selected>---Sélectionnez la catégorie---</option>
-              <option value="{{ value.r_i }}"  *ngFor=" let value of categories " >{{ value.r_libelle }}</option>
-            </select>
-             <span class="messages"></span>
-          </div> -->
+
+          <ng-template [ngIf]="userInfos.r_profil == 4" >
+            <div class="col-sm-6" >
+              <label class="col-form-label styleInput" >Partenaire</label>
+              <select class="form-control" aria-label=".form-select-lg example" [(ngModel)]="detailsProduit.r_partenaire" formControlName="p_partenaire">
+                <option value="0" selected>---Sélectionnez le partenaire---</option>
+                <option value="{{ value.r_i }}"  *ngFor=" let value of partenaires " >{{ value.r_nom }}</option>
+              </select>
+               <span class="messages"></span>
+            </div>
+          </ng-template>
         </div>
+
         <div class="form-group row">
           <div class="col-sm-6">
             <label class="col-form-label styleInput" >Catégorie</label>
@@ -128,6 +124,6 @@
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-secondary" (click)="modal.close('by: close button')">Fermer</button>
-      <button type="button" class="btn btn-primary" (click)="resgister()">Enregistrer</button>
+      <button type="button" class="btn btn-primary" *ngIf=" registerBtnStatus " (click)="resgister()">Enregistrer</button>
     </div>
   </ng-template>

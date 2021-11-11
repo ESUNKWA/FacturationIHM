@@ -16,7 +16,6 @@ export class ProduitsComponent implements OnInit {
 data: any[];
 modalTitle: string
 detailsProduit: any = {};
-  selectedOption = '3';
 produitData = this.fb.group({
   p_partenaire: [],
   p_categorie: [],
@@ -31,7 +30,7 @@ produitData = this.fb.group({
   @ViewChild('newQteProduit') newQteProduit;
   newStock: number;
   augmentationStock: any = {};
-  registerBtnEtat: boolean = false;
+  registerBtnStatus: boolean = true;
   modeAppel: string;
   userInfos: any = {};
   partenaires: any = [];
@@ -54,7 +53,7 @@ produitData = this.fb.group({
 
   openVerticalCenteredModal(content) {
     this.modalService.open(content, {centered: true, size:'lg'}).result.then((result) => {
-      
+
     }).catch((res) => {});
   }
 
@@ -62,26 +61,6 @@ produitData = this.fb.group({
     this.list_produits(parseInt(this.selectedLevel));
   }
 
-  action(data, mode){
-    this.modeAppel = 'modif';
-    this.details = data;
-    switch( mode ){
-      case 'edit':
-        this.registerBtnEtat = false;
-        this.modalTitle = `Modification des informations du partenaire [ ${this.details.r_nom} ]`;
-        this.produitData.enable();
-        break;
-
-      case 'views':
-        this.registerBtnEtat = true;
-        this.modalTitle = `Condutation des informations du partenaire [ ${this.details.r_nom} ]`;
-        this.produitData.disable();
-        break;
-
-      default:
-        return;
-    }
-  }
 
   list_produits(val){
 
@@ -115,26 +94,27 @@ produitData = this.fb.group({
   }
 
   fc_add_produit(){
-    
+
     this.modeAppel = 'creation';
     this.modalTitle = 'Saisir une nouveau produit';
     this.produitData.reset();
     this.produitData.enable();
-    this.registerBtnEtat = false;
+    this.registerBtnStatus = true;
   }
   fc_details_produit(data: any = {}, mode){
+
     this.modalTitle = `Modification de la catégorie [ ${data.r_libelle} ]`;
     this.detailsProduit = data;
     switch( mode ){
       case 1://Modification
         this.produitData.enable();
-        this.registerBtnEtat = false;
+        this.registerBtnStatus = true;
         this.modeAppel = 'modif';
         break;
 
       case 2://Consultation
         this.produitData.disable();
-        this.registerBtnEtat = true;
+        this.registerBtnStatus = false;
         break;
 
       default:
@@ -165,14 +145,14 @@ produitData = this.fb.group({
     if( this.userInfos.r_profil !== 4 ){
       this.produitData.value.p_partenaire = this.userInfos.r_partenaire;
     }
-console.log(this.produitData.value, this.modeAppel);
+
     switch( this.modeAppel ){
       case 'creation':
           this.produitServices.fs_saisieProduit(this.produitData.value).subscribe(
             (res: any = {}) =>{
               if( res.status === 1){
                 ( this.userInfos.r_profil == 4 )? this.list_produits(parseInt(this.produitData.value.p_partenaire, 10)) :  this.list_produits(this.userInfos.r_partenaire);
-               
+
                 this.produitData.reset();
                 this.swalServices.fs_modal(res.result, 'success');
               }else{

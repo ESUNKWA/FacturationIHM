@@ -2,13 +2,14 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
+import * as apiServer from '../../module/urlserver';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CategorieService {
 
-  urlApi = 'http://127.0.0.1:8000/api/';
+  //urlApi = 'http://127.0.0.1:8000/api/';
 
   // Http Options
   httpOptions = {
@@ -21,7 +22,7 @@ export class CategorieService {
   constructor( private http: HttpClient ) { }
 
   fs_listCategorie(){
-    return this.http.get(`${this.urlApi}categories`, this.httpOptions).pipe(
+    return this.http.get(`${apiServer.url}/categories`, this.httpOptions).pipe(
       retry(1),
       catchError(this.handleError)
     )
@@ -29,7 +30,7 @@ export class CategorieService {
   }
 
   fs_saisieCategorie(data){
-    return this.http.post(`${this.urlApi}categories`, JSON.stringify(data), this.httpOptions).pipe(
+    return this.http.post(`${apiServer.url}/categories`, JSON.stringify(data), this.httpOptions).pipe(
       retry(1),
       catchError(this.handleError)
     )

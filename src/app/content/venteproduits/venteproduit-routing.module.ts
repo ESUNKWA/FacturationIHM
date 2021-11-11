@@ -5,13 +5,7 @@ import { VenteproduitsComponent } from "./venteproduits.component";
 const routes: Routes = [
     {
         path: '',
-        component: VenteproduitsComponent,
-        data: {
-            title: 'Liste des ventes',
-            icon: 'icon-layout-cta-right',
-            caption: 'Liste des ventes',
-            status: true
-        }
+        component: VenteproduitsComponent
     }
 ];
 @NgModule({

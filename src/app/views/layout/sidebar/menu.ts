@@ -5,7 +5,7 @@ export const MENU: MenuItem[] = [
   {
     label: 'Tableau de bords',
     icon: 'home',
-    link: '/dashboard'
+    link: '/privilege/dashboard'
   },
 
   {
@@ -18,11 +18,11 @@ export const MENU: MenuItem[] = [
     subItems: [
       {
         label: 'Catégories',
-        link: '/categories',
+        link: '/privilege/categories',
       },
       {
         label: 'Produits',
-        link: '/produits'
+        link: '/privilege/produits'
       }
     ]
   },
@@ -36,7 +36,7 @@ export const MENU: MenuItem[] = [
   {
     label: 'Partenanaire',
     icon: 'user-plus',
-    link: '/partenaires',
+    link: '/privilege/partenaires',
   },
 
 
@@ -51,11 +51,11 @@ export const MENU: MenuItem[] = [
     subItems: [
       {
         label: 'Ventes',
-        link: '/ventes',
+        link: '/privilege/ventes',
       },
       {
         label: 'Commandes',
-        link: '/commandes'
+        link: '/privilege/commandes'
       }
     ]
   },
@@ -88,11 +88,11 @@ export const MENU: MenuItem[] = [
     subItems: [
       {
         label: 'Profils',
-        link: '/profils',
+        link: '/privilege/profils',
       },
       {
         label: 'Utilisateurs',
-        link: '/utilisateurs',
+        link: '/privilege/utilisateurs',
       },
     ]
   },

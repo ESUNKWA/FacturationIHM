@@ -24,7 +24,7 @@ export class CategoriesComponent implements OnInit {
     p_description: []
   });
 
-  registerBtnEtat: boolean = false;
+  registerBtnStatus: boolean = true;
   modeAppel: string;
   details: any;
 
@@ -40,7 +40,7 @@ export class CategoriesComponent implements OnInit {
 
   openVerticalCenteredModal(content) {
     this.modalService.open(content, {centered: true, size:'lg'}).result.then((result) => {
-      console.log("Modal closed" + result);
+
     }).catch((res) => {});
   }
 
@@ -49,8 +49,6 @@ export class CategoriesComponent implements OnInit {
       (res) => {
         this.dataRetour = res,
         this.data = this.dataRetour.result;
-
-        console.log(this.data);
 
       },
       (err) => console.log(err),
@@ -61,7 +59,7 @@ export class CategoriesComponent implements OnInit {
     this.categorieData.reset();
     this.categorieData.enable();
     this.modalTitle = 'Saisir une nouvelle catégorie';
-    this.registerBtnEtat = false;
+    this.registerBtnStatus = false;
   }
 
   fc_details_categorie(data: any = {}, mode){
@@ -70,12 +68,12 @@ export class CategoriesComponent implements OnInit {
     switch( mode ){
       case 1://Modification
         this.categorieData.enable();
-        this.registerBtnEtat = false;
+        this.registerBtnStatus = true;
         break;
 
       case 2://Consultation
         this.categorieData.disable();
-        this.registerBtnEtat = true;
+        this.registerBtnStatus = false;
         break;
 
       default:
@@ -85,39 +83,8 @@ export class CategoriesComponent implements OnInit {
 
   }
 
-  addPartenaire(){
-    this.registerBtnEtat = false;
-    this.modeAppel = 'creation';
-    this.modalTitle = 'Saisir un nouveau partenaire';
-
-    this.categorieData.enable();
-  }
-  action(data, mode){
-    this.modeAppel = 'modif';
-    this.details = data;
-    switch( mode ){
-      case 'edit':
-        this.registerBtnEtat = false;
-        this.modalTitle = `Modification des informations du partenaire [ ${this.details.r_nom} ]`;
-        this.categorieData.enable();
-        break;
-
-      case 'views':
-        this.registerBtnEtat = true;
-        this.modalTitle = `Condutation des informations du partenaire [ ${this.details.r_nom} ]`;
-        this.categorieData.disable();
-        break;
-
-      default:
-        return;
-    }
-  }
 
   resgister(){
-
-    console.log(this.categorieData.value);
-
-
     //Controlle des champs
     if( this.categorieData.value.r_libelle === '' ){
       this.swalServices.fs_modal('Le libellé est réquis','warning');

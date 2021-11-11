@@ -1,12 +1,12 @@
 <div class="row" >
-  <div class="col-md-6" >
-    <select class="form-control" 
-          (change)="selectUsersartenaire();" [(ngModel)]="selectedLevel" >
+  <div class="col" *ngIf=" userInfos.r_profil == 4 " >
+    <select class="form-control"
+          (change)="selectUserspartenaire(selectedLevel);" [(ngModel)]="selectedLevel" >
           <option value="0">---Sélectionnez le partenaire---</option>
           <option value="{{ value.r_i }}"  *ngFor=" let value of partenaires " >{{ value.r_nom }}</option>
     </select>
   </div>
-  <div class="col-md-6">
+  <div class="col">
   <!-- Button trigger modal -->
   <button class="btn btn-primary"
   (click)="addProfil();openVerticalCenteredModal(verticalCenteredModal)"
@@ -42,15 +42,15 @@
                     <button (click)="openVerticalCenteredModal(verticalCenteredModal);action(item,'edit');" class="btn btn-primary btn-icon"><i class="feather icon-edit"></i></button>&nbsp;
                     <button (click)="openVerticalCenteredModal(verticalCenteredModal);action(item,'views');" class="btn btn-info btn-icon"><i class="feather icon-info"></i></button>&nbsp;
                     <button class="btn btn-danger btn-icon"><i class="feather icon-trash-2"></i></button>&nbsp;
-                    
-                    <button *ngIf="item.r_status == 0" 
-                    class="btn btn-success btn-icon" 
+
+                    <button *ngIf="item.r_status == 0"
+                    class="btn btn-success btn-icon"
                     title="Activer le compte du partenaire {{ item.r_nom }}"
                     (click)="activeDesactiveUser(item, 1)"
                      ><i class="feather icon-check"></i></button>&nbsp;
 
-                  <button *ngIf="item.r_status == 1" 
-                  class="btn btn-warning btn-icon" 
+                  <button *ngIf="item.r_status == 1"
+                  class="btn btn-warning btn-icon"
                   title="Désactiver le compte du partenaire {{ item.r_nom }}"
                   (click)="activeDesactiveUser(item, 0)"
                   ><i class="feather icon-slash"></i></button>

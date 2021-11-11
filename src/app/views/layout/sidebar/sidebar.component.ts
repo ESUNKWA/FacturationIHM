@@ -1,3 +1,4 @@
+import { UserInfosService } from 'src/app/services/userInfos/user-infos.service';
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, Renderer2, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
@@ -13,13 +14,13 @@ import { Router, NavigationEnd } from '@angular/router';
   styleUrls: ['./sidebar.component.scss']
 })
 export class SidebarComponent implements OnInit, AfterViewInit {
-
+  userInfos: any = {};
   @ViewChild('sidebarToggler') sidebarToggler: ElementRef;
 
   menuItems = [];
   @ViewChild('sidebarMenu') sidebarMenu: ElementRef;
 
-  constructor(@Inject(DOCUMENT) private document: Document, private renderer: Renderer2, router: Router) {
+  constructor(@Inject(DOCUMENT) private document: Document, private renderer: Renderer2, router: Router, private infosUtilisateur: UserInfosService) {
     router.events.forEach((event) => {
       if (event instanceof NavigationEnd) {
 
@@ -41,7 +42,7 @@ export class SidebarComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.menuItems = MENU;
-
+    this.userInfos = this.infosUtilisateur.fs_informationUtilisateur();
     /**
      * Sidebar-folded on desktop (min-width:992px and max-width: 1199px)
      */

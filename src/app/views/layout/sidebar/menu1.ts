@@ -8,7 +8,7 @@ export const MENU: MenuItem[] = [
   {
     label: 'Tableau de bords',
     icon: 'home',
-    link: '/dashboard'
+    link: '/privilege/dashboard'
   },
   {
     label: 'Web Apps',

@@ -59,7 +59,7 @@ export class UtilisateurComponent implements OnInit {
 
   openVerticalCenteredModal(content) {
     this.modalService.open(content, {centered: true, size:'lg'}).result.then((result) => {
-      console.log("Modal closed" + result);
+
     }).catch((res) => {});
   }
 
@@ -76,7 +76,7 @@ export class UtilisateurComponent implements OnInit {
 
     this.dataStatusUpdate.iduser = data.r_i;
     this.dataStatusUpdate.p_status = status;
-   
+
     this.utilisateurServices.updateStatusUser(this.dataStatusUpdate).subscribe(
       ( res: any = {} ) => {
         this.fct_listUtilisateurs(this.userInfos.r_partenaire);
@@ -84,8 +84,10 @@ export class UtilisateurComponent implements OnInit {
     )
   }
 
-  selectUsersartenaire(){
-    this.fct_listUtilisateurs(parseInt(this.selectedLevel));
+  selectUserspartenaire(selectedLevel){
+
+    this.fct_listUtilisateurs(parseInt(selectedLevel));
+
   }
   selectProduitPartenaire1(){
     this.utilisateurData.value.p_partenaire = +this.details.r_partenaire;
@@ -114,10 +116,6 @@ export class UtilisateurComponent implements OnInit {
   }
 
   fct_listUtilisateurs(val: number){
-
-    if( this.userInfos.r_profil !== 4 ){
-      val = this.userInfos.r_partenaire
-    }
 
     this.utilisateurServices.fs_listUtilisateur(val).subscribe(
       ( res: any = {} ) => {

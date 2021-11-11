@@ -1,4 +1,4 @@
-<nav class="sidebar">
+<nav class="sidebar"  >
   <div class="sidebar-header">
 
     <!--- Logo -->
@@ -14,13 +14,13 @@
     </div>
 
   </div>
-  <div class="sidebar-body" (mouseenter)="operSidebarFolded()" (mouseleave)="closeSidebarFolded()" [perfectScrollbar]>
+  <div class="sidebar-body" style="background-color: #d8dfe9;" (mouseenter)="operSidebarFolded()" (mouseleave)="closeSidebarFolded()" [perfectScrollbar]>
 
     <!--- Sidemenu start -->
 
     <ul class="sidebar-nav metismenu" id="sidebar-menu" #sidebarMenu>
       <ng-container *ngFor="let item of menuItems">
-        <li class="nav-item nav-category" style="color: darkgray;" *ngIf="item.isTitle">{{ item.label }}</li>
+        <li class="nav-item nav-category" style="color: gray;" *ngIf="item.isTitle">{{ item.label }}</li>
 
         <li class="nav-item" *ngIf="!item.isTitle" >
 
@@ -71,7 +71,7 @@
 
   </div>
 </nav>
-<nav class="settings-sidebar">
+<!-- <nav class="settings-sidebar">
   <div class="sidebar-body">
     <a href="" class="settings-sidebar-toggler" (click)="toggleSettingsSidebar($event)">
       <i class="icon feather icon-settings"></i>
@@ -104,4 +104,4 @@
       </a>
     </div>
   </div>
-</nav>
+</nav> -->

@@ -27,8 +27,10 @@
                   <td>{{item.r_libelle}}</td>
                   <td>{{item.r_description}}</td>
                   <td>
-                      <button (click)="openVerticalCenteredModal(verticalCenteredModal);action(item,'edit');" class="btn btn-primary btn-icon"><i class="feather icon-edit"></i></button>&nbsp;
-                      <button (click)="openVerticalCenteredModal(verticalCenteredModal);action(item,'views');" class="btn btn-info btn-icon"><i class="feather icon-info"></i></button>&nbsp;
+                      <button (click)="fc_details_categorie(item,1);openVerticalCenteredModal(verticalCenteredModal);" class="btn btn-primary btn-icon"><i class="feather icon-edit"></i></button>&nbsp;
+                      <button (click)="fc_details_categorie(item,2);openVerticalCenteredModal(verticalCenteredModal);"
+                             class="btn btn-info btn-icon"
+                             ><i class="feather icon-info"></i></button>&nbsp;
                       <button class="btn btn-danger btn-icon"><i class="feather icon-trash-2"></i></button>
 
                   </td>
@@ -81,6 +83,6 @@
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-secondary" (click)="modal.close('by: close button')">Fermer</button>
-      <button type="button" class="btn btn-primary" (click)="resgister()">Enregistrer</button>
+      <button type="button" class="btn btn-primary"  *ngIf=" registerBtnStatus " (click)="resgister()">Enregistrer</button>
     </div>
   </ng-template>
