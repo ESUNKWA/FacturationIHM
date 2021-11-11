@@ -35,7 +35,7 @@
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-baseline">
               <h6 class="card-title mb-0">Vente du jour</h6>
-              <div ngbDropdown class="mb-2">
+              <!-- <div ngbDropdown class="mb-2">
                 <button ngbDropdownToggle class="btn p-0 no-dropdown-toggle-icon" type="button" id="dropdownMenuButton">
                   <i class="icon-lg text-muted pb-3px" data-feather="more-horizontal" appFeatherIcon></i>
                 </button>
@@ -46,22 +46,16 @@
                   <a ngbDropdownItem class="d-flex align-items-center" href="" (click)="false"><i data-feather="printer" appFeatherIcon class="icon-sm mr-2"></i> <span class="">Print</span></a>
                   <a ngbDropdownItem class="d-flex align-items-center" href="" (click)="false"><i data-feather="download" appFeatherIcon class="icon-sm mr-2"></i> <span class="">Download</span></a>
                 </div>
-              </div>
+              </div> -->
             </div>
             <div class="row">
-              <div class="col-6 col-md-12 col-xl-5">
-                <h3 class="mb-2">3,897</h3>
+              <div class="col-12 col-md-12 col-xl-12">
+                <h3 class="mb-2">{{ recetteJr }} fcfa</h3>
                 <div class="d-flex align-items-baseline">
                   <p class="text-success">
-                    <span>+3.3%</span>
+                    <span>+</span>
                     <i data-feather="arrow-up" appFeatherIcon class="icon-sm mb-1"></i>
                   </p>
-                </div>
-              </div>
-              <div class="col-6 col-md-12 col-xl-7">
-                <div class="mt-md-3 mt-xl-0">
-
-
                 </div>
               </div>
             </div>
@@ -72,8 +66,8 @@
         <div class="card">
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-baseline">
-              <h6 class="card-title mb-0">Ventes nons soldées</h6>
-              <div ngbDropdown class="mb-2">
+              <h6 class="card-title mb-0">Ventes restants</h6>
+              <!-- <div ngbDropdown class="mb-2">
                 <button ngbDropdownToggle class="btn p-0 no-dropdown-toggle-icon" type="button" id="dropdownMenuButton1">
                   <i class="icon-lg text-muted pb-3px" data-feather="more-horizontal" appFeatherIcon></i>
                 </button>
@@ -84,23 +78,16 @@
                   <a ngbDropdownItem class="d-flex align-items-center" href="" (click)="false"><i data-feather="printer" appFeatherIcon class="icon-sm mr-2"></i> <span class="">Print</span></a>
                   <a ngbDropdownItem class="d-flex align-items-center" href="" (click)="false"><i data-feather="download" appFeatherIcon class="icon-sm mr-2"></i> <span class="">Download</span></a>
                 </div>
-              </div>
+              </div> -->
             </div>
             <div class="row">
-              <div class="col-6 col-md-12 col-xl-5">
-                <h3 class="mb-2">35,084</h3>
+              <div class="col-12 col-md-12 col-xl-12">
+                <h3 class="mb-2">{{ recetteJrRestant }}</h3>
                 <div class="d-flex align-items-baseline">
                   <p class="text-danger">
                     <span>-2.8%</span>
                     <i data-feather="arrow-down" appFeatherIcon class="icon-sm mb-1"></i>
                   </p>
-                </div>
-              </div>
-              <div class="col-6 col-md-12 col-xl-7">
-                <div class="mt-md-3 mt-xl-0">
-
-
-
                 </div>
               </div>
             </div>
@@ -112,7 +99,7 @@
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-baseline">
               <h6 class="card-title mb-0">Commandes du jour</h6>
-              <div ngbDropdown class="mb-2">
+              <!-- <div ngbDropdown class="mb-2">
                 <button ngbDropdownToggle class="btn p-0 no-dropdown-toggle-icon" type="button" id="dropdownMenuButton2">
                   <i class="icon-lg text-muted pb-3px" data-feather="more-horizontal" appFeatherIcon></i>
                 </button>
@@ -123,10 +110,10 @@
                   <a ngbDropdownItem class="d-flex align-items-center" href="" (click)="false"><i data-feather="printer" appFeatherIcon class="icon-sm mr-2"></i> <span class="">Print</span></a>
                   <a ngbDropdownItem class="d-flex align-items-center" href="" (click)="false"><i data-feather="download" appFeatherIcon class="icon-sm mr-2"></i> <span class="">Download</span></a>
                 </div>
-              </div>
+              </div> -->
             </div>
             <div class="row">
-              <div class="col-6 col-md-12 col-xl-5">
+              <div class="col-12 col-md-12 col-xl-12">
                 <h3 class="mb-2">89.87%</h3>
                 <div class="d-flex align-items-baseline">
                   <p class="text-success">
@@ -261,8 +248,47 @@
       <div class="col-md-4 grid-margin stretch-card" >
         <div class="card">
           <div class="card-body">
-            <div class="d-flex justify-content-between align-items-baseline">
+            <div class="d-flex justify-content-between">
 
+              <!-- <div>
+                <h4>{{ recetteMois }} fcfa</h4>
+              </div> -->
+
+
+
+
+
+                <div class="row" >
+                  <div class="col">
+                    <div class="card" style="background-color: rgb(172, 224, 226);">
+                      <div class="card-body">
+                        <h6 class="card-title">Top 5 produits les plus vendus du mois</h6>
+                        <div class="table-responsive">
+                          <table class="table" >
+                            <thead>
+                              <tr>
+                                <th style="width: 65%;" >Produits</th>
+                                <th style="width: 35%;">total</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor="let produits of topProduitMois" >
+                                <td>{{produits.name}}</td>
+                                <td >{{produits.value}} fcfa</td>
+                              </tr>
+                            </tbody>
+                            <tfoot>
+                              <tr>
+                                <th></th>
+                                <th></th>
+                              </tr>
+                            </tfoot>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
 
             </div>

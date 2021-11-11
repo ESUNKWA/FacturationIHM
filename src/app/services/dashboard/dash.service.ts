@@ -15,8 +15,8 @@ export class DashService {
   }
   constructor( private http: HttpClient ) { }
 
-  fs_dash(datejr: string,partenaire: number){
-    return this.http.get(apiServer.url+'/dashbord/'+datejr+'/'+partenaire, this.httpOptions).pipe(
+  fs_dash(partenaire: number){
+    return this.http.get(apiServer.url+'/dashbord/'+partenaire, this.httpOptions).pipe(
       retry(1),
       catchError(this.handleError)
     );;

@@ -10,6 +10,8 @@ import { Label, Color, SingleDataSet } from 'ng2-charts';
 
 // Progressbar.js
 import ProgressBar from 'progressbar.js';
+import { DashService } from 'src/app/services/dashboard/dash.service';
+import { UserInfosService } from 'src/app/services/userInfos/user-infos.service';
 
 export type apexChartOptions = {
   series: ApexAxisChartSeries;
@@ -46,22 +48,42 @@ export class DashboardComponent implements OnInit {
    * NgbDatepicker
    */
   currentDate: NgbDateStruct;
+  topProduitMois: any = [];
+  dashData: any = {};
+  userInfos: any = {};
+  surveyData = [];
+  recetteJr: number;
+  recetteJrRestant: number;
+  recetteMois: number;
 
 
-
-  surveyData = [
-    { name: 'Bikes', value: 105000 },
-    { name: 'Cars', value: 55000 },
-    { name: 'Trucks', value: 15000 },
-    { name: 'Scooter', value: 150000 },
-    { name: 'Bus', value: 20000 }
-  ];
-
-
-  constructor(private calendar: NgbCalendar) {}
+  constructor(private calendar: NgbCalendar, private dashboard: DashService, private infosUtilisateur: UserInfosService) {}
 
   ngOnInit(): void {
     this.currentDate = this.calendar.getToday();
+
+    this.userInfos = this.infosUtilisateur.fs_informationUtilisateur();
+
+
+    this.dashboard.fs_dash(this.userInfos.r_partenaire).subscribe(
+      (res: any = {}) => {
+
+        this.dashData = res.result[0];
+        const chiffreAffMois = res.result[1];
+
+        this.recetteJr = parseInt(this.dashData.ventejr) + parseInt(this.dashData.reglPartielJr);
+
+        this.recetteJrRestant = parseInt(this.dashData.venteNonSoldees) - parseInt(this.dashData.reglPartielJr);
+        this.recetteMois = parseInt(chiffreAffMois.reglPartielMois) + parseInt(chiffreAffMois.venteMois);
+        this.topProduitMois = res.result[2];
+
+        this.surveyData = this.topProduitMois;
+
+        setTimeout(() => {
+
+        }, 2000);
+      }
+    )
 
   }
 
