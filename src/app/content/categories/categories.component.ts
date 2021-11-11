@@ -27,6 +27,7 @@ export class CategoriesComponent implements OnInit {
   registerBtnStatus: boolean = true;
   modeAppel: string;
   details: any;
+  chargementEncours: boolean;
 
   constructor( private categorieServices: CategorieService, private http: HttpClient,
                 private fb: FormBuilder, private swalServices: ModalService,  private modalService: NgbModal ) {
@@ -45,11 +46,16 @@ export class CategoriesComponent implements OnInit {
   }
 
   list_categorie(){
+
+    this.chargementEncours = true;
+
     this.categorieServices.fs_listCategorie().subscribe(
       (res) => {
         this.dataRetour = res,
         this.data = this.dataRetour.result;
-
+        setTimeout(() => {
+          this.chargementEncours = false;
+        }, 2000);
       },
       (err) => console.log(err),
     );

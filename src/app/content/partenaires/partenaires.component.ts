@@ -29,6 +29,7 @@ partenaireData = this.fb.group({
 details: any = {};
 modeAppel: any;
 registerBtnEtat: boolean = false;
+chargementEncours: boolean
 
 villes: any = [
   {
@@ -42,8 +43,8 @@ villes: any = [
 ];
   userInfos: any = {};
 
-  constructor( private fb: FormBuilder, private swalServices: ModalService, 
-              private partenaireServices: PartenairesService,private modalService: NgbModal, 
+  constructor( private fb: FormBuilder, private swalServices: ModalService,
+              private partenaireServices: PartenairesService,private modalService: NgbModal,
               private infosUtilisateur: UserInfosService) { }
 
   ngOnInit() {
@@ -59,10 +60,17 @@ villes: any = [
   }
 
   listPartenaires(){
+
+    this.chargementEncours = true;
+
     this.partenaireServices.listPartenaires().subscribe(
       (res: any = {}) =>{
 
         this.data = res.result;
+
+        setTimeout(() => {
+          this.chargementEncours = false
+        }, 2000);
 
       },
       (error) => this.swalServices.fs_modal(error,'error')
@@ -102,10 +110,10 @@ villes: any = [
     this.details.length = 0;
     this.details.p_idpartenaire = data.r_i;
     this.details.p_status = status;
-   
+
     this.partenaireServices.updateStatusPartenaire(this.details).subscribe(
       ( res: any = {} ) => {
- 
+
         this.listPartenaires();
 
       }

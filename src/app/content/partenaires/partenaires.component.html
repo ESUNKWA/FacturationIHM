@@ -1,4 +1,10 @@
-<div class="row" >
+<!-- Loader -->
+<div *ngIf="chargementEncours == true" class="spinner-wrapper">
+  <div class="spinner">Loading...</div>
+</div>
+<!-- Loader -->
+
+<div class="row" *ngIf="chargementEncours == false" >
   <div class="col-md-12">
   <!-- Button trigger modal -->
   <button class="btn btn-primary"
@@ -8,7 +14,7 @@
   </div>
   </div>
 
-  <div class="row mt-2" >
+  <div class="row mt-2" *ngIf="chargementEncours == false" >
     <div class="col-md-12 stretch-card">
       <div class="card">
         <div class="card-body">
@@ -37,13 +43,13 @@
                       <button (click)="openVerticalCenteredModal(verticalCenteredModal);action(item,'edit');" class="btn btn-primary btn-icon"><i class="feather icon-edit"></i></button>&nbsp;
                       <button (click)="openVerticalCenteredModal(verticalCenteredModal);action(item,'views');" class="btn btn-info btn-icon"><i class="feather icon-info"></i></button>&nbsp;
                       <button class="btn btn-danger btn-icon"><i class="feather icon-trash-2"></i></button>&nbsp;
-                      <button *ngIf="item.r_status == 0" 
-                              class="btn btn-success btn-icon" 
+                      <button *ngIf="item.r_status == 0"
+                              class="btn btn-success btn-icon"
                               title="Activer le compte du partenaire {{ item.r_nom }}"
                               (click)="activeDesactivePartenaire(item, 1)"
                                ><i class="feather icon-check"></i></button>&nbsp;
-                      <button *ngIf="item.r_status == 1" 
-                      class="btn btn-warning btn-icon" 
+                      <button *ngIf="item.r_status == 1"
+                      class="btn btn-warning btn-icon"
                       title="Désactiver le compte du partenaire {{ item.r_nom }}"
                       (click)="activeDesactivePartenaire(item, 0)"
                        ><i class="feather icon-slash"></i></button>

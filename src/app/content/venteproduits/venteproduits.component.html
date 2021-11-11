@@ -73,7 +73,7 @@
 
             <!-- Sélection des prouits -->
           <div class="col-xl-3 col-md-6">
-            <div class="card feed-card">
+            <div class="card feed-card" style="background-color: rgb(172, 224, 226);">
               <div class="card-header">
                   <h4>Sélections ( {{ choixProduits.length }} )</h4>
               </div>
@@ -91,8 +91,12 @@
                   <div class="form-row">
                     <div class="col-md-12" >
                       <label class="col-form-label">Paiement partiel </label>&nbsp;&nbsp;
-                      <input #paiement class="border-checkbox" (change)="isCheckPaiement(paiement.checked)" type="checkbox" id="checkbox1">
-                  
+                      <div class="form-check form-check-inline">
+                        <label class="form-check-label">
+                          <input #paiement class="border-checkbox" (change)="isCheckPaiement(paiement.checked)" type="checkbox" id="checkbox1">
+                          <i class="input-frame"></i>
+                        </label>
+                      </div>
                     </div>
                   </div>
 
@@ -100,7 +104,7 @@
                     <div class="form-row" >
                       <div class="col-md-12" >
                         <label class="col-form-label">Montant </label>
-                        <input #paiementPartielMnt (keyup)="valMntPartiel()" class="form-control" type="text" placeholder="Ex: 150 000">
+                        <input #paiementPartielMnt (keyup)="valMntPartiel()" class="form-control text-danger" type="text" placeholder="Ex: 150 000">
                       </div>
                     </div>
                   </ng-template>
@@ -195,11 +199,11 @@
                       <h5 class="m-b-1">{{ produitAjoute.r_libelle }}</h5>&nbsp;
                       <p class="text-c-red m-b-0">{{ produitAjoute.p_quantite }} x {{ produitAjoute.r_prix_vente }} = {{ produitAjoute.p_total }}</p>
                     </div>
-  
+
                     <div class="text-center">
                         <h4 class="text-c-red"  >{{ sommes || 'Panier vide' }}</h4>
                     </div>
-  
+
                 </div>
               </div>
             </div>
@@ -270,7 +274,7 @@
               <td><b>{{item.r_mnt}}</b></td>
               <td *ngIf = " item.r_status == 0 " ><span class="badge badge-pill badge-danger" style="width: 100%;" >Non soldée</span></td>
                 <td *ngIf = " item.r_status == 1 " ><span class="badge badge-pill badge-success" style="width: 100%;" >Soldée</span></td>
-                
+
                 <td >
                   <button  class="btn btn-primary btn-icon" (click)="detailsVente(item,'edit');openVerticalCenteredModal(verticalCenteredModal)"><i class="feather icon-edit"></i></button>&nbsp;
                   <button  class="btn btn-info btn-icon" (click)="detailsVente(item,'views');openVerticalCenteredModal(verticalCenteredModal);" ><i class="feather icon-eye"></i></button>&nbsp;
@@ -416,7 +420,7 @@
                       <input #mntRgl type="text" class="form-control"
                               [value]="detailsFacture.r_mnt - +ligneVentes[0].mnt_paye">
                   </div>
-  
+
                   <div class="col-md-4">
                     <label class="col-form-label text-white">Montant à solder </label>
                     <button class="btn btn-primary btn-block" (click)="reglemntPartiel(mntRgl.value)" >Valider</button>
@@ -424,7 +428,7 @@
                 </div>
               </ng-template>
 
-              
+
 
             </ng-template>
           </li>

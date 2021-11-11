@@ -102,7 +102,7 @@ export class VenteproduitsComponent implements OnInit {
     this.produitServices.fs_listProduit(this.userInfos.r_partenaire).subscribe(
       (res: any = {}) => {
         this.data = res.result;
-        
+
       },
       (err) => console.log(err),
     );
@@ -116,7 +116,7 @@ export class VenteproduitsComponent implements OnInit {
   listVentes(partenaireId, today){
 
     this.chargementEncours = true;
-    
+
     if( this.userInfos.r_profil !== 4 ){
       partenaireId = this.userInfos.r_partenaire;
     }
@@ -142,12 +142,18 @@ export class VenteproduitsComponent implements OnInit {
 
   openVerticalCenteredModal(content) {
     this.modalService.open(content, {centered: true, size:'lg'}).result.then((result) => {
-      
+
     }).catch((res) => {});
   }
 
 
   isCheck(checked, ligneProduit, indexLigne){
+
+    if( ligneProduit.r_stock == 0 ){
+      //(<HTMLInputElement>document.getElementById(`checkbox1-${indexLigne}`)).checked = false;
+      alert('Stock épuisé');
+      return;
+    }
 
     let qte = (<HTMLInputElement>document.getElementById(`qte-${indexLigne}`)).value = ""+1;
     (<HTMLInputElement>document.getElementById(`qte-${indexLigne}`)).disabled = false;
@@ -173,8 +179,12 @@ export class VenteproduitsComponent implements OnInit {
 
   choixqteProduit(qte, indexLigne, ligneProduit){
 
-   
-    
+   if( ligneProduit.r_stock < qte.value ){
+     alert('Stock épuisé');
+     (<HTMLInputElement>document.getElementById(`qte-${indexLigne}`)).value = ligneProduit.r_stock;
+     return;
+   }
+
     let total = (<HTMLInputElement>document.getElementById(`produit-${indexLigne}`)).value = (""+qte.value * ligneProduit.r_prix_vente);
 
     this.choixProduits.find( (produit)=>produit.r_i == ligneProduit.r_i);
@@ -250,7 +260,7 @@ export class VenteproduitsComponent implements OnInit {
     this.infosClient.value.p_mnt_partiel = this.mntPartiel;
     this.infosClient.value.p_cmd = 0;
     this.infosClient.value.p_partenaire = this.userInfos.r_partenaire;
-    
+
 
     this.venteServices.fs_saisie_facture(this.infosClient.value).subscribe(
       (res: any)=> {

@@ -36,8 +36,8 @@ produitData = this.fb.group({
   partenaires: any = [];
   categories: any = [];
   selectedLevel: any;
-  hideLoder: boolean = true;
   details: any = {};
+  chargementEncours: boolean;
 
   constructor( private fb: FormBuilder, private produitServices: ProduitService,
                 private swalServices: ModalService, private infosUtilisateur: UserInfosService,
@@ -63,7 +63,7 @@ produitData = this.fb.group({
 
 
   list_produits(val){
-
+this.chargementEncours = true;
     if( this.userInfos.r_profil !== 4 ){
       val = this.userInfos.r_partenaire;
     }
@@ -71,7 +71,7 @@ produitData = this.fb.group({
       (res: any = {}) => {
         this.data = res.result;
         setTimeout(() => {
-          this.hideLoder = false
+          this.chargementEncours = false
         }, 2000);
       },
       (err) => this.swalServices.fs_modal(err, 'error')

@@ -1,4 +1,9 @@
-<div class="row" >
+<!-- Loader -->
+<div *ngIf="chargementEncours == true" class="spinner-wrapper">
+  <div class="spinner">Loading...</div>
+</div>
+<!-- Loader -->
+<div class="row" *ngIf="chargementEncours == false" >
   <div class="col-md-12">
   <!-- Button trigger modal -->
   <button class="btn btn-primary"
@@ -6,9 +11,9 @@
   style="float: right;">Nouveau</button>
   <!-- Modal -->
   </div>
-  </div>
+</div>
 
-  <div class="row mt-2" >
+  <div class="row mt-2" *ngIf="chargementEncours == false" >
     <div class="col-md-12 stretch-card">
       <div class="card">
         <div class="card-body">
@@ -17,9 +22,9 @@
             <table class="table" >
               <thead>
                 <tr>
-                  <th>Libellé</th>
-                  <th>Nom</th>
-                  <th>Action</th>
+                  <th style="width: 40%;" >Libellé</th>
+                  <th style="width: 45%;" >Description</th>
+                  <th style="width: 15%; text-align: center;" >Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -38,9 +43,6 @@
               </tbody>
               <tfoot>
                 <tr>
-                  <th></th>
-                  <th></th>
-                  <th></th>
                   <th></th>
                   <th></th>
                   <th></th>

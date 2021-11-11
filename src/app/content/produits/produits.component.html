@@ -1,24 +1,35 @@
-<div class="row" >
-
-  <div class="col" *ngIf=" this.userInfos.r_profil == 4" >
-    <select class="form-control"
-          (change)="selectProduitPartenaire();" [(ngModel)]="selectedLevel" >
-          <option value="0">---Sélectionnez le partenaire---</option>
-          <option value="{{ value.r_i }}"  *ngFor=" let value of partenaires " >{{ value.r_nom }}</option>
-    </select>
-  </div>
-
-
-  <div class="col">
-    <!-- Button trigger modal -->
-    <button class="btn btn-primary"
-    (click)="fc_add_produit();openVerticalCenteredModal(verticalCenteredModal)"
-    style="float: right;">Nouveau</button>
-    <!-- Modal -->
-  </div>
+<!-- Loader -->
+<div *ngIf="chargementEncours == true" class="spinner-wrapper">
+  <div class="spinner">Loading...</div>
 </div>
+<!-- Loader -->
 
-  <div class="row mt-2" >
+
+  <div class="row mt-2" *ngIf="chargementEncours == false" >
+
+    <div class="col mb-2">
+      <div class="row" >
+
+        <div class="col" *ngIf=" this.userInfos.r_profil == 4" >
+          <select class="form-control"
+                (change)="selectProduitPartenaire();" [(ngModel)]="selectedLevel" >
+                <option value="0">---Sélectionnez le partenaire---</option>
+                <option value="{{ value.r_i }}"  *ngFor=" let value of partenaires " >{{ value.r_nom }}</option>
+          </select>
+        </div>
+
+
+        <div class="col">
+          <!-- Button trigger modal -->
+          <button class="btn btn-primary"
+          (click)="fc_add_produit();openVerticalCenteredModal(verticalCenteredModal)"
+          style="float: right;">Nouveau</button>
+          <!-- Modal -->
+        </div>
+      </div>
+    </div>
+
+
     <div class="col-md-12 stretch-card">
       <div class="card">
         <div class="card-body">
