@@ -80,7 +80,6 @@ export class VenteproduitsComponent implements OnInit {
     this.userInfos = this.infosUtilisateur.fs_informationUtilisateur();
     this.listVentes(this.userInfos.r_partenaire, this.today);
     this.listPartenaire();
-    //this.list_produits();
   }
 
 
@@ -109,7 +108,6 @@ export class VenteproduitsComponent implements OnInit {
   }
 
   selectProduitPartenaire(){
-    console.log(this.selectedLevel);
     this.listVentes(parseInt(this.selectedLevel),this.today);
   }
 
@@ -148,10 +146,10 @@ export class VenteproduitsComponent implements OnInit {
 
 
   isCheck(checked, ligneProduit, indexLigne){
-console.log(checked);
+
     if( ligneProduit.r_stock == 0 ){
       //(<HTMLInputElement>document.getElementById(`checkbox1-${indexLigne}`)).checked = false;
-      alert('Stock épuisé');
+      this.swalServices.fs_modal('Stock épuisé', 'warning');
       return;
     }
 
@@ -180,7 +178,7 @@ console.log(checked);
   choixqteProduit(qte, indexLigne, ligneProduit){
 
    if( ligneProduit.r_stock < qte.value ){
-     alert('Stock épuisé');
+     this.swalServices.fs_modal('Stock épuisé', 'warning');
      (<HTMLInputElement>document.getElementById(`qte-${indexLigne}`)).value = ligneProduit.r_stock;
      return;
    }
@@ -238,7 +236,7 @@ console.log(checked);
   step1(){
 
     if( this.choixProduits.length == 0 ){
-      alert('Veuillez choix au moins 1 articles');
+      this.swalServices.fs_modal('Veuillez choisir au moins 1 article', 'warning');
       return;
     }
 
@@ -273,7 +271,7 @@ console.log(checked);
         (<HTMLButtonElement>document.getElementById('btnVentes')).dispatchEvent(evt);
 
       },
-      (err)=> this.swalServices.fs_modal(err, 'success')
+      (err)=> this.swalServices.fs_modal(err, 'error')
     );
   }
   resetventForm() {

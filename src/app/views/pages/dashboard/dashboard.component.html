@@ -1,4 +1,11 @@
-<div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
+<!-- Loader -->
+<div *ngIf="chargementEncours == true" class="spinner-wrapper">
+  <div class="spinner">Loading...</div>
+</div>
+<!-- Loader -->
+
+
+<div class="d-flex justify-content-between align-items-center flex-wrap grid-margin" *ngIf="chargementEncours == false">
   <div>
     <h4 class="mb-3 mb-md-0">Tableau de bords</h4>
   </div>
@@ -27,7 +34,7 @@
   </div>
 </div>
 
-<div class="row">
+<div class="row" *ngIf="chargementEncours == false">
   <div class="col-12 col-xl-12 stretch-card">
     <div class="row flex-grow">
       <div class="col grid-margin stretch-card">
@@ -35,18 +42,6 @@
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-baseline">
               <h6 class="card-title mb-0">Vente du jour</h6>
-              <!-- <div ngbDropdown class="mb-2">
-                <button ngbDropdownToggle class="btn p-0 no-dropdown-toggle-icon" type="button" id="dropdownMenuButton">
-                  <i class="icon-lg text-muted pb-3px" data-feather="more-horizontal" appFeatherIcon></i>
-                </button>
-                <div ngbDropdownMenu aria-labelledby="dropdownMenuButton">
-                  <a ngbDropdownItem class="d-flex align-items-center" href="" (click)="false"><i data-feather="eye" appFeatherIcon class="icon-sm mr-2"></i> <span class="">View</span></a>
-                  <a ngbDropdownItem class="d-flex align-items-center" href="" (click)="false"><i data-feather="edit-2" appFeatherIcon class="icon-sm mr-2"></i> <span class="">Edit</span></a>
-                  <a ngbDropdownItem class="d-flex align-items-center" href="" (click)="false"><i data-feather="trash" appFeatherIcon class="icon-sm mr-2"></i> <span class="">Delete</span></a>
-                  <a ngbDropdownItem class="d-flex align-items-center" href="" (click)="false"><i data-feather="printer" appFeatherIcon class="icon-sm mr-2"></i> <span class="">Print</span></a>
-                  <a ngbDropdownItem class="d-flex align-items-center" href="" (click)="false"><i data-feather="download" appFeatherIcon class="icon-sm mr-2"></i> <span class="">Download</span></a>
-                </div>
-              </div> -->
             </div>
             <div class="row">
               <div class="col-12 col-md-12 col-xl-12">
@@ -67,18 +62,6 @@
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-baseline">
               <h6 class="card-title mb-0">Ventes restants</h6>
-              <!-- <div ngbDropdown class="mb-2">
-                <button ngbDropdownToggle class="btn p-0 no-dropdown-toggle-icon" type="button" id="dropdownMenuButton1">
-                  <i class="icon-lg text-muted pb-3px" data-feather="more-horizontal" appFeatherIcon></i>
-                </button>
-                <div ngbDropdownMenu aria-labelledby="dropdownMenuButton1">
-                  <a ngbDropdownItem class="d-flex align-items-center" href="" (click)="false"><i data-feather="eye" appFeatherIcon class="icon-sm mr-2"></i> <span class="">View</span></a>
-                  <a ngbDropdownItem class="d-flex align-items-center" href="" (click)="false"><i data-feather="edit-2" appFeatherIcon class="icon-sm mr-2"></i> <span class="">Edit</span></a>
-                  <a ngbDropdownItem class="d-flex align-items-center" href="" (click)="false"><i data-feather="trash" appFeatherIcon class="icon-sm mr-2"></i> <span class="">Delete</span></a>
-                  <a ngbDropdownItem class="d-flex align-items-center" href="" (click)="false"><i data-feather="printer" appFeatherIcon class="icon-sm mr-2"></i> <span class="">Print</span></a>
-                  <a ngbDropdownItem class="d-flex align-items-center" href="" (click)="false"><i data-feather="download" appFeatherIcon class="icon-sm mr-2"></i> <span class="">Download</span></a>
-                </div>
-              </div> -->
             </div>
             <div class="row">
               <div class="col-12 col-md-12 col-xl-12">
@@ -99,18 +82,6 @@
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-baseline">
               <h6 class="card-title mb-0">Commandes du jour</h6>
-              <!-- <div ngbDropdown class="mb-2">
-                <button ngbDropdownToggle class="btn p-0 no-dropdown-toggle-icon" type="button" id="dropdownMenuButton2">
-                  <i class="icon-lg text-muted pb-3px" data-feather="more-horizontal" appFeatherIcon></i>
-                </button>
-                <div ngbDropdownMenu aria-labelledby="dropdownMenuButton2">
-                  <a ngbDropdownItem class="d-flex align-items-center" href="" (click)="false"><i data-feather="eye" appFeatherIcon class="icon-sm mr-2"></i> <span class="">View</span></a>
-                  <a ngbDropdownItem class="d-flex align-items-center" href="" (click)="false"><i data-feather="edit-2" appFeatherIcon class="icon-sm mr-2"></i> <span class="">Edit</span></a>
-                  <a ngbDropdownItem class="d-flex align-items-center" href="" (click)="false"><i data-feather="trash" appFeatherIcon class="icon-sm mr-2"></i> <span class="">Delete</span></a>
-                  <a ngbDropdownItem class="d-flex align-items-center" href="" (click)="false"><i data-feather="printer" appFeatherIcon class="icon-sm mr-2"></i> <span class="">Print</span></a>
-                  <a ngbDropdownItem class="d-flex align-items-center" href="" (click)="false"><i data-feather="download" appFeatherIcon class="icon-sm mr-2"></i> <span class="">Download</span></a>
-                </div>
-              </div> -->
             </div>
             <div class="row">
               <div class="col-12 col-md-12 col-xl-12">
@@ -217,30 +188,26 @@
 
 
 
-<div class="row">
+<div class="row" *ngIf="chargementEncours == false">
   <div class="col-12 col-xl-12 stretch-card">
     <div class="row flex-grow">
 
       <div class="col-md-8 grid-margin stretch-card">
         <div class="card">
           <div class="card-body">
-            <div class="d-flex justify-content-between align-items-baseline">
-              <ngx-charts-bar-vertical
+            <ngx-charts-bar-vertical
               [view]="[800,400]"
               [results]="surveyData"
               [xAxisLabel]="'Produits'"
               [legendTitle]="'Produits vendus'"
               [yAxisLabel]="'Montant en cfa'"
-              [legend]="true"
+              [legend]="false"
               [showXAxisLabel]="true"
               [showYAxisLabel]="true"
               [xAxis]="true"
               [yAxis]="true"
               [gradient]="true">
             </ngx-charts-bar-vertical>
-
-
-            </div>
           </div>
         </div>
       </div>
@@ -259,7 +226,7 @@
 
 
                 <div class="row" >
-                  <div class="col">
+                  <div class="col-md-12 stretch-card">
                     <div class="card" style="background-color: rgb(172, 224, 226);">
                       <div class="card-body">
                         <h6 class="card-title">Top 5 produits les plus vendus du mois</h6>

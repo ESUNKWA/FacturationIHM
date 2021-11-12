@@ -52,6 +52,7 @@ produitData = this.fb.group({
 
 
   openVerticalCenteredModal(content) {
+
     this.modalService.open(content, {centered: true, size:'lg'}).result.then((result) => {
 
     }).catch((res) => {});
@@ -63,7 +64,7 @@ produitData = this.fb.group({
 
 
   list_produits(val){
-this.chargementEncours = true;
+    this.chargementEncours = true;
     if( this.userInfos.r_profil !== 4 ){
       val = this.userInfos.r_partenaire;
     }
@@ -100,6 +101,7 @@ this.chargementEncours = true;
     this.produitData.reset();
     this.produitData.enable();
     this.registerBtnStatus = true;
+
   }
   fc_details_produit(data: any = {}, mode){
 

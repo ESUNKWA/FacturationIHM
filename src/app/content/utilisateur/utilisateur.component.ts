@@ -5,8 +5,8 @@ import { PartenairesService } from 'src/app/services/partenaires/partenaires.ser
 import { ProfilService } from 'src/app/services/profil/profil.service';
 import { UserInfosService } from 'src/app/services/userInfos/user-infos.service';
 import { UtilisateursService } from 'src/app/services/utilisateur/utilisateurs.service';
-import { DataTable } from "simple-datatables";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-utilisateur',
@@ -111,6 +111,23 @@ export class UtilisateurComponent implements OnInit {
         break;
 
       default:
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "You won't be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            Swal.fire(
+              'Deleted!',
+              'Your file has been deleted.',
+              'success'
+            )
+          }
+        })
         return;
     }
   }

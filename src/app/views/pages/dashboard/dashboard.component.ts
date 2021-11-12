@@ -4,12 +4,7 @@ import { ApexAxisChartSeries, ApexNonAxisChartSeries, ApexGrid, ApexChart, ApexX
 
 import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 
-// Ng2-charts
-import { ChartOptions, ChartType, ChartDataSets, RadialChartOptions } from 'chart.js';
-import { Label, Color, SingleDataSet } from 'ng2-charts';
 
-// Progressbar.js
-import ProgressBar from 'progressbar.js';
 import { DashService } from 'src/app/services/dashboard/dash.service';
 import { UserInfosService } from 'src/app/services/userInfos/user-infos.service';
 
@@ -44,9 +39,7 @@ export class DashboardComponent implements OnInit {
 
 
 
-  /**
-   * NgbDatepicker
-   */
+  chargementEncours: boolean;
   currentDate: NgbDateStruct;
   topProduitMois: any = [];
   dashData: any = {};
@@ -61,6 +54,8 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentDate = this.calendar.getToday();
+
+    this.chargementEncours = true;
 
     this.userInfos = this.infosUtilisateur.fs_informationUtilisateur();
 
@@ -80,7 +75,7 @@ export class DashboardComponent implements OnInit {
         this.surveyData = this.topProduitMois;
 
         setTimeout(() => {
-
+          this.chargementEncours = false;
         }, 2000);
       }
     )
