@@ -1,3 +1,4 @@
+import { ModalService } from 'src/app/services/modal/modal.service';
 import { AuthService } from './../../../../services/auth/auth.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
@@ -15,7 +16,8 @@ export class LoginComponent implements OnInit {
   spinner: boolean = false;
   returnUrl: any;
 
-  constructor(private router: Router, private route: ActivatedRoute, private fb: FormBuilder, private authServices: AuthService ) {
+  constructor(private router: Router, private route: ActivatedRoute, private fb: FormBuilder,
+    private authServices: AuthService, private notif: ModalService ) {
     this.logInData = this.fb.group({
       p_login: [],
       p_mdp: []
@@ -28,22 +30,33 @@ export class LoginComponent implements OnInit {
   }
 
   onLoggedin() {
-    //e.preventDefault();
+
+    if( this.logInData.value.p_login == '' || this.logInData.value.p_login == undefined ){
+      this.notif.fs_modal('Veuillez saisir votre login', 'warning');
+      return;
+    }
+
+    if( this.logInData.value.p_mdp == '' || this.logInData.value.p_mdp == undefined ){
+      this.notif.fs_modal('Veuillez saisir votre mot de passe', 'warning');
+      return;
+    }
 
     this.spinner = true;
 
      this.authServices.fct_login(this.logInData.value).subscribe(
       (res: any = {})=>{
-        console.log(res);
+
         switch (res.status) {
           case -100:
             this.spinner = false;
-            alert(res.result);
+
+            this.notif.fs_modal(res.result, 'warning');
+
             break;
 
           case 0:
             this.spinner = false;
-            alert(res.result);
+            this.notif.fs_modal(res.result, 'warning');
             break;
 
           case 1:

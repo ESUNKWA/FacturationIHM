@@ -148,7 +148,7 @@ export class VenteproduitsComponent implements OnInit {
 
 
   isCheck(checked, ligneProduit, indexLigne){
-
+console.log(checked);
     if( ligneProduit.r_stock == 0 ){
       //(<HTMLInputElement>document.getElementById(`checkbox1-${indexLigne}`)).checked = false;
       alert('Stock épuisé');

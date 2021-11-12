@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-//import swal from 'sweetalert2';
+import Swal from 'sweetalert2';
 
 @Injectable({
   providedIn: 'root'
@@ -10,40 +10,37 @@ export class ModalService {
 
   fs_modal(data: string, mode: string){
 
-   /*  switch (mode) {
+    switch (mode) {
       case 'error':
-        swal({
-          title: 'Erreur !',
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
           text: data,
-          type: mode,
-          confirmButtonText: 'Fermer',
-          allowOutsideClick: true
-        }).catch(swal.noop);
+          footer: 'Plateforme de gestion et de vente'
+        })
         break;
 
         case 'success':
-          swal({
-            title: 'Excellent !',
-            text: data,
-            type: mode,
-            confirmButtonText: 'Fermer',
-          }).catch(swal.noop);
+          Swal.fire({
+            icon: 'success',
+            title: data,
+            showConfirmButton: true
+          });
           break;
 
           case 'warning':
-            swal({
-              title: 'Avertissement !',
+            Swal.fire({
+              icon: 'warning',
+              title: 'Oops...',
               text: data,
-              type: mode,
-              confirmButtonText: 'Fermer',
-              allowOutsideClick: true
-            }).catch(swal.noop);
+              footer: 'Plateforme de gestion et de vente'
+            })
           break;
 
       default:
         break;
     }
- */
+
   }
 
 }
