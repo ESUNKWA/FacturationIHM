@@ -69,7 +69,7 @@ export const MENU: MenuItem[] = [
     subItems: [
       {
         label: 'Détails des ventes',
-        link: '/apps/email/inbox',
+        link: '/privilege/details-ventes',
       },
       {
         label: 'Bilan périodique',

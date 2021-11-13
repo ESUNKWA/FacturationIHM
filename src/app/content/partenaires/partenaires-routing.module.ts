@@ -4,13 +4,7 @@ import { PartenairesComponent } from "./partenaires.component";
     const routes: Routes = [
         {
             path: '',
-            component: PartenairesComponent,
-            data: {
-                title: 'Liste des partenaires',
-                icon: 'icon-layout-cta-right',
-                caption: 'Partenaires',
-                status: true
-            }
+            component: PartenairesComponent
         }
     ];
 @NgModule({

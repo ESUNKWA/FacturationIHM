@@ -88,7 +88,7 @@ export const MENU: MenuItem[] = [
       },
       {
         label: 'Datepicker',
-        link: '/ui-components/datepicker',
+        link: '/privilege/ui-components/datepicker',
       },
       {
         label: 'Dropdowns',
@@ -176,34 +176,34 @@ export const MENU: MenuItem[] = [
     subItems: [
       {
         label: 'Basic elements',
-        link: '/form-elements/basic-elements'
+        link: '/privilege/form-elements/basic-elements'
       },
       {
         label: 'Advanced elements',
         subItems: [
           {
             label: 'Form validation',
-            link: '/advanced-form-elements/form-validation'
+            link: '/privilege/advanced-form-elements/form-validation'
           },
           {
             label: 'Input mask',
-            link: '/advanced-form-elements/input-mask'
+            link: '/privilege/advanced-form-elements/input-mask'
           },
           {
             label: 'Ng-select',
-            link: '/advanced-form-elements/ng-select'
+            link: '/privilege/advanced-form-elements/ng-select'
           },
           {
             label: 'Ngx-chips',
-            link: '/advanced-form-elements/ngx-chips'
+            link: '/privilege/advanced-form-elements/ngx-chips'
           },
           {
             label: 'Ngx-color-picker',
-            link: '/advanced-form-elements/ngx-color-picker'
+            link: '/privilege/advanced-form-elements/ngx-color-picker'
           },
           {
             label: 'Ngx-dropzone',
-            link: '/advanced-form-elements/ngx-dropzone-wrapper'
+            link: '/privilege/advanced-form-elements/ngx-dropzone-wrapper'
           },
         ]
       },
@@ -223,11 +223,11 @@ export const MENU: MenuItem[] = [
     subItems: [
       {
         label: 'ApexCharts',
-        link: '/charts-graphs/apexcharts',
+        link: '/privilege/charts-graphs/apexcharts',
       },
       {
         label: 'ChartJs',
-        link: '/charts-graphs/chartjs',
+        link: '/privilege/charts-graphs/chartjs',
       },
     ]
   },
@@ -241,11 +241,11 @@ export const MENU: MenuItem[] = [
       },
       {
         label: 'Data table',
-        link: '/tables/data-table',
+        link: '/privilege/tables/data-table',
       },
       {
         label: 'Ngx-datatable',
-        link: '/tables/ngx-datatable'
+        link: '/privilege/tables/ngx-datatable'
       }
     ]
   },

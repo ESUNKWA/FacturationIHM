@@ -46,6 +46,10 @@ const routes: Routes = [
         path: 'commandes',
         loadChildren: () => import('./content/commandes/commandes.module').then(m => m.CommandesModule)
       },
+      {
+        path: 'details-ventes',
+        loadChildren: () => import('./content/detailsventes/detailsventes.module').then(m => m.DetailsventesModule)
+      },
 
 
 

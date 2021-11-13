@@ -41,7 +41,6 @@
                 <td>
                     <button (click)="openVerticalCenteredModal(verticalCenteredModal);action(item,'edit');" class="btn btn-primary btn-icon"><i class="feather icon-edit"></i></button>&nbsp;
                     <button (click)="openVerticalCenteredModal(verticalCenteredModal);action(item,'views');" class="btn btn-info btn-icon"><i class="feather icon-info"></i></button>&nbsp;
-                    <button class="btn btn-danger btn-icon" (click)="action(item,'del');"  ><i class="feather icon-trash-2"></i></button>&nbsp;
 
                     <button *ngIf="item.r_status == 0"
                     class="btn btn-success btn-icon"
@@ -53,7 +52,9 @@
                   class="btn btn-warning btn-icon"
                   title="Désactiver le compte du partenaire {{ item.r_nom }}"
                   (click)="activeDesactiveUser(item, 0)"
-                  ><i class="feather icon-slash"></i></button>
+                  ><i class="feather icon-slash"></i></button>&nbsp;
+                  <button class="btn btn-danger btn-icon" (click)="action(item,'del');"  ><i class="feather icon-trash-2"></i></button>
+
                 </td>
               </tr>
             </tbody>

@@ -42,6 +42,8 @@ export class UtilisateurComponent implements OnInit {
   dataStatusUpdate: any = {};
 
   basicModalCloseResult: string = '';
+  titre: string;
+  soustitre: string;
 
   constructor( private utilisateurServices: UtilisateursService, private fb: FormBuilder,
               private usersProfils: ProfilService, private swalServices: ModalService,
@@ -73,15 +75,49 @@ export class UtilisateurComponent implements OnInit {
   }
 
   activeDesactiveUser(data, status){
+    let btntxt: string;
+    if( status == 1 ){
+      this.titre = 'Voullez vous activer le compte ?';
+      this.soustitre  = `Compte de ${data.r_nom} ${data.r_prenoms}`;
+      btntxt = 'Oui, Activer !';
+    }else{
+      this.titre = 'Voullez vous désactiver le compte ?';
+      this.soustitre  = `Compte de ${data.r_nom} ${data.r_prenoms}`;
+      btntxt = 'Oui, Désctiver !';
+    }
 
-    this.dataStatusUpdate.iduser = data.r_i;
-    this.dataStatusUpdate.p_status = status;
+    Swal.fire({
+      title: this.titre,
+      text: this.soustitre,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: btntxt
+    }).then((result) => {
 
-    this.utilisateurServices.updateStatusUser(this.dataStatusUpdate).subscribe(
-      ( res: any = {} ) => {
-        this.fct_listUtilisateurs(this.userInfos.r_partenaire);
+      if (result.isConfirmed) {
+        
+        this.dataStatusUpdate.iduser = data.r_i;
+        this.dataStatusUpdate.p_status = status;
+    
+        this.utilisateurServices.updateStatusUser(this.dataStatusUpdate).subscribe(
+          ( res: any = {} ) => {
+            this.fct_listUtilisateurs(this.userInfos.r_partenaire);
+            const txtaffirm = ( status == 1 )? 'Compte activé avec succès' : 'Compte désactivé avec succès';
+            Swal.fire(
+              'Succès !',
+              txtaffirm,
+              'success'
+            )
+          }
+        );
+         
       }
-    )
+      
+    });
+
+   
   }
 
   selectUserspartenaire(selectedLevel){

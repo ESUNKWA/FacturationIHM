@@ -36,10 +36,10 @@ export class ErrorPageComponent implements OnInit, OnDestroy {
     switch(this.type) {
       case '404':
         if (!this.title) {
-          this.title = 'Page Not Found'
+          this.title = 'Page non trouvée'
         }
         if (!this.desc) {
-          this.desc = 'Oopps!! The page you were looking for doesn\'t exist.'
+          this.desc = 'Oopps!! La page que vous cherchiez n\'existe pas.'
         }
         break;
       case '500':

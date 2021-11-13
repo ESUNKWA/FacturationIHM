@@ -21,7 +21,13 @@ export class SuiviventescmdService {
       retry(1),
       catchError(this.handleError)
     )
-   // return this.dkem;
+  }
+
+  detailsVentesCmdProduits(idpartenaire, idproduits, iscmd, date1, date2){
+    return this.http.get(`${api.url}/produitsVendus/${idpartenaire}/${idproduits}/${iscmd}/${date1}/${date2}`, this.httpOptions).pipe(
+      retry(1),
+      catchError(this.handleError)
+    )
   }
 
   handleError(error) {
