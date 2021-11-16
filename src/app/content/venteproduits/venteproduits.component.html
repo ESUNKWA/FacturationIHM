@@ -9,7 +9,7 @@
           </button>
     </div>
   </div>
-  <div class="card">
+  <div class="card mt-2">
     <div class="card-body">
       <h6 class="card-title">Saisie de ventes</h6>
 
@@ -18,7 +18,7 @@
 
 
           <div class="row mt-2" >
-            <div class="col-md-9 stretch-card">
+            <div class="col-md-8 stretch-card">
               <div class="card">
                 <div class="card-body">
                   <h6 class="card-title">Liste des produits</h6>
@@ -72,7 +72,7 @@
             </div>
 
             <!-- Sélection des prouits -->
-          <div class="col-xl-3 col-md-6">
+          <div class="col-md-4">
             <div class="card feed-card" style="background-color: rgb(172, 224, 226);">
               <div class="card-header">
                   <h4>Sélections ( {{ choixProduits.length }} )</h4>
@@ -87,18 +87,28 @@
                       <h4 class="text-c-red"  >{{ sommes || 'Panier vide' }}</h4>
                   </div>
                   <hr>
-                  <!-- Paiement partiel -->
-                  <div class="form-row">
-                    <div class="col-md-12" >
-                      <label class="col-form-label">Paiement partiel </label>&nbsp;&nbsp;
-                      <div class="form-check form-check-inline">
-                        <label class="form-check-label">
-                          <input #paiement class="border-checkbox" (change)="isCheckPaiement(paiement.checked)" type="checkbox" id="checkbox1">
-                          <i class="input-frame"></i>
-                        </label>
-                      </div>
+
+                  <!-- Rémise & paiement partiel -->
+                  <div class="form-group">
+                    <div class="form-check">
+                      <label class="form-check-label">
+                        <input #remise type="radio" class="form-check-input" (change)="isCheckRemise(remise.checked)" name="optionsRadios" id="optionsRadios" value="option1" checked="">
+                        <i class="input-frame"></i>
+                        Remise
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <label class="form-check-label">
+                        <input #paiement type="radio" class="form-check-input" (change)="isCheckPaiement(paiement.checked)" name="optionsRadios" id="optionsRadios1" value="option1">
+                        <i class="input-frame"></i>
+                        Paiement partiel
+                      </label>
                     </div>
                   </div>
+
+                  
+
+                  <hr>
 
                   <ng-template [ngIf]=" InputPaiementPartiel === true " >
                     <div class="form-row" >
@@ -107,7 +117,65 @@
                         <input #paiementPartielMnt (keyup)="valMntPartiel()" class="form-control text-danger" type="text" placeholder="Ex: 150 000">
                       </div>
                     </div>
+                  </ng-template >
+
+                  <ng-template [ngIf]=" InputPaiementPartiel === false ">
+                    <table class="table" >
+                      <div class="form-group">
+                        <div class="form-check">
+                          <tr>
+                            <td>
+                              <div class="form-check">
+                                <label class="form-check-label">
+                                  <input type="radio" class="form-check-input" (change)="etatInputRemise()" name="optionsRadios" id="optionsRadios" value="option1" checked="">
+                                  <i class="input-frame"></i>
+                                  Remise
+                                </label>
+                              </div>
+                            </td>
+                            <td>
+                              <input #remise1 (keyup)="valReduction(1,remise1)" [disabled]="remise1Input" class="form-control text-danger" id="" placeholder="Ex: 15" suffix=" %" mask="000">
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <div class="form-check">
+                                <label class="form-check-label">
+                                  <input type="radio" class="form-check-input" (change)="etatInputRemise()" name="optionsRadios" id="optionsRadios" value="option1" checked="">
+                                  <i class="input-frame"></i>
+                                  Réduction de 
+                                </label>
+                              </div>
+                            </td>
+                            <td>
+                              <input #remise2 (keyup)="valReduction(2,remise2)" [disabled]="remise2Input" class="form-control text-danger" placeholder="Ex: 15 000 fcfa" suffix=" fcfa" mask="separator">
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <div class="form-check">
+                              <label class="form-check-label">
+                                <input type="radio" class="form-check-input" (change)="etatInputRemise()" name="optionsRadios" id="optionsRadios" value="option1" checked="">
+                                <i class="input-frame"></i>
+                                Nouveau Total
+                              </label>
+                            </div>
+                          </td>
+                            <td>
+                              <input #remise3 (keyup)="valReduction(3,remise3)" [disabled]="remise3Input" class="form-control text-danger" placeholder="Ex: 150 000" suffix=" fcfa" mask="separator">
+                            </td>
+                          </tr>
+                        </div>
+                      </div>
+                  </table>
+
+                  <div class="text-center">
+                    <input class="form-control" [(ngModel)]="MntRemise" suffix=" fcfa" mask="separator"  >
+                  </div>
+
                   </ng-template>
+
+                  
 
               </div>
             </div>
@@ -228,76 +296,91 @@
 </div>
 <!-- Loader -->
 
-<!-- Liste des ventes -->
-<ng-template [ngIf]=" afficheVente === true && chargementEncours == false " >
-  <div class="row">
-
-    <div class="col" *ngIf="userInfos.r_profil == 4" >
-      <select class="form-control"
-              aria-label=".form-select-lg example"
-              (change)="selectProduitPartenaire();" [(ngModel)]="selectedLevel" >
-        <option value="0" selected>---Sélectionnez le partenaire---</option>
-        <option value="{{ value.r_i }}"  *ngFor=" let value of partenaires " >{{ value.r_nom }}</option>
-      </select>
-    </div>
-
-    <div class="col">
-      <button style="float: right;"
-                  title="Ajouter un nouveau produit"
-                  type="button" class="btn btn-primary btn-round"
-                  id="btnVentes"
-                  (click)="saisieVentes()">Effectuer une vente
-          </button>
-    </div>
-
+<div class="row" *ngIf="afficheVente === true && chargementEncours == false">
+    
+  <div class="col" *ngIf="userInfos.r_profil == 4" >
+    <select class="form-control"
+            aria-label=".form-select-lg example"
+            (change)="selectProduitPartenaire();" [(ngModel)]="selectedLevel" >
+      <option value="0" selected>---Sélectionnez le partenaire---</option>
+      <option value="{{ value.r_i }}"  *ngFor=" let value of partenaires " >{{ value.r_nom }}</option>
+    </select>
   </div>
 
-  <div class="card">
-    <div class="card-body">
-      <h6 class="card-title">Ventes du jour</h6>
-      <div class="table-responsive">
-        <table class="table" >
-          <thead>
-            <tr>
-              <th style="width: 20%;" >Date</th>
-              <th style="width: 20%;" >Numéro de facture</th>
-              <th style="width: 20%;">Montant total</th>
-              <th style="width: 20%;">Status</th>
-              <th style="width: 20%; text-align: center;">Actions</th>
+  <div class="col">
+    <button style="float: right;"
+                title="Ajouter un nouveau produit"
+                type="button" class="btn btn-primary btn-round"
+                id="btnVentes"
+                (click)="saisieVentes()">Effectuer une vente
+        </button>
+  </div>
 
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let item of data; let i = index" >
-              <td>{{item.created_at | date: 'dd/MM/yyyy à hh:mm:ss' }}</td>
-              <td>{{item.r_num}}</td>
-              <td><b>{{item.r_mnt}}</b></td>
-              <td *ngIf = " item.r_status == 0 " ><span class="badge badge-pill badge-danger" style="width: 100%;" >Non soldée</span></td>
-                <td *ngIf = " item.r_status == 1 " ><span class="badge badge-pill badge-success" style="width: 100%;" >Soldée</span></td>
+</div>
 
-                <td >
-                  <button  class="btn btn-primary btn-icon" (click)="detailsVente(item,'edit');openVerticalCenteredModal(verticalCenteredModal)"><i class="feather icon-edit"></i></button>&nbsp;
-                  <button  class="btn btn-info btn-icon" (click)="detailsVente(item,'views');openVerticalCenteredModal(verticalCenteredModal);" ><i class="feather icon-eye"></i></button>&nbsp;
-                  <button class="btn btn-danger btn-icon "><i class="feather icon-trash"></i></button>
-              </td>
+<!-- Liste des ventes -->
+<div class="mt-2" [ngSwitch]="dataRetour" *ngIf=" afficheVente === true && chargementEncours == false " >
+  <div *ngSwitchCase = 0 >
 
-            </tr>
-          </tbody>
-          <tfoot>
-            <tr>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-            </tr>
-          </tfoot>
-        </table>
+    <div class="card" >  
+      <div class="card-body text-center" >
+        <h1 style="color: red;">{{ data }}</h1>
       </div>
     </div>
+
   </div>
-</ng-template>
+
+  <div *ngSwitchCase = 1 >
+
+    <div class="card">
+      <div class="card-body">
+        <h6 class="card-title">Ventes du jour</h6>
+        <div class="table-responsive">
+          <table class="table" >
+            <thead>
+              <tr>
+                <th style="width: 20%;" >Date</th>
+                <th style="width: 20%;" >Numéro de facture</th>
+                <th style="width: 20%;">Montant total</th>
+                <th style="width: 20%;">Status</th>
+                <th style="width: 20%; text-align: center;">Actions</th>
+  
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of data; let i = index" >
+                <td>{{item.created_at | date: 'dd/MM/yyyy à hh:mm:ss' }}</td>
+                <td>{{item.r_num}}</td>
+                <td><b>{{item.r_mnt}}</b></td>
+                <td *ngIf = " item.r_status == 0 " ><span class="badge badge-pill badge-danger" style="width: 100%;" >Non soldée</span></td>
+                  <td *ngIf = " item.r_status == 1 " ><span class="badge badge-pill badge-success" style="width: 100%;" >Soldée</span></td>
+  
+                  <td >
+                    <button  class="btn btn-primary btn-icon" (click)="detailsVente(item,'edit');openVerticalCenteredModal(verticalCenteredModal)"><i class="feather icon-edit"></i></button>&nbsp;
+                    <button  class="btn btn-info btn-icon" (click)="detailsVente(item,'views');openVerticalCenteredModal(verticalCenteredModal);" ><i class="feather icon-eye"></i></button>&nbsp;
+                    <button class="btn btn-danger btn-icon "><i class="feather icon-trash"></i></button>
+                </td>
+  
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
 
 
 <!-- Modal -->

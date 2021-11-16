@@ -4,6 +4,8 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/fo
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CategorieService } from 'src/app/services/categorie/categorie.service';
 import { ModalService } from 'src/app/services/modal/modal.service';
+import { PartenairesService } from 'src/app/services/partenaires/partenaires.service';
+import { UserInfosService } from 'src/app/services/userInfos/user-infos.service';
 //import Swal from 'sweetalert2';
 @Component({
   selector: 'app-categories',
@@ -28,15 +30,20 @@ export class CategoriesComponent implements OnInit {
   modeAppel: string;
   details: any;
   chargementEncours: boolean;
+  userInfos: any = {};
+  selectedLevel: number;
+  partenaires: any = [];
 
   constructor( private categorieServices: CategorieService, private http: HttpClient,
-                private fb: FormBuilder, private swalServices: ModalService,  private modalService: NgbModal ) {
+                private fb: FormBuilder, private swalServices: ModalService,  private modalService: NgbModal,
+                private infosUtilisateur: UserInfosService, private partenaireServices: PartenairesService ) {
 
                 }
 
   ngOnInit() {
-
+    this.userInfos = this.infosUtilisateur.fs_informationUtilisateur();
     this.list_categorie();
+    this.listPartenaire();
   }
 
   openVerticalCenteredModal(content) {
@@ -45,11 +52,21 @@ export class CategoriesComponent implements OnInit {
     }).catch((res) => {});
   }
 
+  listPartenaire(){
+
+    this.partenaireServices.listPartenaires().subscribe(
+      (res: any = {})=>{
+        this.partenaires = res.result;
+        
+      }
+    )
+  }
+
   list_categorie(){
 
     this.chargementEncours = true;
-
-    this.categorieServices.fs_listCategorie().subscribe(
+    const idpart = ( this.userInfos.r_profil == 4 )? this.selectedLevel : this.userInfos.r_partenaire;
+    this.categorieServices.listCategoriePart(idpart).subscribe(
       (res) => {
         this.dataRetour = res,
         this.data = this.dataRetour.result;
@@ -73,11 +90,13 @@ export class CategoriesComponent implements OnInit {
     this.detailsCategories = data;
     switch( mode ){
       case 1://Modification
+        this.modeAppel = 'modif';
         this.categorieData.enable();
         this.registerBtnStatus = true;
         break;
 
       case 2://Consultation
+        this.modeAppel = 'consult';
         this.categorieData.disable();
         this.registerBtnStatus = false;
         break;
@@ -89,6 +108,10 @@ export class CategoriesComponent implements OnInit {
 
   }
 
+  addCategorie(){
+    this.modalTitle = 'Saisie une nouvelle catégorie de produit';
+    this.modeAppel = 'creation';
+  }
 
   resgister(){
     //Controlle des champs
@@ -97,22 +120,67 @@ export class CategoriesComponent implements OnInit {
       return;
     }
 
-    //Envoie vers le serveur api
-    this.categorieServices.fs_saisieCategorie(this.categorieData.value).subscribe(
-      (res: any = {}) =>{
-        if( res.status === 1){
-          this.list_categorie();
-          this.categorieData.reset();
-          this.swalServices.fs_modal(res.result, 'success');
-        }else{
-          this.swalServices.fs_modal(res.r_libelle, 'error');
-        }
 
-      },
-      (error) =>{
-        this.swalServices.fs_modal(error, 'error');
-      }
+    switch (this.modeAppel) {
+
+      case 'creation':
+        console.log(this.userInfos.r_i, this.userInfos);
+        
+        //Envoie vers le serveur api
+        const idpart = ( this.userInfos.r_profil == 4 )? this.selectedLevel : this.userInfos.r_partenaire;
+        this.categorieData.value.p_utilisateur = this.userInfos.r_i;
+        this.categorieData.value.p_partenaire = idpart;
+        this.categorieServices.fs_saisieCategorie(this.categorieData.value).subscribe(
+          (res: any = {}) =>{
+            if( res.status === 1){
+              this.list_categorie();
+              this.categorieData.reset();
+              this.swalServices.fs_modal(res.result, 'success');
+            }else{
+              this.swalServices.fs_modal(res.r_libelle, 'error');
+            }
+
+          },
+          (error) =>{
+            this.swalServices.fs_modal(error, 'error');
+          }
     );
+        break;
+
+      case 'modif':
+
+        //Envoie vers le serveur api
+        const idparten = ( this.userInfos.r_profil == 4 )? this.selectedLevel : this.userInfos.r_partenaire;
+        //this.detailsCategories.p_utilisateur = this.userInfos.r_i;
+        //this.detailsCategories.p_partenaire = idparten;
+
+        console.log(this.detailsCategories);
+      
+        
+
+        this.categorieServices.udpdateCategorie(this.detailsCategories, this.detailsCategories.r_i).subscribe(
+          (res: any = {}) =>{
+            if( res.status === 1){
+              this.list_categorie();
+              this.categorieData.reset();
+              this.swalServices.fs_modal(res.result, 'success');
+            }else{
+              this.swalServices.fs_modal(res.r_libelle, 'error');
+            }
+
+          },
+          (error) =>{
+            this.swalServices.fs_modal(error, 'error');
+          }
+        );
+
+      break;
+    
+      default:
+        break;
+    }
+
+    
 
 
   }

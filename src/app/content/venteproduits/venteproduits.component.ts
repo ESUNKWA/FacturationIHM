@@ -19,9 +19,9 @@ export class VenteproduitsComponent implements OnInit {
   desabledInputQteProduit: any = true;
   choixProduitsFinal: any = [];
   sommes: number = 0;
-
+  dataRetour: any;
   detailProduit: any = {};
-
+  etat: boolean;
   infosClient = this.fb.group({
     p_type_person: [],
     p_nom: [],
@@ -46,11 +46,15 @@ export class VenteproduitsComponent implements OnInit {
   });
 
   InputPaiementPartiel: boolean = false;
-
+  remise = false;
   @ViewChild('paiementPartielMnt') paiementPartielMnt;
+  @ViewChild('remise1') remise1;
+  @ViewChild('remise2') remise2;
+  @ViewChild('remise3') remise3;
   @ViewChild('mntRgl') mntRgl;
   @ViewChild('wizardForm') wizardForm: BaseWizardComponent;
   mntPartiel: any = 0;
+  MntRemise: number = 0;
   mntPayeRestant: any = {};
 
   devise: string = ' fcfa';
@@ -68,6 +72,8 @@ export class VenteproduitsComponent implements OnInit {
   data: any;
   chargementEncours: boolean;
   modifCmd: boolean = false;
+  
+
 
   constructor( private produitServices: ProduitService, private excelService: ExcelService,
                 private fb: FormBuilder, private venteServices: FactureService,
@@ -121,7 +127,13 @@ export class VenteproduitsComponent implements OnInit {
 
     this.venteServices.fs_list_factures(0,partenaireId, today).subscribe(
       (res: any = {}) => {
+        if( res.status == 1 ){
+          this.dataRetour = 1;
+        }else{
+          this.dataRetour = 0;
+        }
         this.data = res.result;
+        
         setTimeout(()=>{
           this.chargementEncours = false;
         }, 2000);
@@ -239,6 +251,8 @@ export class VenteproduitsComponent implements OnInit {
       this.swalServices.fs_modal('Veuillez choisir au moins 1 article', 'warning');
       return;
     }
+    console.log('this.MntRemise',this.MntRemise,'this.sommes====',this.sommes);
+
 
     this.filterParmas(this.choixProduits);
     this.wizardForm.goToNextStep();
@@ -251,13 +265,55 @@ export class VenteproduitsComponent implements OnInit {
 
   }
 
+//Récupération du montant sans la dévise
+  getRemise(remise){
+    let mnt, tab, lastElt;
+    mnt = remise.value;//Récupération du montant avec la dévise
+    tab = mnt.split(' ');//Convertion du montant en tableau
+    lastElt = tab.pop();
+    
+    return +tab.join('');
+  }
+
+  valReduction(modeRemise, remise){
+   let a, b, c;
+    switch (modeRemise) {
+      case 1:
+        a = this.getRemise(remise);
+        this.MntRemise = this.sommes - (this.sommes * (a/100));
+        break;
+
+      case 2:
+        b = this.getRemise(remise);
+        
+        this.MntRemise = this.sommes - b;
+        break;
+    
+      default:
+        c = this.getRemise(remise);
+        this.MntRemise = c;
+        break;
+    }
+//this.sommes = this.MntRemise;
+    console.log('this.MntRemise',this.MntRemise,'this.sommes====',this.sommes);
+    
+    
+  }
+
+  etatInputRemise(){
+    console.log(this.etat);
+    
+  }
+
   registerVente(){
 
-    this.infosClient.value.p_mnt = this.sommes;
+    this.infosClient.value.p_mnt = ( this.MntRemise == 0 )? this.sommes : this.MntRemise;
     this.infosClient.value.p_ligneFacture = this.choixProduits;
     this.infosClient.value.p_mnt_partiel = this.mntPartiel;
+    this.infosClient.value.p_mntTotalAchat = this.sommes;
     this.infosClient.value.p_cmd = 0;
     this.infosClient.value.p_partenaire = this.userInfos.r_partenaire;
+    this.infosClient.value.p_utilisateur = this.userInfos.r_i
 
 
     this.venteServices.fs_saisie_facture(this.infosClient.value).subscribe(
@@ -316,11 +372,18 @@ export class VenteproduitsComponent implements OnInit {
     }
   }
 
-  isCheckPaiement(data: any){
-
-    this.InputPaiementPartiel = data;
-
+  isCheckPaiement(value: any){
+    this.InputPaiementPartiel = value;
+    this.remise = !value;
     this.mntPartiel = 0;
+  }
+
+  isCheckRemise(value: any){
+    this.remise = value;
+    this.InputPaiementPartiel = !value;
+    console.log(value);
+    
+    
   }
 
   valMntPartiel(){

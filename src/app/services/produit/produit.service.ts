@@ -46,6 +46,13 @@ export class ProduitService {
     )
   }
 
+  alertStock(idpartenaire){
+    return this.http.get(`${apiServer.url}/produit.alerte/${idpartenaire}`, this.httpOptions).pipe(
+      retry(1),
+      catchError(this.handleError)
+    )
+  }
+
   handleError(error) {
     let errorMessage = '';
     if(error.error instanceof ErrorEvent) {

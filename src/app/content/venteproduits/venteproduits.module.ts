@@ -3,6 +3,8 @@ import { NgModule } from "@angular/core";
 import { FormsModule, NgSelectOption, ReactiveFormsModule } from "@angular/forms";
 import { NgbNavModule } from "@ng-bootstrap/ng-bootstrap";
 import { ArchwizardModule } from "angular-archwizard";
+import { TagInputModule } from "ngx-chips";
+import { NgxMaskModule } from "ngx-mask";
 import { VenteproduitsRouting } from "./venteproduit-routing.module";
 import { VenteproduitsComponent } from "./venteproduits.component";
 
@@ -13,7 +15,9 @@ import { VenteproduitsComponent } from "./venteproduits.component";
         FormsModule,
         ReactiveFormsModule,
         ArchwizardModule,
-        NgbNavModule
+        NgbNavModule,
+        NgxMaskModule.forRoot({ validation: true}),
+        TagInputModule
     ],
     declarations: [VenteproduitsComponent]
 })

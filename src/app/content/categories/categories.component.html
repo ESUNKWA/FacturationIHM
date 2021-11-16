@@ -4,10 +4,20 @@
 </div>
 <!-- Loader -->
 <div class="row" *ngIf="chargementEncours == false" >
-  <div class="col-md-12">
+  <div class="col">
+    <div class="form-group ml-2" *ngIf="userInfos.r_profil == 4" >
+      <select class="form-control"
+              aria-label=".form-select-lg example"
+              (change)="list_categorie();" [(ngModel)]="selectedLevel" [ngModelOptions]="{standalone: true}" >
+        <option value="0" selected>---Sélectionnez le partenaire---</option>
+        <option value="{{ value.r_i }}"  *ngFor=" let value of partenaires " >{{ value.r_nom }}</option>
+      </select>
+    </div>
+  </div>
+  <div class="col">
   <!-- Button trigger modal -->
   <button class="btn btn-primary"
-  (click)="openVerticalCenteredModal(verticalCenteredModal)"
+  (click)="addCategorie();openVerticalCenteredModal(verticalCenteredModal)"
   style="float: right;">Nouveau</button>
   <!-- Modal -->
   </div>

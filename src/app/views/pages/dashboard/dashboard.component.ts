@@ -99,9 +99,10 @@ export class DashboardComponent implements OnInit {
         this.topProduitMois.forEach(element => {
           
           this.barChartLabels.push(element.name);
-          this.barChartData[0]['data'].push(element.value);
+          this.barChartData[0]['data'].push(parseInt(element.value));
           
         });
+        
 
         setTimeout(() => {
           this.chargementEncours = false;

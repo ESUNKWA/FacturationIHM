@@ -87,7 +87,8 @@ produitData = this.fb.group({
     )
   }
   listCategories(){
-    this.categorieServices.fs_listCategorie().subscribe(
+    const idpart = ( this.userInfos.r_profil == 4 )? this.selectedLevel : this.userInfos.r_partenaire;
+    this.categorieServices.listCategoriePart(idpart).subscribe(
       (res: any = {})=>{
         this.categories = res.result;
       }

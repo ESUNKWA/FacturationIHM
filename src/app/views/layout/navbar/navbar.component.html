@@ -47,7 +47,7 @@
             <a href="" (click)="false">View all</a>
           </div>
         </div>
-      </li>
+      </li> -->
       <li class="nav-item nav-messages" ngbDropdown>
         <a class="nav-link" ngbDropdownToggle id="messageDropdown">
           <i class="link-icon feather icon-mail"></i>
@@ -124,62 +124,26 @@
           </div>
         </div>
       </li>
-      <li class="nav-item nav-notifications" ngbDropdown>
+      <li class="nav-item nav-notifications" ngbDropdown *ngIf=" data.length >= 1 " >
         <a class="nav-link" ngbDropdownToggle id="notificationDropdown">
           <i class="link-icon feather icon-bell"></i>
           <div class="indicator">
-            <div class="circle"></div>
+            <div class="circle" style="background-color: red;" ></div>
           </div>
         </a>
         <div ngbDropdownMenu aria-labelledby="notificationDropdown">
           <div class="dropdown-header d-flex align-items-center justify-content-between">
-            <p class="mb-0 font-weight-medium">6 New Notifications</p>
-            <a href="" (click)="false" class="text-muted">Clear all</a>
+            <p class="mb-0 font-weight-medium">{{ data.length }} Notifications</p>
+            <!-- <a href="" (click)="false" class="text-muted">Clear all</a> -->
           </div>
           <div class="dropdown-body">
-            <a href="" (click)="false" class="dropdown-item">
+            <a href="" (click)="false" class="dropdown-item" *ngFor=" let item of data ">
               <div class="icon">
                 <i class="feather icon-user-plus"></i>
               </div>
-              <div class="content">
-                <p>New customer registered</p>
-                <p class="sub-text text-muted">2 sec ago</p>
-              </div>
-            </a>
-            <a href="" (click)="false" class="dropdown-item">
-              <div class="icon">
-                <i class="feather icon-gift"></i>
-              </div>
-              <div class="content">
-                <p>New Order Recieved</p>
-                <p class="sub-text text-muted">30 min ago</p>
-              </div>
-            </a>
-            <a href="" (click)="false" class="dropdown-item">
-              <div class="icon">
-                <i class="feather icon-alert-circle"></i>
-              </div>
-              <div class="content">
-                <p>Server Limit Reached!</p>
-                <p class="sub-text text-muted">1 hrs ago</p>
-              </div>
-            </a>
-            <a href="" (click)="false" class="dropdown-item">
-              <div class="icon">
-                <i class="feather icon-layers"></i>
-              </div>
-              <div class="content">
-                <p>Apps are ready for update</p>
-                <p class="sub-text text-muted">5 hrs ago</p>
-              </div>
-            </a>
-            <a href="" (click)="false" class="dropdown-item">
-              <div class="icon">
-                <i class="feather icon-download"></i>
-              </div>
-              <div class="content">
-                <p>Download completed</p>
-                <p class="sub-text text-muted">6 hrs ago</p>
+              <div class="content" >
+                <p>{{ item.r_libelle }}</p>
+                <p class="sub-text text-muted"> Stock : {{ item.r_stock }}</p>
               </div>
             </a>
           </div>
@@ -187,7 +151,7 @@
             <a href="" (click)="false">View all</a>
           </div>
         </div>
-      </li> -->
+      </li>
 
       <li class="nav-item nav-profile" ngbDropdown>
          <h4>{{ userInfos.r_nom }} {{ userInfos.r_prenoms }}</h4> &nbsp;&nbsp;&nbsp; <a class="nav-link" ngbDropdownToggle id="profileDropdown">

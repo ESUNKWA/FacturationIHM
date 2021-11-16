@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, Inject, Renderer2 } from '@an
 import { DOCUMENT } from '@angular/common';
 import { Router } from '@angular/router';
 import { UserInfosService } from 'src/app/services/userInfos/user-infos.service';
+import { ProduitService } from 'src/app/services/produit/produit.service';
 
 @Component({
   selector: 'app-navbar',
@@ -10,16 +11,31 @@ import { UserInfosService } from 'src/app/services/userInfos/user-infos.service'
 })
 export class NavbarComponent implements OnInit {
   userInfos: any = {};
+  data: any = [];
   constructor(
     @Inject(DOCUMENT) private document: Document,
     private renderer: Renderer2,
-    private router: Router, private userInfoServices: UserInfosService
+    private router: Router, private userInfoServices: UserInfosService,
+    private alertStockProduit: ProduitService
   ) { }
 
   ngOnInit(): void {
 
     this.userInfos = this.userInfoServices.fs_informationUtilisateur();
 
+    setInterval(()=>{
+      this.alertStockProduit.alertStock(this.userInfos.r_partenaire).subscribe(
+        ( res: any = {} )=>{
+          this.data = res.result;        
+        }
+      )
+    }, 5000);
+
+   
+  }
+
+  stockProduit(){
+    
   }
 
   /**

@@ -253,6 +253,10 @@ export class CommandesComponent implements OnInit {
     this.CmdData.value.p_ligneFacture = this.choixProduits;
     this.CmdData.value.p_mnt_partiel = this.mntPartiel;
     this.CmdData.value.p_cmd = 1;
+    this.CmdData.value.p_utilisateur = this.userInfos.r_i,
+    this.CmdData.value.p_partenaire = this.userInfos.r_partenaire;
+    this.CmdData.value.p_mntTotalAchat = this.sommes;
+
     if( this.userInfos.r_profil !== 4 ){
       this.CmdData.value.p_partenaire = this.userInfos.r_partenaire;
     }

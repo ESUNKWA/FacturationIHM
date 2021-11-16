@@ -21,16 +21,29 @@ export class CategorieService {
   //dkem: Observable<any[]>;
   constructor( private http: HttpClient ) { }
 
-  fs_listCategorie(){
+  fs_listAllCategorie(){
     return this.http.get(`${apiServer.url}/categories`, this.httpOptions).pipe(
       retry(1),
       catchError(this.handleError)
     )
-   // return this.dkem;
+  }
+
+  listCategoriePart(idpartenaire){
+    return this.http.get(`${apiServer.url}/categories/${idpartenaire}`, this.httpOptions).pipe(
+      retry(1),
+      catchError(this.handleError)
+    )
   }
 
   fs_saisieCategorie(data){
-    return this.http.post(`${apiServer.url}/categories`, JSON.stringify(data), this.httpOptions).pipe(
+    return this.http.put(`${apiServer.url}/categories`, JSON.stringify(data), this.httpOptions).pipe(
+      retry(1),
+      catchError(this.handleError)
+    )
+  }
+
+  udpdateCategorie(data,idCat){
+    return this.http.put(`${apiServer.url}/categories/${idCat}`, JSON.stringify(data), this.httpOptions).pipe(
       retry(1),
       catchError(this.handleError)
     )
