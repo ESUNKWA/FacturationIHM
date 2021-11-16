@@ -37,7 +37,7 @@
 </div>
 
 <div class="row" *ngIf="chargementEncours == false">
-  <div class="col-9 col-xl-12 stretch-card">
+  <div class="col-12 col-xl-12 stretch-card">
     <div class="row flex-grow">
       <div class="col grid-margin stretch-card">
         <div class="card">
@@ -83,23 +83,16 @@
         <div class="card">
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-baseline">
-              <h6 class="card-title mb-0">Commandes du jour</h6>
+              <h6 class="card-title mb-0">Ventes restants</h6>
             </div>
             <div class="row">
               <div class="col-12 col-md-12 col-xl-12">
-                <h3 class="mb-2">89.87%</h3>
+                <h3 class="mb-2">{{ recetteJrRestant }}</h3>
                 <div class="d-flex align-items-baseline">
-                  <p class="text-success">
-                    <span>+2.8%</span>
-                    <i data-feather="arrow-up" appFeatherIcon class="icon-sm mb-1"></i>
+                  <p class="text-danger">
+                    <span>-2.8%</span>
+                    <i data-feather="arrow-down" appFeatherIcon class="icon-sm mb-1"></i>
                   </p>
-                </div>
-              </div>
-              <div class="col-6 col-md-12 col-xl-7">
-                <div class="mt-md-3 mt-xl-0">
-
-
-
                 </div>
               </div>
             </div>
@@ -110,47 +103,28 @@
         <div class="card">
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-baseline">
-              <h6 class="card-title mb-0">Commandes du jour</h6>
-              <div ngbDropdown class="mb-2">
-                <button ngbDropdownToggle class="btn p-0 no-dropdown-toggle-icon" type="button" id="dropdownMenuButton2">
-                  <i class="icon-lg text-muted pb-3px" data-feather="more-horizontal" appFeatherIcon></i>
-                </button>
-                <div ngbDropdownMenu aria-labelledby="dropdownMenuButton2">
-                  <a ngbDropdownItem class="d-flex align-items-center" href="" (click)="false"><i data-feather="eye" appFeatherIcon class="icon-sm mr-2"></i> <span class="">View</span></a>
-                  <a ngbDropdownItem class="d-flex align-items-center" href="" (click)="false"><i data-feather="edit-2" appFeatherIcon class="icon-sm mr-2"></i> <span class="">Edit</span></a>
-                  <a ngbDropdownItem class="d-flex align-items-center" href="" (click)="false"><i data-feather="trash" appFeatherIcon class="icon-sm mr-2"></i> <span class="">Delete</span></a>
-                  <a ngbDropdownItem class="d-flex align-items-center" href="" (click)="false"><i data-feather="printer" appFeatherIcon class="icon-sm mr-2"></i> <span class="">Print</span></a>
-                  <a ngbDropdownItem class="d-flex align-items-center" href="" (click)="false"><i data-feather="download" appFeatherIcon class="icon-sm mr-2"></i> <span class="">Download</span></a>
-                </div>
-              </div>
+              <h6 class="card-title mb-0">Ventes restants</h6>
             </div>
             <div class="row">
-              <div class="col-6 col-md-12 col-xl-5">
-                <h3 class="mb-2">89.87%</h3>
+              <div class="col-12 col-md-12 col-xl-12">
+                <h3 class="mb-2">{{ recetteJrRestant }}</h3>
                 <div class="d-flex align-items-baseline">
-                  <p class="text-success">
-                    <span>+2.8%</span>
-                    <i data-feather="arrow-up" appFeatherIcon class="icon-sm mb-1"></i>
+                  <p class="text-danger">
+                    <span>-2.8%</span>
+                    <i data-feather="arrow-down" appFeatherIcon class="icon-sm mb-1"></i>
                   </p>
-                </div>
-              </div>
-              <div class="col-6 col-md-12 col-xl-7">
-                <div class="mt-md-3 mt-xl-0">
-
-
-
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      
+
     </div>
   </div>
 
-  
-  
+
+
 </div> <!-- row -->
 
 
@@ -162,7 +136,7 @@
       <div class="card-body">
         <h6 class="card-title">Graphe des meilleures ventes</h6>
 
-        <canvas baseChart 
+        <canvas baseChart
           [datasets]="barChartData"
           [labels]="barChartLabels"
           [options]="barChartOptions"
@@ -171,7 +145,7 @@
           [legend]="barChartLegend"
           [chartType]="barChartType">
         </canvas>
-        
+
       </div>
     </div>
   </div>

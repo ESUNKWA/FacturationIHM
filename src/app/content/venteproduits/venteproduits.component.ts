@@ -72,13 +72,16 @@ export class VenteproduitsComponent implements OnInit {
   data: any;
   chargementEncours: boolean;
   modifCmd: boolean = false;
-  
-
+  remise1Input: any;
+  remise2Input: any;
+  remise3Input: any;
+  spinner: boolean = false;
 
   constructor( private produitServices: ProduitService, private excelService: ExcelService,
                 private fb: FormBuilder, private venteServices: FactureService,
                 private swalServices: ModalService, private infosUtilisateur: UserInfosService,
-                private partenaireServices: PartenairesService, private modalService: NgbModal ) { }
+                private partenaireServices: PartenairesService, private modalService: NgbModal,
+                private alertStockProduit: ProduitService ) { }
 
   ngOnInit() {
     this.today = this.myDate.getFullYear()+'-'+ (this.myDate.getMonth() + 1) + '-'+ this.myDate.getDate();
@@ -133,10 +136,10 @@ export class VenteproduitsComponent implements OnInit {
           this.dataRetour = 0;
         }
         this.data = res.result;
-        
+
         setTimeout(()=>{
           this.chargementEncours = false;
-        }, 2000);
+        }, 1);
       },
       (err) => console.log(err),
     );
@@ -271,7 +274,7 @@ export class VenteproduitsComponent implements OnInit {
     mnt = remise.value;//Récupération du montant avec la dévise
     tab = mnt.split(' ');//Convertion du montant en tableau
     lastElt = tab.pop();
-    
+
     return +tab.join('');
   }
 
@@ -285,10 +288,10 @@ export class VenteproduitsComponent implements OnInit {
 
       case 2:
         b = this.getRemise(remise);
-        
+
         this.MntRemise = this.sommes - b;
         break;
-    
+
       default:
         c = this.getRemise(remise);
         this.MntRemise = c;
@@ -296,16 +299,18 @@ export class VenteproduitsComponent implements OnInit {
     }
 //this.sommes = this.MntRemise;
     console.log('this.MntRemise',this.MntRemise,'this.sommes====',this.sommes);
-    
-    
+
+
   }
 
   etatInputRemise(){
     console.log(this.etat);
-    
+
   }
 
   registerVente(){
+
+    this.spinner = true
 
     this.infosClient.value.p_mnt = ( this.MntRemise == 0 )? this.sommes : this.MntRemise;
     this.infosClient.value.p_ligneFacture = this.choixProduits;
@@ -320,7 +325,7 @@ export class VenteproduitsComponent implements OnInit {
       (res: any)=> {
         this.swalServices.fs_modal(res.result, 'success');
         this.resetventForm();
-
+        this.spinner = false;
         //Exécute automatiquement pour afficher la liste des commandes
         var evt = document.createEvent("MouseEvents");
         evt.initMouseEvent("click", true, true, window,0, 0, 0, 0, 0, false, false, false, false, 0, null);
@@ -382,8 +387,8 @@ export class VenteproduitsComponent implements OnInit {
     this.remise = value;
     this.InputPaiementPartiel = !value;
     console.log(value);
-    
-    
+
+
   }
 
   valMntPartiel(){
@@ -393,6 +398,15 @@ export class VenteproduitsComponent implements OnInit {
 //Eportation au format excel
   exportAsXLSX():void {
     this.excelService.exportAsExcelFile(this.data, 'vente');
+  }
+
+  //Alerte stock
+  alerteStockProduit(){
+    this.alertStockProduit.alertStock(this.userInfos.r_partenaire).subscribe(
+      ( res: any = {} )=>{
+        this.data = res.result;
+      }
+    )
   }
 
 }

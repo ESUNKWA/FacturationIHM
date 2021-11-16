@@ -27,8 +27,7 @@ export const MENU: MenuItem[] = [
     ]
   },
 
-
-  {
+  /* {
     label: 'Partenanaire',
     isTitle: true
   },
@@ -37,9 +36,7 @@ export const MENU: MenuItem[] = [
     label: 'Partenanaire',
     icon: 'user-plus',
     link: '/privilege/partenaires',
-  },
-
-
+  }, */
 
   {
     label: 'Ventes et commandes',
@@ -79,11 +76,11 @@ export const MENU: MenuItem[] = [
   },
 
   {
-    label: 'Utilisateurs',
+    label: 'Gestion et administration',
     isTitle: true
   },
   {
-    label: 'Utilisateurs',
+    label: 'Administration',
     icon: 'users',
     subItems: [
       {
@@ -94,6 +91,10 @@ export const MENU: MenuItem[] = [
         label: 'Utilisateurs',
         link: '/privilege/utilisateurs',
       },
+      {
+        label: 'Partenanaire',
+        link: '/privilege/partenaires',
+      }
     ]
   },
 

@@ -70,7 +70,7 @@ villes: any = [
 
         setTimeout(() => {
           this.chargementEncours = false
-        }, 2000);
+        }, 1);
 
       },
       (error) => this.swalServices.fs_modal(error,'error')

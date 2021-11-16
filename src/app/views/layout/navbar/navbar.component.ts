@@ -26,16 +26,16 @@ export class NavbarComponent implements OnInit {
     setInterval(()=>{
       this.alertStockProduit.alertStock(this.userInfos.r_partenaire).subscribe(
         ( res: any = {} )=>{
-          this.data = res.result;        
+          this.data = res.result;
         }
       )
     }, 5000);
 
-   
+
   }
 
   stockProduit(){
-    
+
   }
 
   /**

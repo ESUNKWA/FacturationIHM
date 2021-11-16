@@ -106,7 +106,7 @@
                     </div>
                   </div>
 
-                  
+
 
                   <hr>
 
@@ -143,7 +143,7 @@
                                 <label class="form-check-label">
                                   <input type="radio" class="form-check-input" (change)="etatInputRemise()" name="optionsRadios" id="optionsRadios" value="option1" checked="">
                                   <i class="input-frame"></i>
-                                  Réduction de 
+                                  Réduction de
                                 </label>
                               </div>
                             </td>
@@ -175,7 +175,7 @@
 
                   </ng-template>
 
-                  
+
 
               </div>
             </div>
@@ -279,7 +279,11 @@
           </div>
           <div class="d-flex justify-content-center mt-2">
             <button class="btn btn-light mr-2" type="button" awPreviousStep>Précédent</button>
-            <button class="btn btn-success" type="button" (click)="registerVente()">Terminer</button>
+            <button class="btn btn-success" type="button" (click)="registerVente()">Terminer
+              <ng-template [ngIf]=" spinner == true" >
+                <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+              </ng-template>
+            </button>
           </div>
         </aw-wizard-step>
       </aw-wizard>
@@ -297,7 +301,7 @@
 <!-- Loader -->
 
 <div class="row" *ngIf="afficheVente === true && chargementEncours == false">
-    
+
   <div class="col" *ngIf="userInfos.r_profil == 4" >
     <select class="form-control"
             aria-label=".form-select-lg example"
@@ -322,7 +326,7 @@
 <div class="mt-2" [ngSwitch]="dataRetour" *ngIf=" afficheVente === true && chargementEncours == false " >
   <div *ngSwitchCase = 0 >
 
-    <div class="card" >  
+    <div class="card" >
       <div class="card-body text-center" >
         <h1 style="color: red;">{{ data }}</h1>
       </div>
@@ -344,7 +348,7 @@
                 <th style="width: 20%;">Montant total</th>
                 <th style="width: 20%;">Status</th>
                 <th style="width: 20%; text-align: center;">Actions</th>
-  
+
               </tr>
             </thead>
             <tbody>
@@ -354,13 +358,13 @@
                 <td><b>{{item.r_mnt}}</b></td>
                 <td *ngIf = " item.r_status == 0 " ><span class="badge badge-pill badge-danger" style="width: 100%;" >Non soldée</span></td>
                   <td *ngIf = " item.r_status == 1 " ><span class="badge badge-pill badge-success" style="width: 100%;" >Soldée</span></td>
-  
+
                   <td >
                     <button  class="btn btn-primary btn-icon" (click)="detailsVente(item,'edit');openVerticalCenteredModal(verticalCenteredModal)"><i class="feather icon-edit"></i></button>&nbsp;
                     <button  class="btn btn-info btn-icon" (click)="detailsVente(item,'views');openVerticalCenteredModal(verticalCenteredModal);" ><i class="feather icon-eye"></i></button>&nbsp;
                     <button class="btn btn-danger btn-icon "><i class="feather icon-trash"></i></button>
                 </td>
-  
+
               </tr>
             </tbody>
             <tfoot>

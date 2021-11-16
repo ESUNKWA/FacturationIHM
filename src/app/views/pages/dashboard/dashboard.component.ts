@@ -97,16 +97,16 @@ export class DashboardComponent implements OnInit {
         this.topProduitMois = res.result[2];
 
         this.topProduitMois.forEach(element => {
-          
+
           this.barChartLabels.push(element.name);
           this.barChartData[0]['data'].push(parseInt(element.value));
-          
+
         });
-        
+
 
         setTimeout(() => {
           this.chargementEncours = false;
-        }, 2000);
+        }, 1000);
       }
     )
 
