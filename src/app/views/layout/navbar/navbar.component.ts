@@ -23,13 +23,22 @@ export class NavbarComponent implements OnInit {
 
     this.userInfos = this.userInfoServices.fs_informationUtilisateur();
 
-    setInterval(()=>{
-      this.alertStockProduit.alertStock(this.userInfos.r_partenaire).subscribe(
-        ( res: any = {} )=>{
-          this.data = res.result;
-        }
-      )
-    }, 5000);
+    if( navigator.onLine ){
+
+      setInterval(()=>{
+        this.alertStockProduit.alertStock(this.userInfos.r_partenaire).subscribe(
+          ( res: any = {} )=>{
+            this.data = res.result;
+          }
+        )
+      }, 5000);
+
+    }else{
+      console.log(navigator.geolocation);
+
+    }
+
+
 
 
   }

@@ -69,13 +69,21 @@ export class VenteproduitsComponent implements OnInit {
   today: any;
   afficheVente: boolean = true;
   saisieVente: boolean = false;
-  data: any;
+  data: any = [];
   chargementEncours: boolean;
   modifCmd: boolean = false;
   remise1Input: any;
   remise2Input: any;
   remise3Input: any;
   spinner: boolean = false;
+  dataProduits:any = [];
+  modiVentes: boolean = true;
+  affichPU: any;
+  totalAchat: any;
+  venteUpdateData: any = {};
+  /* New ligne de vente update */
+  dkem: any = [];
+  newLigneVente: any = {};
 
   constructor( private produitServices: ProduitService, private excelService: ExcelService,
                 private fb: FormBuilder, private venteServices: FactureService,
@@ -89,6 +97,7 @@ export class VenteproduitsComponent implements OnInit {
     this.userInfos = this.infosUtilisateur.fs_informationUtilisateur();
     this.listVentes(this.userInfos.r_partenaire, this.today);
     this.listPartenaire();
+    this.list_produits();
   }
 
 
@@ -106,11 +115,10 @@ export class VenteproduitsComponent implements OnInit {
   }
 
   list_produits(){
-    this.data = [];
+
     this.produitServices.fs_listProduit(this.userInfos.r_partenaire).subscribe(
       (res: any = {}) => {
-        this.data = res.result;
-
+        this.dataProduits = res.result;
       },
       (err) => console.log(err),
     );
@@ -159,6 +167,55 @@ export class VenteproduitsComponent implements OnInit {
     }).catch((res) => {});
   }
 
+  selectProduits(produits, idproduit,tr,ligneVentes){
+
+    const a = produits.find((el)=> el.r_i == idproduit );
+    (<HTMLInputElement>document.getElementById(`updateqte-${tr}`)).value = ""+1;//Quantité initiale
+   let prixvente = (<HTMLTableElement>document.getElementById(`updatePU-${tr}`)).textContent = a.r_prix_vente;//Prix de vente
+   (<HTMLInputElement>document.getElementById(`updatetotal-${tr}`)).textContent = prixvente; //Sous total
+
+
+   //********* */
+    this.venteUpdateData.p_utilisateur = this.userInfos.r_i;
+    this.venteUpdateData.p_facture = this.detailsFacture.r_i;
+    this.venteUpdateData.p_mntTotalAchat = this.detailsFacture.r_mnt;
+
+    //Récupération des id de chaque ligne de vente
+    const tabIdLigneVentes = [];
+    ligneVentes.forEach(item => tabIdLigneVentes.push(item.r_i) );
+
+    this.getNewLigneVente(tabIdLigneVentes);
+    //this.getNewTotal(tabIdLigneVentes);
+  }
+
+  /* Nouveau total lors de la modification de la vente */
+  getNewLigneVente(val: any=[]){
+
+    val.forEach(element => {
+      this.newLigneVente.idlignevente =element
+      this.dkem.push( element);
+    });
+
+console.log(this.dkem);
+
+    //this.venteUpdateData.p_mnt = newtotal;
+  }
+
+  getNewTotal(val: any=[]){
+    let newtotal = 0;
+    val.forEach(item => newtotal = newtotal +  parseInt((<HTMLInputElement>document.getElementById(`updatetotal-${item}`)).textContent ));
+
+    this.venteUpdateData.p_mnt = newtotal;
+  }
+
+  updtaQteVendu(qte, indexLigne, ){
+
+    let PU:any = (<HTMLTableElement>document.getElementById(`updatePU-${indexLigne}`)).textContent;
+    let total = (<HTMLInputElement>document.getElementById(`updatetotal-${indexLigne}`)).textContent = (""+qte.value * PU);
+
+    console.log(total);
+
+  }
 
   isCheck(checked, ligneProduit, indexLigne){
 
@@ -354,17 +411,26 @@ export class VenteproduitsComponent implements OnInit {
     );
   }
 
-  detailsVente(data: any = {}, mode: string){
+  update(indexLigne){
 
+    (<HTMLInputElement>document.getElementById(`updateqte-${indexLigne}`)).disabled = false;
+    (<HTMLInputElement>document.getElementById(`updatelibprod-${indexLigne}`)).disabled = false;
+  }
+
+  detailsVente(data: any = {}, mode: string){
+    this.modiVentes = true;
     this.viewsBtnUpdate = mode;
 
     this.detailsFacture = data;
     this.modalTitle = ( mode == 'edit' )?`Modification de la vente N° [ ${data.r_num} ] _______ Montant : ${data.r_mnt} ${this.devise}`:`Consultation de la vente N° [ ${data.r_num} ] _______ Montant : ${data.r_mnt} ${this.devise}`;
 
+
     //Récupération des détails de la facture
     this.venteServices.fs_details_facture(data.r_i).subscribe(
       ( res: any = {} ) => {
         this.ligneVentes = res.result;
+        console.log(this.ligneVentes);
+
       },
       ( err ) => console.log(err)
     );

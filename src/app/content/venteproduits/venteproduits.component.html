@@ -36,7 +36,7 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr *ngFor="let item of data; let i = index" >
+                        <tr *ngFor="let item of dataProduits; let i = index" >
                           <td><div class="form-check form-check-inline">
                             <label class="form-check-label">
                               <input #choix type="checkbox" class="form-check-input" (change)="isCheck(choix.checked, item, i)" [id]="'checkbox1'+i">
@@ -449,30 +449,38 @@
           <li ngbNavItem>
             <a ngbNavLink>Détails des ventes</a>
             <ng-template ngbNavContent>
-
+              <div class="table-responsive">
               <table class="table" >
                 <thead>
                   <tr>
-                    <th style="width: 10%;" >Date</th>
-                    <th style="width: 25%;" >Numéro de facture</th>
-                    <th style="width: 15%;">Article</th>
-                    <th style="width: 15%;">Quantité</th>
-                    <th style="width: 10%;">Montant</th>
-                    <th style="width: 10%;">Actions</th>
+
+                    <th >N° facture</th>
+                    <th >Article</th>
+                    <th style="width: 15%;" >Quantité</th>
+                    <th >PU</th>
+                    <th >Montant</th>
+                    <th>Actions</th>
 
                   </tr>
                 </thead>
-                <tbody>
-                  <tr *ngFor="let item of ligneVentes; let i = index" >
-                    <td>{{item.created_at | date: 'dd/MM/yyyy à hh:mm'}}</td>
+                <tbody >
+                  <tr *ngFor="let item of ligneVentes; let i = index">
+
                         <td>{{item.r_num}}</td>
-                        <td>{{item.libelle_produit}}</td>
-                        <td>{{item.r_quantite}}</td>
-                        <td>{{item.r_total}}</td>
                         <td>
-                        <button  class="btn btn-primary btn-icon" (click)="detailsVente(item,'edit');openVerticalCenteredModal(verticalCenteredModal)"><i class="feather icon-edit"></i></button>&nbsp;
-                        <button class="btn btn-danger btn-icon "><i class="feather icon-trash"></i></button>
-                    </td>
+                          <select class="form-control" disabled [id]="'updatelibprod-'+item.r_i"
+                          aria-label=".form-select-lg example"
+                          (change)="selectProduits(dataProduits,ligneVentes[i].r_produit,item.r_i,ligneVentes);" [(ngModel)]="ligneVentes[i].r_produit" >
+                            <option value="{{ value.r_i }}"  *ngFor=" let value of dataProduits " >{{ value.r_libelle }}</option>
+                          </select>
+                        </td>
+                        <td> <input #qteUpdate type="number" disabled class="form-control" (change)="updtaQteVendu(qteUpdate, item.r_i)" [id]="'updateqte-'+item.r_i" ngModel='{{item.r_quantite}}' > </td>
+                        <td [id]="'updatePU-'+ item.r_i" >{{item.r_prix_vente}}</td>
+                        <td [id]="'updatetotal-'+ item.r_i" >{{item.r_total}}</td>
+                        <td>
+                        <button  class="btn btn-primary btn-icon" (click)="update(item.r_i)" ><i class="feather icon-edit"></i></button>&nbsp;
+<!--                         <button class="btn btn-danger btn-icon "><i class="feather icon-trash"></i></button>
+ -->                    </td>
 
                   </tr>
                 </tbody>
@@ -487,6 +495,8 @@
                   </tr>
                 </tfoot>
               </table>
+
+              </div>
 
 
               <ng-template [ngIf]="modifCmd" >

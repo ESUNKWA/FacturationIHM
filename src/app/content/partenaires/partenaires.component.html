@@ -5,7 +5,10 @@
 <!-- Loader -->
 
 <div class="row" *ngIf="chargementEncours == false" >
-  <div class="col-md-12">
+  <div class="col">
+    <button class="btn btn-success" title="Imprimer au format PDF" (click)="openPDF()"><i class="mdi mdi-file-pdf"></i></button>
+  </div>
+  <div class="col">
   <!-- Button trigger modal -->
   <button class="btn btn-primary"
   (click)="addPartenaire();openVerticalCenteredModal(verticalCenteredModal)"
@@ -19,7 +22,7 @@
       <div class="card">
         <div class="card-body">
           <h6 class="card-title">Liste des partenaires</h6>
-          <div class="table-responsive">
+          <div class="table-responsive" id="htmlData" >
             <table class="table" >
               <thead>
                 <tr>
