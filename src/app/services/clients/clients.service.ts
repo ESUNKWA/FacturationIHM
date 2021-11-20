@@ -24,6 +24,13 @@ export class ClientsService {
     );;
   }
 
+  update_client(data: any){
+    return this.http.put(`${apiServer.url}/client/update`, JSON.stringify(data), this.httpOptions).pipe(
+      retry(1),
+      catchError(this.handleError)
+    );
+  }
+
   handleError(error: { error: { message: string; }; status: any; message: any; }) {
     let errorMessage = '';
     if(error.error instanceof ErrorEvent) {

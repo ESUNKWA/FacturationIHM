@@ -458,7 +458,7 @@
                     <th >Article</th>
                     <th style="width: 15%;" >Quantité</th>
                     <th >PU</th>
-                    <th >Montant</th>
+                    <th >Total</th>
                     <th>Actions</th>
 
                   </tr>
@@ -478,7 +478,7 @@
                         <td [id]="'updatePU-'+ item.r_i" >{{item.r_prix_vente}}</td>
                         <td [id]="'updatetotal-'+ item.r_i" >{{item.r_total}}</td>
                         <td>
-                        <button  class="btn btn-primary btn-icon" (click)="update(item.r_i)" ><i class="feather icon-edit"></i></button>&nbsp;
+                        <button  class="btn btn-primary btn-icon" (click)="selectProduits(dataProduits,ligneVentes[i].r_produit,item.r_i,ligneVentes);update(item.r_i)" ><i class="feather icon-edit"></i></button>&nbsp;
 <!--                         <button class="btn btn-danger btn-icon "><i class="feather icon-trash"></i></button>
  -->                    </td>
 
@@ -539,6 +539,7 @@
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-secondary" (click)="modal.close('by: close button')">Fermer</button>
-    <button type="button" class="btn btn-primary">Enregistrer</button>
+    <button type="button" class="btn btn-primary" (click)="registerUpdateVente();modal.close('by: close button')" >Enregistrer</button>
+    <button type="button" class="btn btn-primary" (click)="registerUpdateClient();" >Enregistrer</button>
   </div>
 </ng-template>

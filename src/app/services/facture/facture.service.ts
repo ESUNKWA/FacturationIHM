@@ -52,6 +52,13 @@ httpOptions = {
     );
   }
 
+  update_vente(data: any){
+    return this.http.put(`${apiServer.url}/facture/update`, JSON.stringify(data), this.httpOptions).pipe(
+      retry(1),
+      catchError(this.handleError)
+    );
+  }
+
   handleError(error) {
     let errorMessage = '';
     if(error.error instanceof ErrorEvent) {

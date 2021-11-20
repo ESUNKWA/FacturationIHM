@@ -8,6 +8,7 @@ import { PartenairesService } from 'src/app/services/partenaires/partenaires.ser
 import { ProduitService } from 'src/app/services/produit/produit.service';
 import { UserInfosService } from 'src/app/services/userInfos/user-infos.service';
 import { WizardComponent as BaseWizardComponent } from 'angular-archwizard';
+import { ClientsService } from 'src/app/services/clients/clients.service';
 
 @Component({
   selector: 'app-venteproduits',
@@ -83,13 +84,13 @@ export class VenteproduitsComponent implements OnInit {
   venteUpdateData: any = {};
   /* New ligne de vente update */
   dkem: any = [];
-  newLigneVente: any = {};
+  newLigneVente: any = [];
 
   constructor( private produitServices: ProduitService, private excelService: ExcelService,
                 private fb: FormBuilder, private venteServices: FactureService,
                 private swalServices: ModalService, private infosUtilisateur: UserInfosService,
                 private partenaireServices: PartenairesService, private modalService: NgbModal,
-                private alertStockProduit: ProduitService ) { }
+                private alertStockProduit: ProduitService, private clientServices: ClientsService ) { }
 
   ngOnInit() {
     this.today = this.myDate.getFullYear()+'-'+ (this.myDate.getMonth() + 1) + '-'+ this.myDate.getDate();
@@ -178,26 +179,37 @@ export class VenteproduitsComponent implements OnInit {
    //********* */
     this.venteUpdateData.p_utilisateur = this.userInfos.r_i;
     this.venteUpdateData.p_facture = this.detailsFacture.r_i;
-    this.venteUpdateData.p_mntTotalAchat = this.detailsFacture.r_mnt;
+    
 
     //Récupération des id de chaque ligne de vente
     const tabIdLigneVentes = [];
     ligneVentes.forEach(item => tabIdLigneVentes.push(item.r_i) );
 
     this.getNewLigneVente(tabIdLigneVentes);
-    //this.getNewTotal(tabIdLigneVentes);
+    this.getNewTotal(tabIdLigneVentes);
   }
 
   /* Nouveau total lors de la modification de la vente */
   getNewLigneVente(val: any=[]){
-
+    this.dkem = [];
     val.forEach(element => {
-      this.newLigneVente.idlignevente =element
-      this.dkem.push( element);
+      let newLigneVente:any = {}, produit, quantite,total;
+      
+      produit = (<HTMLInputElement>document.getElementById(`updatelibprod-${element}`)).value;
+      quantite = (<HTMLInputElement>document.getElementById(`updateqte-${element}`)).value;
+      total = (<HTMLInputElement>document.getElementById(`updatetotal-${element}`)).textContent;
+
+      newLigneVente.p_idlignevente = element;
+      newLigneVente.p_idproduit = parseInt(produit);
+      newLigneVente.p_quantite = parseInt(quantite);
+      newLigneVente.p_total = parseInt(total);
+      newLigneVente.p_utilisateur = this.userInfos.r_i;
+       
+      this.dkem.push(newLigneVente);
+      
     });
-
-console.log(this.dkem);
-
+    console.log(this.dkem);
+    
     //this.venteUpdateData.p_mnt = newtotal;
   }
 
@@ -206,6 +218,9 @@ console.log(this.dkem);
     val.forEach(item => newtotal = newtotal +  parseInt((<HTMLInputElement>document.getElementById(`updatetotal-${item}`)).textContent ));
 
     this.venteUpdateData.p_mnt = newtotal;
+    this.venteUpdateData.p_mntTotalAchat = newtotal;
+    console.log(newtotal);
+    
   }
 
   updtaQteVendu(qte, indexLigne, ){
@@ -213,8 +228,42 @@ console.log(this.dkem);
     let PU:any = (<HTMLTableElement>document.getElementById(`updatePU-${indexLigne}`)).textContent;
     let total = (<HTMLInputElement>document.getElementById(`updatetotal-${indexLigne}`)).textContent = (""+qte.value * PU);
 
-    console.log(total);
+    let c = this.dkem.find((item)=> item.p_idlignevente == indexLigne);
+    c.p_quantite = parseInt(qte.value);
+    c.p_total = parseInt(total);
 
+    let tabIdLigneVentes = [];
+    this.dkem.forEach(item => tabIdLigneVentes.push(item.p_idlignevente) );
+    console.log(tabIdLigneVentes);
+    
+    this.getNewTotal(tabIdLigneVentes);
+  }
+
+  registerUpdateVente(){
+    this.venteUpdateData.p_ligneventes = this.dkem;
+    
+    this.venteServices.update_vente(this.venteUpdateData).subscribe(
+      (res: any = {})=>{
+        ( res.status == 1 )? this.swalServices.fs_modal(res.result,'success') : this.swalServices.fs_modal(res.result,'warning');
+        this.listVentes(this.userInfos.r_partenaire, this.today);
+      }
+    )
+    
+  }
+
+  registerUpdateClient(){
+    this.formDetailsfacture.value.idCLient = this.detailsFacture.r_client;
+    this.formDetailsfacture.value.r_utilisateur = this.userInfos.r_i;
+    console.log(this.formDetailsfacture.value);
+   
+    this.clientServices.update_client(this.formDetailsfacture.value).subscribe(
+      (res: any = {})=>{
+        if( res.status == 1 ) {
+          this.swalServices.fs_modal(res.result,'success');
+        } this.listVentes(this.userInfos.r_partenaire, this.today);
+      }
+    )
+    
   }
 
   isCheck(checked, ligneProduit, indexLigne){
@@ -423,13 +472,11 @@ console.log(this.dkem);
 
     this.detailsFacture = data;
     this.modalTitle = ( mode == 'edit' )?`Modification de la vente N° [ ${data.r_num} ] _______ Montant : ${data.r_mnt} ${this.devise}`:`Consultation de la vente N° [ ${data.r_num} ] _______ Montant : ${data.r_mnt} ${this.devise}`;
-
-
+    
     //Récupération des détails de la facture
     this.venteServices.fs_details_facture(data.r_i).subscribe(
       ( res: any = {} ) => {
         this.ligneVentes = res.result;
-        console.log(this.ligneVentes);
 
       },
       ( err ) => console.log(err)
