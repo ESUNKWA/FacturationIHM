@@ -1,7 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule, NgSelectOption, ReactiveFormsModule } from "@angular/forms";
-import { NgbNavModule } from "@ng-bootstrap/ng-bootstrap";
+import { NgbDatepickerModule, NgbNavModule } from "@ng-bootstrap/ng-bootstrap";
 import { ArchwizardModule } from "angular-archwizard";
 import { TagInputModule } from "ngx-chips";
 import { NgxMaskModule } from "ngx-mask";
@@ -17,7 +17,8 @@ import { VenteproduitsComponent } from "./venteproduits.component";
         ArchwizardModule,
         NgbNavModule,
         NgxMaskModule.forRoot({ validation: true}),
-        TagInputModule
+        TagInputModule,
+        NgbDatepickerModule
     ],
     declarations: [VenteproduitsComponent]
 })

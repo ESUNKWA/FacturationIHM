@@ -150,7 +150,7 @@ export class CommandesComponent implements OnInit {
     if( this.userInfos.r_profil !== 4 ){
       partenaireId = this.userInfos.r_partenaire;
     }
-    this.venteServices.fs_list_factures(1,partenaireId, today).subscribe(
+    this.venteServices.fs_list_factures(1,partenaireId, today, today).subscribe(
       (res: any = {}) => {
         this.data = res.result;
 

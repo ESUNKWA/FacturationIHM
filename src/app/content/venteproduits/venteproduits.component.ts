@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbCalendar, NgbDate, NgbDateParserFormatter, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ExcelService } from 'src/app/services/excel/excel.service';
 import { FactureService } from 'src/app/services/facture/facture.service';
 import { ModalService } from 'src/app/services/modal/modal.service';
@@ -86,17 +86,31 @@ export class VenteproduitsComponent implements OnInit {
   dkem: any = [];
   newLigneVente: any = [];
 
+  hoveredDate: NgbDate | null = null;
+
+  fromDate: NgbDate | null;
+  toDate: NgbDate | null;
+
+  date1: any;
+  date2: any;
+  viewAction: boolean = true;
+  tabs: number;
+
   constructor( private produitServices: ProduitService, private excelService: ExcelService,
                 private fb: FormBuilder, private venteServices: FactureService,
                 private swalServices: ModalService, private infosUtilisateur: UserInfosService,
                 private partenaireServices: PartenairesService, private modalService: NgbModal,
-                private alertStockProduit: ProduitService, private clientServices: ClientsService ) { }
+                private alertStockProduit: ProduitService, private clientServices: ClientsService,
+                public formatter: NgbDateParserFormatter, private calendar: NgbCalendar,) { 
+                  this.fromDate = calendar.getToday();
+                this.toDate = calendar.getNext(calendar.getToday(), 'd', 10);
+                }
 
   ngOnInit() {
     this.today = this.myDate.getFullYear()+'-'+ (this.myDate.getMonth() + 1) + '-'+ this.myDate.getDate();
-
+    
     this.userInfos = this.infosUtilisateur.fs_informationUtilisateur();
-    this.listVentes(this.userInfos.r_partenaire, this.today);
+    this.listVentes(this.userInfos.r_partenaire, this.today, this.today);
     this.listPartenaire();
     this.list_produits();
   }
@@ -109,7 +123,7 @@ export class VenteproduitsComponent implements OnInit {
     this.chargementEncours = false;
   }
   viewsVentes(){
-    this.listVentes(this.userInfos.r_partenaire, this.today);
+    this.listVentes(this.userInfos.r_partenaire, this.today, this.today);
     this.saisieVente = false;
     this.afficheVente = true;
     this.chargementEncours = true;
@@ -126,10 +140,10 @@ export class VenteproduitsComponent implements OnInit {
   }
 
   selectProduitPartenaire(){
-    this.listVentes(parseInt(this.selectedLevel),this.today);
+    //this.listVentes(parseInt(this.selectedLevel),this.date1, this.date2);
   }
 
-  listVentes(partenaireId, today){
+  listVentes(partenaireId, date1, date2){
 
     this.chargementEncours = true;
 
@@ -137,7 +151,7 @@ export class VenteproduitsComponent implements OnInit {
       partenaireId = this.userInfos.r_partenaire;
     }
 
-    this.venteServices.fs_list_factures(0,partenaireId, today).subscribe(
+    this.venteServices.fs_list_factures(0,partenaireId, date1, date2).subscribe(
       (res: any = {}) => {
         if( res.status == 1 ){
           this.dataRetour = 1;
@@ -240,12 +254,18 @@ export class VenteproduitsComponent implements OnInit {
   }
 
   registerUpdateVente(){
+
+    if( this.dkem.length == 0 ){
+      this.swalServices.fs_modal('Veuillez modifier les informations','warning');
+      return;
+    }
+
     this.venteUpdateData.p_ligneventes = this.dkem;
     
     this.venteServices.update_vente(this.venteUpdateData).subscribe(
       (res: any = {})=>{
         ( res.status == 1 )? this.swalServices.fs_modal(res.result,'success') : this.swalServices.fs_modal(res.result,'warning');
-        this.listVentes(this.userInfos.r_partenaire, this.today);
+        this.listVentes(this.userInfos.r_partenaire, this.today, this.today);
       }
     )
     
@@ -260,11 +280,63 @@ export class VenteproduitsComponent implements OnInit {
       (res: any = {})=>{
         if( res.status == 1 ) {
           this.swalServices.fs_modal(res.result,'success');
-        } this.listVentes(this.userInfos.r_partenaire, this.today);
+        } this.listVentes(this.userInfos.r_partenaire, this.today, this.today);
       }
     )
     
   }
+
+  tabsActive(tabs){
+    this.tabs = tabs;  
+  }
+
+  selectPartenaire(){
+    
+  }
+
+  //   Datepicker select période 
+  onDateSelection(date: NgbDate) {
+    if (!this.fromDate && !this.toDate) {
+      this.fromDate = date;
+    } else if (this.fromDate && !this.toDate && date && date.after(this.fromDate)) {
+      this.toDate = date;
+      const datefin = ( this.toDate.day < 10 )? '0'+this.toDate.day : this.toDate.day;
+      this.date2 = `${this.toDate.year}-${this.toDate.month}-${datefin}`;
+    } else {
+      this.toDate = null;
+      this.fromDate = date;
+      const datedebut = ( this.fromDate.day < 10 )? '0'+this.fromDate.day : this.fromDate.day;
+      this.date1 = `${this.fromDate.year}-${this.fromDate.month}-${datedebut}`;
+      
+    }
+    
+    if( this.userInfos.r_profil !== 4 ){
+        ( this.date1 !== undefined && this.date2 !== undefined )? this.listVentes(this.userInfos.r_partenaire, this.date1, this.date2) : null;
+    }else{
+        ( this.date1 !== undefined && this.date2 !== undefined )? this.listVentes(this.selectedLevel, this.date1, this.date2) : null;
+
+    }
+
+  }
+
+  isHovered(date: NgbDate) {
+    return this.fromDate && !this.toDate && this.hoveredDate && date.after(this.fromDate) && date.before(this.hoveredDate);
+  }
+
+  isInside(date: NgbDate) {
+    return this.toDate && date.after(this.fromDate) && date.before(this.toDate);
+  }
+
+  isRange(date: NgbDate) {
+    return date.equals(this.fromDate) || (this.toDate && date.equals(this.toDate)) || this.isInside(date) || this.isHovered(date);
+  }
+
+  validateInput(currentValue: NgbDate | null, input: string): NgbDate | null {
+    const parsed = this.formatter.parse(input);
+    return parsed && this.calendar.isValid(NgbDate.from(parsed)) ? NgbDate.from(parsed) : currentValue;
+  }
+
+  //   Datepicker select période Fin
 
   isCheck(checked, ligneProduit, indexLigne){
 
@@ -484,9 +556,11 @@ export class VenteproduitsComponent implements OnInit {
     if( mode !== 'edit' ){
       this.formDetailsfacture.disable();
       this.modifCmd = true;
+      this.viewAction = true;
     }else{
       this.formDetailsfacture.enable();
       this.modifCmd = false;
+      this.viewAction = false;
     }
   }
 

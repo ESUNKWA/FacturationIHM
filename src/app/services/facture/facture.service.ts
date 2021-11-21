@@ -24,8 +24,8 @@ httpOptions = {
     );
   }
 
-  fs_list_factures(cmd,partenaire,today){
-    return this.http.get(`${apiServer.url}/facture/list/${cmd}/${partenaire}/${today}`, this.httpOptions).pipe(
+  fs_list_factures(cmd,partenaire,date1,date2){
+    return this.http.get(`${apiServer.url}/facture/list/${cmd}/${partenaire}/${date1}/${date2}`, this.httpOptions).pipe(
       retry(1),
       catchError(this.handleError)
     );

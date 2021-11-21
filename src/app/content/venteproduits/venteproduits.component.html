@@ -1,3 +1,6 @@
+
+
+
 <ng-template [ngIf]=" saisieVente === true " >
   <div class="row">
     <div class="col-md-12">
@@ -305,10 +308,77 @@
   <div class="col" *ngIf="userInfos.r_profil == 4" >
     <select class="form-control"
             aria-label=".form-select-lg example"
-            (change)="selectProduitPartenaire();" [(ngModel)]="selectedLevel" >
+            [(ngModel)]="selectedLevel" >
       <option value="0" selected>---Sélectionnez le partenaire---</option>
       <option value="{{ value.r_i }}"  *ngFor=" let value of partenaires " >{{ value.r_nom }}</option>
     </select>
+  </div>
+
+  <div class="col-6" >
+    <form class="form-inline range-selection">
+      <div class="form-group hidden">
+        <div class="input-group">
+          <input name="datepicker"
+                class="form-control"
+                ngbDatepicker
+                #datepicker="ngbDatepicker"
+                [autoClose]="'outside'"
+                (dateSelect)="onDateSelection($event)"
+                [displayMonths]="2"
+                [dayTemplate]="t"
+                outsideDays="hidden"
+                [startDate]="fromDate!">
+          <ng-template #t let-date let-focused="focused">
+            <span class="custom-day"
+                  [class.focused]="focused"
+                  [class.range]="isRange(date)"
+                  [class.faded]="isHovered(date) || isInside(date)"
+                  (mouseenter)="hoveredDate = date"
+                  (mouseleave)="hoveredDate = null">
+              {{ date.day }}
+            </span>
+          </ng-template>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="input-group" (click)="datepicker.toggle()">
+          <input #dpFromDate
+                class="form-control" placeholder="yyyy-mm-dd"
+                name="dpFromDate"
+                [value]="formatter.format(fromDate)"
+                (input)="fromDate = validateInput(fromDate, dpFromDate.value)">
+          <div class="input-group-append">
+            <button class="btn btn-outline-light btn-icon" type="button">
+              <i data-feather="calendar" appFeatherIcon class="text-secondary"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="form-group ml-2">
+        <div class="input-group" (click)="datepicker.toggle()">
+          <input #dpToDate
+                class="form-control" placeholder="yyyy-mm-dd"
+                name="dpToDate"
+                [value]="formatter.format(toDate)"
+                (input)="toDate = validateInput(toDate, dpToDate.value)">
+          <div class="input-group-append">
+            <button class="btn btn-outline-light btn-icon" type="button">
+              <i data-feather="calendar" appFeatherIcon class="text-secondary"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    
+      <!-- <div class="form-group ml-2" *ngIf="userInfos.r_profil == 4" >
+        <select class="form-control"
+                aria-label=".form-select-lg example"
+                (change)="selectPartenaire();" [(ngModel)]="selectedLevel" [ngModelOptions]="{standalone: true}" >
+          <option value="0" selected>---Sélectionnez le partenaire---</option>
+          <option value="{{ value.r_i }}"  *ngFor=" let value of partenaires " >{{ value.r_nom }}</option>
+        </select>
+      </div> -->
+    
+    </form>
   </div>
 
   <div class="col">
@@ -402,7 +472,7 @@
 
         <ul ngbNav #nav="ngbNav" class="nav-tabs">
 
-          <li ngbNavItem>
+          <li ngbNavItem (click)="tabsActive(1)" > 
             <a ngbNavLink>Signalitique du client</a>
             <ng-template ngbNavContent>
               <form [formGroup]="formDetailsfacture" >
@@ -446,7 +516,7 @@
             </ng-template>
           </li>
 
-          <li ngbNavItem>
+          <li ngbNavItem (click)="tabsActive(2)">
             <a ngbNavLink>Détails des ventes</a>
             <ng-template ngbNavContent>
               <div class="table-responsive">
@@ -459,7 +529,7 @@
                     <th style="width: 15%;" >Quantité</th>
                     <th >PU</th>
                     <th >Total</th>
-                    <th>Actions</th>
+                    <th [hidden]="viewAction">Actions</th>
 
                   </tr>
                 </thead>
@@ -477,7 +547,7 @@
                         <td> <input #qteUpdate type="number" disabled class="form-control" (change)="updtaQteVendu(qteUpdate, item.r_i)" [id]="'updateqte-'+item.r_i" ngModel='{{item.r_quantite}}' > </td>
                         <td [id]="'updatePU-'+ item.r_i" >{{item.r_prix_vente}}</td>
                         <td [id]="'updatetotal-'+ item.r_i" >{{item.r_total}}</td>
-                        <td>
+                        <td [hidden]="viewAction">
                         <button  class="btn btn-primary btn-icon" (click)="selectProduits(dataProduits,ligneVentes[i].r_produit,item.r_i,ligneVentes);update(item.r_i)" ><i class="feather icon-edit"></i></button>&nbsp;
 <!--                         <button class="btn btn-danger btn-icon "><i class="feather icon-trash"></i></button>
  -->                    </td>
@@ -539,7 +609,9 @@
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-secondary" (click)="modal.close('by: close button')">Fermer</button>
-    <button type="button" class="btn btn-primary" (click)="registerUpdateVente();modal.close('by: close button')" >Enregistrer</button>
-    <button type="button" class="btn btn-primary" (click)="registerUpdateClient();" >Enregistrer</button>
+    <button type="button" class="btn btn-primary" (click)="registerUpdateVente();modal.close('by: close button')"
+            *ngIf=" tabs == 2 " title="Enregistrer la modification de de la ventes" >Enregistrer</button>
+    <button type="button" class="btn btn-success" (click)="registerUpdateClient();" 
+    *ngIf=" tabs == 1 " title="Enregistrer la modification des informations du clients" >Enregistrer</button>
   </div>
 </ng-template>
