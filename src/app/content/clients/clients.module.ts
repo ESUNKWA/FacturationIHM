@@ -6,6 +6,9 @@ import { ClientsComponent } from "./clients.component";
 
 @NgModule({
     imports: [
+        CommonModule,
+        ClientsRoutingModule,
+        ReactiveFormsModule
     ],
     declarations: [ClientsComponent]
 })

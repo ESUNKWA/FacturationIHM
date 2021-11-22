@@ -32,6 +32,12 @@ export class VenteproduitsComponent implements OnInit {
     p_email: [],
     p_description: []
   });
+  livraisonData = this.fb.group({
+    p_ville: [1],
+    p_quartier: [],
+    p_frais: [],
+    p_situation_geo: []
+  });
   selectedOption = '3';
   dataVentes: any = [];
   modalTitle: string;
@@ -95,6 +101,7 @@ export class VenteproduitsComponent implements OnInit {
   date2: any;
   viewAction: boolean = true;
   tabs: number;
+  formLivraion: boolean = false;
 
   constructor( private produitServices: ProduitService, private excelService: ExcelService,
                 private fb: FormBuilder, private venteServices: FactureService,
@@ -113,6 +120,9 @@ export class VenteproduitsComponent implements OnInit {
     this.listVentes(this.userInfos.r_partenaire, this.today, this.today);
     this.listPartenaire();
     this.list_produits();
+
+    console.log(this.formLivraion);
+    
   }
 
 
@@ -166,6 +176,10 @@ export class VenteproduitsComponent implements OnInit {
       },
       (err) => console.log(err),
     );
+  }
+
+  islivraison(livraison){
+    this.formLivraion = ( livraison.checked === true )? true : false;
   }
 
   listPartenaire(){
@@ -415,7 +429,7 @@ export class VenteproduitsComponent implements OnInit {
   }
 
   stepControl1(){
-
+    console.log(this.formLivraion);
     if( this.choixProduits.length === 0 ){
       this.swalServices.fs_modal('Veuillez choisir au moins 1 article', 'warning');
       return;
@@ -427,7 +441,7 @@ export class VenteproduitsComponent implements OnInit {
   }
 
   step1(){
-
+    console.log(this.formLivraion);
     if( this.choixProduits.length == 0 ){
       this.swalServices.fs_modal('Veuillez choisir au moins 1 article', 'warning');
       return;
@@ -498,6 +512,8 @@ export class VenteproduitsComponent implements OnInit {
     this.infosClient.value.p_partenaire = this.userInfos.r_partenaire;
     this.infosClient.value.p_utilisateur = this.userInfos.r_i
 
+    this.infosClient.value.p_livraison =  ( this.formLivraion )? this.livraisonData.value : null;
+    console.log(this.infosClient.value);
 
     this.venteServices.fs_saisie_facture(this.infosClient.value).subscribe(
       (res: any)=> {

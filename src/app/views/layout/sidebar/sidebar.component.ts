@@ -43,6 +43,11 @@ export class SidebarComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.menuItems = MENU;
     this.userInfos = this.infosUtilisateur.fs_informationUtilisateur();
+
+    if( this.userInfos.r_profil !== 4 ){
+      this.menuItems = this.menuItems.filter((el) => el.label !== 'Administration' && el.label !== 'Gestion et administration');
+    }
+
     /**
      * Sidebar-folded on desktop (min-width:992px and max-width: 1199px)
      */

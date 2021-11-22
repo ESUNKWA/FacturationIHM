@@ -43,7 +43,7 @@ export const MENU: MenuItem[] = [
     isTitle: true
   },
   {
-    label: 'Facturations',
+    label: 'Facturation',
     icon: 'file-minus',
     subItems: [
       {
@@ -53,6 +53,14 @@ export const MENU: MenuItem[] = [
       {
         label: 'Commandes',
         link: '/privilege/commandes'
+      },
+      {
+        label: 'Voir les livraisons',
+        link: '/privilege/livraisons'
+      },
+      {
+        label: 'Liste de clients',
+        link: '/privilege/clients'
       }
     ]
   },

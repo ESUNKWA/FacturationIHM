@@ -33,9 +33,6 @@ export class NavbarComponent implements OnInit {
         )
       }, 5000);
 
-    }else{
-      console.log(navigator.geolocation);
-
     }
 
 

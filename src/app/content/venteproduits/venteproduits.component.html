@@ -258,9 +258,9 @@
         </aw-wizard-step>
 
         <aw-wizard-step stepTitle="Récapitulatif">
-          <div class="text-center">
+          <div class="row text-center">
 
-            <div class="col-xl-3 col-md-6">
+            <div class="col-lg-6">
               <div class="card feed-card">
                 <div class="card-header">
                     <h4>Sélections ( {{ choixProduits.length }} )</h4>
@@ -277,6 +277,63 @@
 
                 </div>
               </div>
+            </div>
+
+            <div class="col-lg-6" >
+              <div class="row">
+                <div class="col">
+                  <label class="col-form-label styleInput" >Nom </label>
+                    <input type="text" class="form-control" [(ngModel)]="infosClient.value.p_nom" disabled>
+                    <span class="messages"></span>
+                </div>
+  
+                <div class="col">
+                  <label class="col-form-label styleInput" >Prenoms </label>
+                    <input type="text" class="form-control" [(ngModel)]="infosClient.value.p_prenoms" disabled>
+                    <span class="messages"></span>
+                </div>
+              </div>
+              <div class="form-check mt-5">
+                <label class="form-check-label">
+                  <input #livraisonCheck (change)="islivraison(livraisonCheck)" type="checkbox" class="form-check-input"><i class="input-frame"></i> 
+                  Livrer les produits vendus ?
+                </label>
+              </div>
+              <div class="row" *ngIf=" formLivraion === true " >
+                <form [formGroup]="livraisonData">
+                  <div class="form-group row">
+      
+                      <div class="col-sm-12">
+                        <label class="col-form-label styleInput" >Ville</label>
+                        <select class="form-control" aria-label=".form-select-lg example" formControlName="p_ville" >
+                          <option selected>---Sélectionnez---</option>
+                        </select>
+                      </div>
+                  </div>
+      
+                  <div class="form-group row">
+
+                    <div class="col-sm-6">
+                      <label class="col-form-label styleInput" >Quartier </label>
+                        <input type="text" class="form-control" formControlName="p_quartier" placeholder="">
+                        <span class="messages"></span>
+                    </div>
+
+                    <div class="col-sm-6">
+                      <label class="col-form-label styleInput" >Frais de livraison </label>
+                        <input type="text" class="form-control" formControlName="p_frais">
+                    </div>
+                  </div>
+      
+                  <div class="form-group row">
+                    <div class="col-sm-12">
+                      <label class="col-form-label styleInput">Description</label>
+                        <textarea rows="5" cols="5" class="form-control" formControlName="p_situation_geo" placeholder=""></textarea>
+                    </div>
+                  </div>
+                </form>
+              </div>
+
             </div>
 
           </div>
@@ -385,7 +442,7 @@
     <button style="float: right;"
                 title="Ajouter un nouveau produit"
                 type="button" class="btn btn-primary btn-round"
-                id="btnVentes"
+                id=""
                 (click)="saisieVentes()">Effectuer une vente
         </button>
   </div>

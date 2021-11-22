@@ -79,6 +79,8 @@ export class CommandesComponent implements OnInit {
   chargementEncours: boolean;
   modifCmd: boolean = false;
 
+  dataRetour: any;
+
   constructor( private produitServices: ProduitService, private excelService: ExcelService,
                 private fb: FormBuilder, private venteServices: FactureService,
                 private swalServices: ModalService, private infosUtilisateur: UserInfosService,
@@ -90,11 +92,7 @@ export class CommandesComponent implements OnInit {
 
     this.userInfos = this.infosUtilisateur.fs_informationUtilisateur();
 
-    
-
     this.listVentes(this.userInfos.r_partenaire, this.today);
-
-
 
     this.listPartenaire();
   }
@@ -125,12 +123,11 @@ export class CommandesComponent implements OnInit {
   }
 
   viewsCmd(){
-    this.chargementEncours = true;
+    
     this.listVentes(this.userInfos.r_partenaire, this.today);
     this.saisieVente = false;
     this.afficheVente = true;
-
-
+    this.chargementEncours = true;
   }
 
   list_produits(){
@@ -152,11 +149,16 @@ export class CommandesComponent implements OnInit {
     }
     this.venteServices.fs_list_factures(1,partenaireId, today, today).subscribe(
       (res: any = {}) => {
+        if( res.status == 1 ){
+          this.dataRetour = 1;
+        }else{
+          this.dataRetour = 0;
+        }
         this.data = res.result;
-
+        
         setTimeout(() => {
           this.chargementEncours = false;
-        }, 2000);
+        }, 1000);
       },
       (err) => console.log(err),
     );
@@ -164,6 +166,13 @@ export class CommandesComponent implements OnInit {
 
 //Au choix d'un produits
   isCheck(checked, ligneProduit, indexLigne){
+
+    if( ligneProduit.r_stock == 0 ){
+      //(<HTMLInputElement>document.getElementById(`checkbox1-${indexLigne}`)).checked = false;
+      this.swalServices.fs_modal('Stock épuisé', 'warning');
+      return;
+    }
+
     let qte = (<HTMLInputElement>document.getElementById(`qte-${indexLigne}`)).value = ""+1;
         (<HTMLInputElement>document.getElementById(`qte-${indexLigne}`)).disabled = false;
     if( checked === true ){
@@ -230,20 +239,8 @@ export class CommandesComponent implements OnInit {
       this.swalServices.fs_modal('Veuillez choisir au moins 1 article', 'warning');
       return;
     }
-
-  }
-
-  step1(){
-
-
-    if( this.choixProduits.length == 0 ){
-      alert('Veuillez choix au moins 1 articles');
-      return;
-    }
-
     this.filterParmas(this.choixProduits);
     this.wizardForm.goToNextStep();
-
   }
 
 

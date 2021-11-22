@@ -30,7 +30,8 @@ export class UtilisateurComponent implements OnInit {
     p_email: [],
     p_login: [],
     password: [],
-    password_confirmation: []
+    password_confirmation: [],
+    p_tous_droits: [false]
   });
   dataProfil: any = [];
   partenaires: any = [];
@@ -229,11 +230,10 @@ export class UtilisateurComponent implements OnInit {
 
       case 'modif':
         //Envoie vers le serveur api
-        console.log(this.details);
         this.utilisateurServices.fs_updateUtilisateur(this.details).subscribe(
           (res: any = {}) =>{
             if( res.status === 1){
-              //this.fct_listUtilisateurs(this.userInfos.r_partenaire);
+              this.fct_listUtilisateurs(this.userInfos.r_partenaire);
               this.utilisateurData.reset();
               this.swalServices.fs_modal(res.result, 'success');
             }else{
