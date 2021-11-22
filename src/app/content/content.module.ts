@@ -8,7 +8,7 @@ import { LivraisonComponent } from './livraison/livraison.component';
         CommonModule,
         ContentRoutingModule
     ],
-    declarations: [LivraisonComponent]
+    declarations: []
 })
 
 export class ContentModule{}

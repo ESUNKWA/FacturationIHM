@@ -1,1 +1,81 @@
-<p>livraison works!</p>
+<!-- Loader -->
+<div *ngIf="chargementEncours == true" class="spinner-wrapper">
+  <div class="spinner">Loading...</div>
+</div>
+<!-- Loader -->
+<div class="row" *ngIf="chargementEncours == false" >
+  <div class="col">
+    <div class="form-group ml-2" *ngIf="userInfos.r_profil == 4" >
+      <select class="form-control"
+              aria-label=".form-select-lg example" >
+        <option value="0" selected>---Sélectionnez le partenaire---</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+  <div class="row mt-2" *ngIf="chargementEncours == false" >
+    <div class="col-md-12 stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <h6 class="card-title">Liste des livraisons</h6>
+          <div class="table-responsive">
+            <table class="table" >
+              <thead>
+                <tr>
+                  <th style="width: 10%;" >Date</th>
+                  <th style="width: 10%;" >N° Vente</th>
+                  <th style="width: 15%;" >Frais</th>
+                  <th style="width: 15%;" >Quartier</th>
+                  <th style="width: 25%;" >Situa Géo</th>
+                  <th style="width: 10%;" >Status</th>
+                  <th style="width: 10%; text-align: center;" >Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of data" >
+                  <td>{{item.created_at | date: 'dd-MM-YYYY à hh:mm:ss'}}</td>
+                  <td>{{item.r_num}}</td>
+                  <td>{{item.r_frais}}</td>
+                  <td>{{item.r_quartier}}</td>
+                  <td>{{item.r_situa_geo}}</td>
+                  <td>{{item.etat_livraison}}</td>
+                  <td>
+                      <button (click)="openVerticalCenteredModal(verticalCenteredModal);" class="btn btn-primary btn-icon"><i class="feather icon-edit"></i></button>&nbsp;
+                      <button class="btn btn-danger btn-icon"><i class="feather icon-trash-2"></i></button>
+
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <ng-template #verticalCenteredModal let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title" id="exampleModalLabel"></h5>
+      <button type="button" class="close" (click)="modal.close('by: close icon')" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+
+
+
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="modal.close('by: close button')">Fermer</button>
+      <button type="button" class="btn btn-primary" >Enregistrer</button>
+    </div>
+  </ng-template>

@@ -1,7 +1,7 @@
+import { LivraisonComponent } from './livraison.component';
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { livraisonRouting } from "./livraison-routing.module";
-import { LivraisonComponent } from "./livraison.component";
 
 @NgModule({
     imports: [
