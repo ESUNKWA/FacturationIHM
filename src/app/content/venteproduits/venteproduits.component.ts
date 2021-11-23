@@ -108,21 +108,21 @@ export class VenteproduitsComponent implements OnInit {
                 private swalServices: ModalService, private infosUtilisateur: UserInfosService,
                 private partenaireServices: PartenairesService, private modalService: NgbModal,
                 private alertStockProduit: ProduitService, private clientServices: ClientsService,
-                public formatter: NgbDateParserFormatter, private calendar: NgbCalendar,) { 
+                public formatter: NgbDateParserFormatter, private calendar: NgbCalendar,) {
                   this.fromDate = calendar.getToday();
                 this.toDate = calendar.getNext(calendar.getToday(), 'd', 10);
                 }
 
   ngOnInit() {
     this.today = this.myDate.getFullYear()+'-'+ (this.myDate.getMonth() + 1) + '-'+ this.myDate.getDate();
-    
+
     this.userInfos = this.infosUtilisateur.fs_informationUtilisateur();
     this.listVentes(this.userInfos.r_partenaire, this.today, this.today);
     this.listPartenaire();
     this.list_produits();
 
     console.log(this.formLivraion);
-    
+
   }
 
 
@@ -207,7 +207,7 @@ export class VenteproduitsComponent implements OnInit {
    //********* */
     this.venteUpdateData.p_utilisateur = this.userInfos.r_i;
     this.venteUpdateData.p_facture = this.detailsFacture.r_i;
-    
+
 
     //Récupération des id de chaque ligne de vente
     const tabIdLigneVentes = [];
@@ -222,7 +222,7 @@ export class VenteproduitsComponent implements OnInit {
     this.dkem = [];
     val.forEach(element => {
       let newLigneVente:any = {}, produit, quantite,total;
-      
+
       produit = (<HTMLInputElement>document.getElementById(`updatelibprod-${element}`)).value;
       quantite = (<HTMLInputElement>document.getElementById(`updateqte-${element}`)).value;
       total = (<HTMLInputElement>document.getElementById(`updatetotal-${element}`)).textContent;
@@ -232,12 +232,12 @@ export class VenteproduitsComponent implements OnInit {
       newLigneVente.p_quantite = parseInt(quantite);
       newLigneVente.p_total = parseInt(total);
       newLigneVente.p_utilisateur = this.userInfos.r_i;
-       
+
       this.dkem.push(newLigneVente);
-      
+
     });
     console.log(this.dkem);
-    
+
     //this.venteUpdateData.p_mnt = newtotal;
   }
 
@@ -248,7 +248,7 @@ export class VenteproduitsComponent implements OnInit {
     this.venteUpdateData.p_mnt = newtotal;
     this.venteUpdateData.p_mntTotalAchat = newtotal;
     console.log(newtotal);
-    
+
   }
 
   updtaQteVendu(qte, indexLigne, ){
@@ -263,7 +263,7 @@ export class VenteproduitsComponent implements OnInit {
     let tabIdLigneVentes = [];
     this.dkem.forEach(item => tabIdLigneVentes.push(item.p_idlignevente) );
     console.log(tabIdLigneVentes);
-    
+
     this.getNewTotal(tabIdLigneVentes);
   }
 
@@ -275,21 +275,21 @@ export class VenteproduitsComponent implements OnInit {
     }
 
     this.venteUpdateData.p_ligneventes = this.dkem;
-    
+
     this.venteServices.update_vente(this.venteUpdateData).subscribe(
       (res: any = {})=>{
         ( res.status == 1 )? this.swalServices.fs_modal(res.result,'success') : this.swalServices.fs_modal(res.result,'warning');
         this.listVentes(this.userInfos.r_partenaire, this.today, this.today);
       }
     )
-    
+
   }
 
   registerUpdateClient(){
     this.formDetailsfacture.value.idCLient = this.detailsFacture.r_client;
     this.formDetailsfacture.value.r_utilisateur = this.userInfos.r_i;
     console.log(this.formDetailsfacture.value);
-   
+
     this.clientServices.update_client(this.formDetailsfacture.value).subscribe(
       (res: any = {})=>{
         if( res.status == 1 ) {
@@ -297,18 +297,18 @@ export class VenteproduitsComponent implements OnInit {
         } this.listVentes(this.userInfos.r_partenaire, this.today, this.today);
       }
     )
-    
+
   }
 
   tabsActive(tabs){
-    this.tabs = tabs;  
+    this.tabs = tabs;
   }
 
   selectPartenaire(){
-    
+
   }
 
-  //   Datepicker select période 
+  //   Datepicker select période
   onDateSelection(date: NgbDate) {
     if (!this.fromDate && !this.toDate) {
       this.fromDate = date;
@@ -321,9 +321,9 @@ export class VenteproduitsComponent implements OnInit {
       this.fromDate = date;
       const datedebut = ( this.fromDate.day < 10 )? '0'+this.fromDate.day : this.fromDate.day;
       this.date1 = `${this.fromDate.year}-${this.fromDate.month}-${datedebut}`;
-      
+
     }
-    
+
     if( this.userInfos.r_profil !== 4 ){
         ( this.date1 !== undefined && this.date2 !== undefined )? this.listVentes(this.userInfos.r_partenaire, this.date1, this.date2) : null;
     }else{
@@ -560,7 +560,7 @@ export class VenteproduitsComponent implements OnInit {
 
     this.detailsFacture = data;
     this.modalTitle = ( mode == 'edit' )?`Modification de la vente N° [ ${data.r_num} ] _______ Montant : ${data.r_mnt} ${this.devise}`:`Consultation de la vente N° [ ${data.r_num} ] _______ Montant : ${data.r_mnt} ${this.devise}`;
-    
+
     //Récupération des détails de la facture
     this.venteServices.fs_details_facture(data.r_i).subscribe(
       ( res: any = {} ) => {
@@ -589,7 +589,6 @@ export class VenteproduitsComponent implements OnInit {
   isCheckRemise(value: any){
     this.remise = value;
     this.InputPaiementPartiel = !value;
-    console.log(value);
 
 
   }
