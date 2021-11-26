@@ -57,6 +57,9 @@ const routes: Routes = [
       {
         path: 'clients',
         loadChildren: () => import('./content/clients/clients.module').then(m => m.ClientsModule)
+      },{
+        path: 'home',
+        loadChildren: () => import('./content/homepage/homepage.module').then(m => m.HomeModue)
       },
 
 

@@ -1,21 +1,30 @@
+
 import { HttpClient } from '@angular/common/http';
-import { Component, Input, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, Input, OnInit, PipeTransform, QueryList, ViewChildren } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CategorieService } from 'src/app/services/categorie/categorie.service';
 import { ModalService } from 'src/app/services/modal/modal.service';
 import { PartenairesService } from 'src/app/services/partenaires/partenaires.service';
 import { UserInfosService } from 'src/app/services/userInfos/user-infos.service';
-//import Swal from 'sweetalert2';
+import { Observable } from 'rxjs';
+import { DecimalPipe } from '@angular/common';
+import { map, startWith } from 'rxjs/operators';
+
+
+/* ----------------------- */
+
 @Component({
   selector: 'app-categories',
   templateUrl: './categories.component.html',
-  styleUrls: ['./categories.component.scss'],
+  styleUrls: ['./categories.component.scss']
 })
 export class CategoriesComponent implements OnInit {
+
+
   ////////////
   dataRetour: any = {};
-  data: any[];
+  data: any = [];
 
   modalTitle: string;
 
@@ -36,7 +45,7 @@ export class CategoriesComponent implements OnInit {
 
   constructor( private categorieServices: CategorieService, private http: HttpClient,
                 private fb: FormBuilder, private swalServices: ModalService,  private modalService: NgbModal,
-                private infosUtilisateur: UserInfosService, private partenaireServices: PartenairesService ) {
+                private infosUtilisateur: UserInfosService, private partenaireServices: PartenairesService) {
 
                 }
 
@@ -44,6 +53,7 @@ export class CategoriesComponent implements OnInit {
     this.userInfos = this.infosUtilisateur.fs_informationUtilisateur();
     this.list_categorie();
     this.listPartenaire();
+
   }
 
   openVerticalCenteredModal(content) {
@@ -57,7 +67,7 @@ export class CategoriesComponent implements OnInit {
     this.partenaireServices.listPartenaires().subscribe(
       (res: any = {})=>{
         this.partenaires = res.result;
-        
+
       }
     )
   }
@@ -70,6 +80,7 @@ export class CategoriesComponent implements OnInit {
       (res) => {
         this.dataRetour = res,
         this.data = this.dataRetour.result;
+
         setTimeout(() => {
           this.chargementEncours = false;
         }, 2000);
@@ -125,7 +136,7 @@ export class CategoriesComponent implements OnInit {
 
       case 'creation':
         console.log(this.userInfos.r_i, this.userInfos);
-        
+
         //Envoie vers le serveur api
         const idpart = ( this.userInfos.r_profil == 4 )? this.selectedLevel : this.userInfos.r_partenaire;
         this.categorieData.value.p_utilisateur = this.userInfos.r_i;
@@ -155,8 +166,8 @@ export class CategoriesComponent implements OnInit {
         //this.detailsCategories.p_partenaire = idparten;
 
         console.log(this.detailsCategories);
-      
-        
+
+
 
         this.categorieServices.udpdateCategorie(this.detailsCategories, this.detailsCategories.r_i).subscribe(
           (res: any = {}) =>{
@@ -175,15 +186,15 @@ export class CategoriesComponent implements OnInit {
         );
 
       break;
-    
+
       default:
         break;
     }
 
-    
-
-
   }
 
+
+
+  /* --------------------------------------------------------------------------------- */
 
 }

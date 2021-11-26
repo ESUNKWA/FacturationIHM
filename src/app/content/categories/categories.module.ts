@@ -1,6 +1,7 @@
-import { CommonModule } from "@angular/common";
+import { CommonModule, DecimalPipe } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { NgbTypeaheadModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { CategorieRoutingModule } from "./categories-routing.module";
 import { CategoriesComponent } from "./categories.component";
 
@@ -9,9 +10,12 @@ import { CategoriesComponent } from "./categories.component";
         CommonModule,
         CategorieRoutingModule,
         FormsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        NgbTypeaheadModule,
+        NgbPaginationModule
 
     ],
-    declarations: [CategoriesComponent]
+    declarations: [CategoriesComponent],
+    providers: [DecimalPipe],
 })
 export class CategoriesModule{}

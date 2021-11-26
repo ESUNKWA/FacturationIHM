@@ -14,11 +14,11 @@
   <div class="d-flex align-items-center flex-wrap text-nowrap">
     <div class="input-group dashboard-date mr-2 mb-2 mb-md-0 d-md-none d-xl-flex">
       <div class="input-group-prepend">
-        <button class="btn btn-outline-primary btn-icon calendar" type="button" (click)="d.toggle()">
+        <button class="btn btn-outline-primary btn-icon calendar" type="button">
           <i data-feather="calendar" appFeatherIcon></i>
         </button>
       </div>
-      <input class="form-control" placeholder="yyyy-mm-dd"
+      <input readonly class="form-control" placeholder="yyyy-mm-dd"
           name="dp" [(ngModel)]="currentDate" ngbDatepicker #d="ngbDatepicker">
     </div>
     <!-- <button type="button" class="btn btn-outline-info btn-icon-text mr-2 d-none d-md-block">
@@ -39,81 +39,77 @@
 <div class="row" *ngIf="chargementEncours == false">
   <div class="col-12 col-xl-12 stretch-card">
     <div class="row flex-grow">
-      <div class="col grid-margin stretch-card">
+      <div class="col grid-margin stretch-card dash" >
         <div class="card">
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-baseline">
-              <h6 class="card-title mb-0">Vente du jour</h6>
+              <h3 class="mb-0">Vente du jour</h3>
             </div>
-            <div class="row">
-              <div class="col-12 col-md-12 col-xl-12">
-                <h3 class="mb-2">{{ recetteJr }} fcfa</h3>
+            <div class="row mt-2">
+              <div class="col">
                 <div class="d-flex align-items-baseline">
-                  <p class="text-success">
-                    <span>+</span>
-                    <i data-feather="arrow-up" appFeatherIcon class="icon-sm mb-1"></i>
-                  </p>
+                  <img src="assets/dash/salary.png" class="img-responsive">
                 </div>
+              </div>
+              <div class="col" style="text-align: right;" >
+                <h3 class="mb-2">{{ recetteJr | mask: 'separator':' ' }} fcfa</h3>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="col grid-margin stretch-card">
+      <div class="col grid-margin stretch-card dash">
         <div class="card">
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-baseline">
-              <h6 class="card-title mb-0">Ventes restants</h6>
+              <h3 class=" mb-0">Montant à relancer</h3>
             </div>
-            <div class="row">
-              <div class="col-12 col-md-12 col-xl-12">
-                <h3 class="mb-2">{{ recetteJrRestant }}</h3>
+            <div class="row mt-2">
+              <div class="col">
                 <div class="d-flex align-items-baseline">
-                  <p class="text-danger">
-                    <span>-2.8%</span>
-                    <i data-feather="arrow-down" appFeatherIcon class="icon-sm mb-1"></i>
-                  </p>
+                  <img src="assets/dash/refund.png" class="img-responsive">
                 </div>
+              </div>
+              <div class="col">
+                <h3 class="mb-2">{{ recetteJrRestant | mask: 'separator':' '}} fcfa</h3>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="col grid-margin stretch-card">
+      <div class="col grid-margin stretch-card dash">
         <div class="card">
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-baseline">
-              <h6 class="card-title mb-0">Ventes restants</h6>
+              <h3 class="mb-0">Recette du mois</h3>
             </div>
-            <div class="row">
-              <div class="col-12 col-md-12 col-xl-12">
-                <h3 class="mb-2">{{ recetteJrRestant }}</h3>
+            <div class="row mt-2">
+              <div class="col">
                 <div class="d-flex align-items-baseline">
-                  <p class="text-danger">
-                    <span>-2.8%</span>
-                    <i data-feather="arrow-down" appFeatherIcon class="icon-sm mb-1"></i>
-                  </p>
+                  <img src="assets/dash/money-bag.png" class="img-responsive">
                 </div>
+              </div>
+              <div class="col">
+                <h3 class="mb-2">{{ recetteMois | mask: 'separator':' '}} fcfa</h3>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="col grid-margin stretch-card">
+      <div class="col grid-margin stretch-card dash">
         <div class="card">
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-baseline">
-              <h6 class="card-title mb-0">Ventes restants</h6>
+              <h3 class="mb-0">Total facture à relancer</h3>
             </div>
-            <div class="row">
-              <div class="col-12 col-md-12 col-xl-12">
-                <h3 class="mb-2">{{ recetteJrRestant }}</h3>
+            <div class="row mt-2">
+              <div class="col">
                 <div class="d-flex align-items-baseline">
-                  <p class="text-danger">
-                    <span>-2.8%</span>
-                    <i data-feather="arrow-down" appFeatherIcon class="icon-sm mb-1"></i>
-                  </p>
+                  <img src="assets/dash/the-sum-of.png" class="img-responsive">
                 </div>
+              </div>
+              <div class="col-3">
+                <h3 class="mb-2">{{ dashData.nbre_facture_a_relancer }}</h3>
               </div>
             </div>
           </div>
@@ -134,7 +130,7 @@
   <div class="col-lg-8 stretch-card">
     <div class="card">
       <div class="card-body">
-        <h6 class="card-title">Graphe des meilleures ventes</h6>
+        <h3 class="">Graphe des meilleures ventes</h3>
 
         <canvas baseChart
           [datasets]="barChartData"
@@ -153,7 +149,7 @@
     <div class="card" style="background-color: rgb(172, 224, 226);">
       <div class="card-body">
         <div class="d-flex justify-content-between align-items-baseline">
-          <h6 class="card-title mb-0">Top 5 produits du mois</h6>
+          <h3 class=" mb-0">Top 5 produits du mois</h3>
         </div>
 
         <div class="table-responsive">

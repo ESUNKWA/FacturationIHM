@@ -1,3 +1,4 @@
+import { NgxMaskModule } from 'ngx-mask';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
@@ -33,7 +34,8 @@ const routes: Routes = [
     NgbDatepickerModule,
     NgApexchartsModule,
     ChartsModule,
-    NgxChartsModule
+    NgxChartsModule,
+    NgxMaskModule.forRoot()
   ]
 })
 export class DashboardModule { }

@@ -87,13 +87,14 @@ export class DashboardComponent implements OnInit {
     this.dashboard.fs_dash(this.userInfos.r_partenaire).subscribe(
       (res: any = {}) => {
 
+
         this.dashData = res.result[0];
         const chiffreAffMois = res.result[1];
 
-        this.recetteJr = parseInt(this.dashData.ventejr) + parseInt(this.dashData.reglPartielJr);
+        this.recetteJr = parseInt(this.dashData.mnt_total_paie_cash_jr) + parseInt(this.dashData.mnt_total_paie_seq_jr);
 
-        this.recetteJrRestant = parseInt(this.dashData.venteNonSoldees) - parseInt(this.dashData.reglPartielJr);
-        this.recetteMois = parseInt(chiffreAffMois.reglPartielMois) + parseInt(chiffreAffMois.venteMois);
+        this.recetteJrRestant = parseInt(this.dashData.mnt_total_facture) - parseInt(this.dashData.mnt_total_paie_seq_jr);
+        this.recetteMois = parseInt(chiffreAffMois.mnt_total_paie_cash_mois) + parseInt(chiffreAffMois.mnt_total_paie_seq_mois);
         this.topProduitMois = res.result[2];
 
         this.topProduitMois.forEach(element => {

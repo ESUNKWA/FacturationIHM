@@ -31,7 +31,7 @@ export class UtilisateurComponent implements OnInit {
     p_login: [],
     password: [],
     password_confirmation: [],
-    p_tous_droits: [false]
+    p_tous_droits: [0]
   });
   dataProfil: any = [];
   partenaires: any = [];
@@ -98,10 +98,10 @@ export class UtilisateurComponent implements OnInit {
     }).then((result) => {
 
       if (result.isConfirmed) {
-        
+
         this.dataStatusUpdate.iduser = data.r_i;
         this.dataStatusUpdate.p_status = status;
-    
+
         this.utilisateurServices.updateStatusUser(this.dataStatusUpdate).subscribe(
           ( res: any = {} ) => {
             this.fct_listUtilisateurs(this.userInfos.r_partenaire);
@@ -113,12 +113,12 @@ export class UtilisateurComponent implements OnInit {
             )
           }
         );
-         
+
       }
-      
+
     });
 
-   
+
   }
 
   selectUserspartenaire(selectedLevel){
@@ -199,12 +199,12 @@ export class UtilisateurComponent implements OnInit {
 
     switch( this.modeAppel ){
       case 'creation':
+        this.utilisateurData.value.p_tous_droits = false;
         //Controlle des champs
         if( this.utilisateurData.value.p_nom === undefined ){
           this.swalServices.fs_modal('Le nom est réquis','warning');
           return;
         }
-        console.log(this.selectedLevel, this.userInfos.r_profil)
 
         if ( this.userInfos.r_profil !== 4){
           this.utilisateurData.value.p_partenaire = this.userInfos.r_partenaire;
@@ -214,9 +214,9 @@ export class UtilisateurComponent implements OnInit {
         this.utilisateurServices.fs_ajoutUtilisateur(this.utilisateurData.value).subscribe(
           (res: any = {}) =>{
             if( res.status === 1){
-              //this.fct_listUtilisateurs(this.selectedLevel || this.userInfos.r_partenaire);
               this.utilisateurData.reset();
               this.swalServices.fs_modal(res.msg, 'success');
+              this.fct_listUtilisateurs(this.selectedLevel || this.userInfos.r_partenaire);
             }else{
               this.swalServices.fs_modal(res.r_libelle, 'error');
             }
