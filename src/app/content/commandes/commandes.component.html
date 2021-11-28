@@ -387,44 +387,45 @@
           <li ngbNavItem>
             <a ngbNavLink>Détails des ventes</a>
             <ng-template ngbNavContent>
-
-              <table class="table" >
-                <thead>
-                  <tr>
-                    <th style="width: 15%;" >Date</th>
-                    <th style="width: 25%;" >Numéro de facture</th>
-                    <th style="width: 15%;">Article</th>
-                    <th style="width: 15%;">Quantité</th>
-                    <th style="width: 10%;">Montant</th>
-                    <th style="width: 10%;">Actions</th>
-
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let item of ligneVentes; let i = index" >
-                    <td>{{item.created_at | date: 'dd/MM/yyyy à hh:mm'}}</td>
-                        <td>{{item.r_num}}</td>
-                        <td>{{item.libelle_produit}}</td>
-                        <td>{{item.r_quantite}}</td>
-                        <td>{{item.r_total}}</td>
-                        <td>
-                        <button  class="btn btn-primary btn-icon" (click)="detailsVente(item,'edit');openVerticalCenteredModal(verticalCenteredModal)"><i class="feather icon-edit"></i></button>&nbsp;
-                        <button class="btn btn-danger btn-icon "><i class="feather icon-trash"></i></button>
-                    </td>
-
-                  </tr>
-                </tbody>
-                <tfoot>
-                  <tr>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                  </tr>
-                </tfoot>
-              </table>
+              <div class="table-responsive">
+                <table class="table" >
+                  <thead>
+                    <tr>
+                      <th style="width: 15%;" >Date</th>
+                      <th style="width: 25%;" >Numéro de facture</th>
+                      <th style="width: 15%;">Article</th>
+                      <th style="width: 15%;">Quantité</th>
+                      <th style="width: 10%;">Montant</th>
+                      <th style="width: 10%;">Actions</th>
+  
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of ligneVentes; let i = index" >
+                      <td>{{item.created_at | date: 'dd/MM/yyyy à hh:mm'}}</td>
+                          <td>{{item.r_num}}</td>
+                          <td>{{item.libelle_produit}}</td>
+                          <td>{{item.r_quantite}}</td>
+                          <td>{{item.r_total}}</td>
+                          <td>
+                          <button  class="btn btn-primary btn-icon" (click)="detailsVente(item,'edit');openVerticalCenteredModal(verticalCenteredModal)"><i class="feather icon-edit"></i></button>&nbsp;
+                          <button class="btn btn-danger btn-icon "><i class="feather icon-trash"></i></button>
+                      </td>
+                    </tr>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <th></th>
+                      <th></th>
+                      <th></th>
+                      <th></th>
+                      <th></th>
+                      <th></th>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+              
 
               <ng-template [ngIf]="modifCmd" >
 

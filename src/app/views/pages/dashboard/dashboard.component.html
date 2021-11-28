@@ -46,12 +46,12 @@
               <h3 class="mb-0">Vente du jour</h3>
             </div>
             <div class="row mt-2">
-              <div class="col">
+              <div class="col-3">
                 <div class="d-flex align-items-baseline">
                   <img src="assets/dash/salary.png" class="img-responsive">
                 </div>
               </div>
-              <div class="col" style="text-align: right;" >
+              <div class="col-9" style="text-align: right;" >
                 <h3 class="mb-2">{{ recetteJr | mask: 'separator':' ' }} fcfa</h3>
               </div>
             </div>
@@ -65,12 +65,12 @@
               <h3 class=" mb-0">Montant à relancer</h3>
             </div>
             <div class="row mt-2">
-              <div class="col">
+              <div class="col-3">
                 <div class="d-flex align-items-baseline">
                   <img src="assets/dash/refund.png" class="img-responsive">
                 </div>
               </div>
-              <div class="col">
+              <div class="col-9">
                 <h3 class="mb-2">{{ recetteJrRestant | mask: 'separator':' '}} fcfa</h3>
               </div>
             </div>
@@ -84,12 +84,12 @@
               <h3 class="mb-0">Recette du mois</h3>
             </div>
             <div class="row mt-2">
-              <div class="col">
+              <div class="col-3">
                 <div class="d-flex align-items-baseline">
                   <img src="assets/dash/money-bag.png" class="img-responsive">
                 </div>
               </div>
-              <div class="col">
+              <div class="col-9">
                 <h3 class="mb-2">{{ recetteMois | mask: 'separator':' '}} fcfa</h3>
               </div>
             </div>
@@ -103,12 +103,12 @@
               <h3 class="mb-0">Total facture à relancer</h3>
             </div>
             <div class="row mt-2">
-              <div class="col">
+              <div class="col-3">
                 <div class="d-flex align-items-baseline">
                   <img src="assets/dash/the-sum-of.png" class="img-responsive">
                 </div>
               </div>
-              <div class="col-3">
+              <div class="col-9">
                 <h3 class="mb-2">{{ dashData.nbre_facture_a_relancer }}</h3>
               </div>
             </div>
@@ -149,7 +149,7 @@
     <div class="card" style="background-color: rgb(172, 224, 226);">
       <div class="card-body">
         <div class="d-flex justify-content-between align-items-baseline">
-          <h3 class=" mb-0">Top 5 produits du mois</h3>
+          <h3 class=" mb-0">Top 5 produits du jour</h3>
         </div>
 
         <div class="table-responsive">

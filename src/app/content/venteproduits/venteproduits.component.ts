@@ -300,6 +300,7 @@ export class VenteproduitsComponent implements OnInit {
 
   }
 
+  
   tabsActive(tabs){
     this.tabs = tabs;
   }
@@ -544,6 +545,11 @@ export class VenteproduitsComponent implements OnInit {
     this.venteServices.fs_reglementPartiel(this.detailsFacture.r_i, this.mntRgl, this.solder, this.detailsFacture.r_partenaire).subscribe(
       ( res: any = {} ) => {
         this.swalServices.fs_modal(res.result, 'success');
+        this.listVentes(this.userInfos.r_partenaire, this.today, this.today);
+        //Exécute automatiquement le btn step
+    var evt = document.createEvent("MouseEvents");
+    evt.initMouseEvent("click", true, true, window,0, 0, 0, 0, 0, false, false, false, false, 0, null);
+    (<HTMLButtonElement>document.getElementById('close')).dispatchEvent(evt)
       }
     );
   }

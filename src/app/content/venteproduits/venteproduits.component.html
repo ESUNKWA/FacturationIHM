@@ -665,7 +665,7 @@
 
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" (click)="modal.close('by: close button')">Fermer</button>
+    <button type="button" class="btn btn-secondary" id="close" (click)="modal.close('by: close button')">Fermer</button>
     <button type="button" class="btn btn-primary" (click)="registerUpdateVente();modal.close('by: close button')"
             *ngIf=" tabs == 2 " title="Enregistrer la modification de de la ventes" >Enregistrer</button>
     <button type="button" class="btn btn-success" (click)="registerUpdateClient();"
