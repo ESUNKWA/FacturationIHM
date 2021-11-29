@@ -47,8 +47,8 @@
               <tbody>
                 <tr *ngFor="let item of data" >
                   <td>{{item.r_libelle}}</td>
-                  <td>{{item.r_stock}}                       
-                    <button style="float: right;" (click)="ajoutStock()" title="Augmenter le stock" class="btn btn-outline-info btn-icon"><i class="feather icon-plus"></i></button>
+                  <td>{{item.r_stock}}
+                    <button style="float: right;" (click)="ajoutStock(item)" title="Augmenter le stock" class="btn btn-outline-info btn-icon"><i class="feather icon-plus"></i></button>
                   </td>
                   <td><b>{{item.r_prix_vente | mask: 'separator':' '}} fcfa</b></td>
                   <td>

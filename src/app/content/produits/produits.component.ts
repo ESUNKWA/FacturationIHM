@@ -25,8 +25,9 @@ produitData = this.fb.group({
   p_prix_vente: [],
   p_description: [],
 });
-  selectOptionService: any;
-  public items:Array<string> = ['Alabama', 'Wyoming', 'Henry Die', 'John Doe'];
+
+updatestockData: any = {};
+
   article: any = {};
   @ViewChild('newQteProduit') newQteProduit;
   newStock: number;
@@ -74,7 +75,7 @@ produitData = this.fb.group({
         this.data = res.result;
         setTimeout(() => {
           this.chargementEncours = false
-        }, 2000);
+        }, 1000);
       },
       (err) => this.swalServices.fs_modal(err, 'error')
     );
@@ -197,15 +198,73 @@ produitData = this.fb.group({
   }
   //Validation du formulaire
 
-  ajoutStock(){
+  ajoutStock(produit){
     Swal.fire({
-      icon: 'warning',
-      title: 'Nouveau stock',
-      text: 'data',
-      footer: 'Plateforme de gestion et de vente'
-    });
+      title: `[ ${produit.r_libelle} ] </br></br> Stock actuel : ${produit.r_stock}`,
+      input: 'number',
+      inputAttributes: {
+        autocapitalize: 'off'
+      },
+      showCancelButton: true,
+      confirmButtonText: 'Valider',
+      showLoaderOnConfirm: true,
+      preConfirm: (newQte) => {
+
+        this.updatestockData.p_newStock     = parseInt(produit.r_stock) + parseInt(newQte);
+        this.updatestockData.p_partenaire   = this.userInfos.r_partenaire;
+        this.updatestockData.p_utilisateur  = this.userInfos.r_i;
+        this.updatestockData.p_quantite     = parseInt(newQte);
+        this.updatestockData.p_produit     = produit.r_i;
+
+
+        if( newQte < 1 || newQte == undefined ){
+          Swal.showValidationMessage(
+            `Veuillez saisir une quantité valide`
+          );
+          return;
+        }
+
+        return fetch(`http://127.0.0.1:8000/api/stock`,
+        {
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          method: "POST",
+          body: JSON.stringify(this.updatestockData)
+          })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error(response.statusText)
+            }
+            return response.json()
+          })
+          .catch(error => {
+            Swal.showValidationMessage(
+              `Request failed: ${error}`
+            )
+          })
+      },
+      allowOutsideClick: () => !Swal.isLoading()
+    }).then((res: any) => {
+      if (res.value.status == 1) {
+        Swal.fire(
+          'Succès!',
+          res.value.result,
+          'success'
+        );
+        this.list_produits(this.userInfos.r_partenaire);
+      }else{
+        Swal.fire(
+          'Oups!',
+          res.value.result,
+          'error'
+        )
+      }
+
+    })
   }
-  
+
   saisirNewQteproduit(){
     this.newStock = this.article.r_stock + +this.newQteProduit.nativeElement.value;
   }

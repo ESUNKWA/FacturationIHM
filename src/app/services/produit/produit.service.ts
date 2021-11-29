@@ -53,6 +53,13 @@ export class ProduitService {
     )
   }
 
+  addstock(data){
+    return this.http.post(`${apiServer.url}/stock`, JSON.stringify(data), this.httpOptions).pipe(
+      retry(1),
+      catchError(this.handleError)
+    )
+  }
+
   handleError(error) {
     let errorMessage = '';
     if(error.error instanceof ErrorEvent) {
