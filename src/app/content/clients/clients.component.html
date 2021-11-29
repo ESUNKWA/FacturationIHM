@@ -1,0 +1,212 @@
+<!-- Loader -->
+<div *ngIf="chargementEncours == true" class="spinner-wrapper">
+    <div class="spinner">Loading...</div>
+  </div>
+  <!-- Loader -->
+  
+  
+  <div class="row" *ngIf="chargementEncours == false">
+  
+    <div class="col" *ngIf="userInfos.r_profil == 4" >
+      <select class="form-control"
+              aria-label=".form-select-lg example"
+              [(ngModel)]="selectedLevel" >
+        <option value="0" selected>---Sélectionnez le partenaire---</option>
+        <option value="{{ value.r_i }}"  *ngFor=" let value of partenaires " >{{ value.r_nom }}</option>
+      </select>
+    </div>
+  
+    <div class="col-6" >
+      <form class="form-inline range-selection">
+        <div class="form-group hidden">
+          <div class="input-group">
+            <input name="datepicker"
+                  class="form-control"
+                  ngbDatepicker
+                  #datepicker="ngbDatepicker"
+                  [autoClose]="'outside'"
+                  (dateSelect)="onDateSelection($event)"
+                  [displayMonths]="2"
+                  [dayTemplate]="t"
+                  outsideDays="hidden"
+                  [startDate]="fromDate!">
+            <ng-template #t let-date let-focused="focused">
+              <span class="custom-day"
+                    [class.focused]="focused"
+                    [class.range]="isRange(date)"
+                    [class.faded]="isHovered(date) || isInside(date)"
+                    (mouseenter)="hoveredDate = date"
+                    (mouseleave)="hoveredDate = null">
+                {{ date.day }}
+              </span>
+            </ng-template>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="input-group" (click)="datepicker.toggle()">
+            <input #dpFromDate
+                  class="form-control" placeholder="yyyy-mm-dd"
+                  name="dpFromDate"
+                  [value]="formatter.format(fromDate)"
+                  (input)="fromDate = validateInput(fromDate, dpFromDate.value)">
+            <div class="input-group-append">
+              <button class="btn btn-outline-light btn-icon" type="button">
+                <i data-feather="calendar" appFeatherIcon class="text-secondary"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="form-group ml-2">
+          <div class="input-group" (click)="datepicker.toggle()">
+            <input #dpToDate
+                  class="form-control" placeholder="yyyy-mm-dd"
+                  name="dpToDate"
+                  [value]="formatter.format(toDate)"
+                  (input)="toDate = validateInput(toDate, dpToDate.value)">
+            <div class="input-group-append">
+              <button class="btn btn-outline-light btn-icon" type="button">
+                <i data-feather="calendar" appFeatherIcon class="text-secondary"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+  
+      </form>
+    </div>
+  
+  </div>
+  
+  
+  <!-- Liste des livraisons -->
+  <div class="mt-2" [ngSwitch]="dataRetour" *ngIf="chargementEncours == false " >
+    <div *ngSwitchCase = 0 >
+      <div class="card" >
+        <div class="card-body text-center" >
+          <h1 style="color: red;">{{ data }}</h1>
+        </div>
+      </div>
+  
+    </div>
+  
+    <div *ngSwitchCase = 1 >
+      <div class="row mt-2">
+        <div class="col-md-12 stretch-card">
+          <div class="card">
+            <div class="card-body">
+              <h6 class="card-title">Liste des livraisons</h6>
+              <div class="table-responsive">
+                <table class="table" >
+                  <thead>
+                    <tr>
+                      <th style="width: 10%;" >Date</th>
+                      <th style="width: 20%;" >Nom</th>
+                      <th style="width: 20%;" >Prénoms</th>
+                      <th style="width: 20%;" >Téléphone</th>
+                      <th style="width: 20%; text-align: center;" >Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of data; let i = index;" >
+                      <td>{{item.created_at | date: 'dd-MM-YYYY à hh:mm:ss'}}</td>
+                      <td>{{item.r_nom}}</td>
+                      <td>{{item.r_prenoms}}</td>
+                      <td>{{item.r_phone}}</td>
+                     <td style="display: flex; flex-direction: row;" >
+                          <button (click)="details_livraison(item);openVerticalCenteredModal(verticalCenteredModal);" class="btn btn-primary btn-icon"><i class="feather icon-info"></i></button>&nbsp;
+                          <button class="btn btn-danger btn-icon"><i class="feather icon-trash-2"></i></button>&nbsp;
+                      </td>
+                    </tr>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <th></th>
+                      <th></th>
+                      <th></th>
+                      <th></th>
+                      <th></th>
+                      <th></th>
+                      <th></th>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+  </div>
+  
+  
+  
+    <ng-template #verticalCenteredModal let-modal>
+      <div class="modal-header">
+        <h3 class="modal-title" id="exampleModalLabel">{{ modalTitle }}</h3>
+        <button type="button" class="close" (click)="modal.close('by: close icon')" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+  
+        <div class="form-group row">
+          <div class="col-lg-4">
+            <label class="col-form-label">Nom </label>
+              <input type="text" class="form-control" disabled [(ngModel)]="client.r_nom" >
+              <span class="messages"></span>
+          </div>
+  
+          <div class="col-lg-4">
+            <label class="col-form-label">Prenoms </label>
+              <input type="text" class="form-control" disabled [(ngModel)]="client.r_prenoms" >
+              <span class="messages"></span>
+          </div>
+          <div class="col-lg-4">
+            <label class="col-form-label">Numéro de téléphone </label>
+              <input type="text" class="form-control" disabled [(ngModel)]="client.r_phone" >
+              <span class="messages"></span>
+          </div>
+        </div>
+  
+        <div class="form-group row" >
+          <div class="col-lg-12">
+            <label class="col-form-label">Situation géographique </label>
+          <textarea type="text" class="form-control" rows="2" disabled [(ngModel)]="situationGeo"></textarea>
+          </div>
+        </div>
+  
+  
+        <div class="table-responsive">
+  
+          <table class="table" style="background-color: rgb(172, 224, 226);" >
+            <thead>
+              <tr>
+                <th style="width: 40%;" >Produits</th>
+                <th style="width: 30%;" >Quantité</th>
+                <th style="width: 30%;" >Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of detailLivraisons" >
+                <td>{{item.r_libelle }}</td>
+                <td>{{item.r_quantite}}</td>
+                <td>{{item.r_total}}</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+  
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modal.close('by: close button')">Fermer</button>
+        <button type="button" class="btn btn-primary" >Enregistrer</button>
+      </div>
+    </ng-template>
+  

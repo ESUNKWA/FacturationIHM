@@ -6,6 +6,7 @@ import { ModalService } from 'src/app/services/modal/modal.service';
 import { PartenairesService } from 'src/app/services/partenaires/partenaires.service';
 import { ProduitService } from 'src/app/services/produit/produit.service';
 import { UserInfosService } from 'src/app/services/userInfos/user-infos.service';
+import Swal from 'sweetalert2';
 @Component({
   selector: 'app-produits',
   templateUrl: './produits.component.html',
@@ -196,7 +197,15 @@ produitData = this.fb.group({
   }
   //Validation du formulaire
 
-
+  ajoutStock(){
+    Swal.fire({
+      icon: 'warning',
+      title: 'Nouveau stock',
+      text: 'data',
+      footer: 'Plateforme de gestion et de vente'
+    });
+  }
+  
   saisirNewQteproduit(){
     this.newStock = this.article.r_stock + +this.newQteProduit.nativeElement.value;
   }

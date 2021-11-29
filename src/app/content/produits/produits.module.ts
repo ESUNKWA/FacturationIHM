@@ -1,6 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { NgxMaskModule } from "ngx-mask";
 import { ProduitsRoutingModule } from "./produits-routing.module";
 import { ProduitsComponent } from "./produits.component";
 
@@ -9,7 +10,8 @@ import { ProduitsComponent } from "./produits.component";
       CommonModule,
       ReactiveFormsModule,
       ProduitsRoutingModule,
-      FormsModule
+      FormsModule,
+      NgxMaskModule.forRoot()
     ],
     declarations: [ProduitsComponent]
 })

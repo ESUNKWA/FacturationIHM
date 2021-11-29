@@ -39,16 +39,18 @@
               <thead>
                 <tr>
                   <th style="width: 50%;" >Libellé</th>
-                  <th style="width: 15%;">Stock</th>
-                  <th style="width: 20%;">Prix Unitaire</th>
+                  <th style="width: 20%;">Stock</th>
+                  <th style="width: 15%;">Prix Unitaire</th>
                   <th style="width: 15%; text-align: center;">Action</th>
                 </tr>
               </thead>
               <tbody>
                 <tr *ngFor="let item of data" >
                   <td>{{item.r_libelle}}</td>
-                  <td>{{item.r_stock}}</td>
-                  <td><b>{{item.r_prix_vente}}</b></td>
+                  <td>{{item.r_stock}}                       
+                    <button style="float: right;" (click)="ajoutStock()" title="Augmenter le stock" class="btn btn-outline-info btn-icon"><i class="feather icon-plus"></i></button>
+                  </td>
+                  <td><b>{{item.r_prix_vente | mask: 'separator':' '}} fcfa</b></td>
                   <td>
                       <button (click)="fc_details_produit(item, 1);openVerticalCenteredModal(verticalCenteredModal);" class="btn btn-primary btn-icon"><i class="feather icon-edit"></i></button>&nbsp;
                       <button (click)="fc_details_produit(item, 2);openVerticalCenteredModal(verticalCenteredModal);" class="btn btn-info btn-icon"><i class="feather icon-info"></i></button>&nbsp;

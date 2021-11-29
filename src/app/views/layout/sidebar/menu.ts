@@ -77,7 +77,7 @@ export const MENU: MenuItem[] = [
         link: '/privilege/details-ventes',
       },
       {
-        label: 'Bilan périodique',
+        label: 'Statistiques',
         link: '/apps/email/read'
       }
     ]
