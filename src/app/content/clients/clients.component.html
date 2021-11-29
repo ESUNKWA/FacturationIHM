@@ -3,10 +3,10 @@
     <div class="spinner">Loading...</div>
   </div>
   <!-- Loader -->
-  
-  
+
+
   <div class="row" *ngIf="chargementEncours == false">
-  
+
     <div class="col" *ngIf="userInfos.r_profil == 4" >
       <select class="form-control"
               aria-label=".form-select-lg example"
@@ -15,7 +15,7 @@
         <option value="{{ value.r_i }}"  *ngFor=" let value of partenaires " >{{ value.r_nom }}</option>
       </select>
     </div>
-  
+
     <div class="col-6" >
       <form class="form-inline range-selection">
         <div class="form-group hidden">
@@ -70,13 +70,13 @@
             </div>
           </div>
         </div>
-  
+
       </form>
     </div>
-  
+
   </div>
-  
-  
+
+
   <!-- Liste des livraisons -->
   <div class="mt-2" [ngSwitch]="dataRetour" *ngIf="chargementEncours == false " >
     <div *ngSwitchCase = 0 >
@@ -85,9 +85,9 @@
           <h1 style="color: red;">{{ data }}</h1>
         </div>
       </div>
-  
+
     </div>
-  
+
     <div *ngSwitchCase = 1 >
       <div class="row mt-2">
         <div class="col-md-12 stretch-card">
@@ -112,7 +112,7 @@
                       <td>{{item.r_prenoms}}</td>
                       <td>{{item.r_phone}}</td>
                      <td style="display: flex; flex-direction: row;" >
-                          <button (click)="details_livraison(item);openVerticalCenteredModal(verticalCenteredModal);" class="btn btn-primary btn-icon"><i class="feather icon-info"></i></button>&nbsp;
+                          <button (click)="openVerticalCenteredModal(verticalCenteredModal);" class="btn btn-primary btn-icon"><i class="feather icon-info"></i></button>&nbsp;
                           <button class="btn btn-danger btn-icon"><i class="feather icon-trash-2"></i></button>&nbsp;
                       </td>
                     </tr>
@@ -135,11 +135,11 @@
         </div>
       </div>
     </div>
-  
+
   </div>
-  
-  
-  
+
+
+
     <ng-template #verticalCenteredModal let-modal>
       <div class="modal-header">
         <h3 class="modal-title" id="exampleModalLabel">{{ modalTitle }}</h3>
@@ -148,36 +148,36 @@
         </button>
       </div>
       <div class="modal-body">
-  
+
         <div class="form-group row">
           <div class="col-lg-4">
             <label class="col-form-label">Nom </label>
-              <input type="text" class="form-control" disabled [(ngModel)]="client.r_nom" >
+              <input type="text" class="form-control" disabled [(ngModel)]="detailsClient.r_nom" >
               <span class="messages"></span>
           </div>
-  
+
           <div class="col-lg-4">
             <label class="col-form-label">Prenoms </label>
-              <input type="text" class="form-control" disabled [(ngModel)]="client.r_prenoms" >
+              <input type="text" class="form-control" disabled [(ngModel)]="detailsClient.r_prenoms" >
               <span class="messages"></span>
           </div>
           <div class="col-lg-4">
             <label class="col-form-label">Numéro de téléphone </label>
-              <input type="text" class="form-control" disabled [(ngModel)]="client.r_phone" >
+              <input type="text" class="form-control" disabled [(ngModel)]="detailsClient.r_phone" >
               <span class="messages"></span>
           </div>
         </div>
-  
+
         <div class="form-group row" >
           <div class="col-lg-12">
             <label class="col-form-label">Situation géographique </label>
-          <textarea type="text" class="form-control" rows="2" disabled [(ngModel)]="situationGeo"></textarea>
+          <textarea type="text" class="form-control" rows="2" disabled ></textarea>
           </div>
         </div>
-  
-  
+
+
         <div class="table-responsive">
-  
+
           <table class="table" style="background-color: rgb(172, 224, 226);" >
             <thead>
               <tr>
@@ -187,11 +187,11 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let item of detailLivraisons" >
+              <!-- <tr *ngFor="let item of detailLivraisons" >
                 <td>{{item.r_libelle }}</td>
                 <td>{{item.r_quantite}}</td>
                 <td>{{item.r_total}}</td>
-              </tr>
+              </tr> -->
             </tbody>
             <tfoot>
               <tr>
@@ -202,11 +202,10 @@
             </tfoot>
           </table>
         </div>
-  
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" (click)="modal.close('by: close button')">Fermer</button>
         <button type="button" class="btn btn-primary" >Enregistrer</button>
       </div>
     </ng-template>
-  

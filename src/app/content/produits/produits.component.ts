@@ -224,7 +224,7 @@ updatestockData: any = {};
           return;
         }
 
-        return fetch(`http://127.0.0.1:8000/api/stock`,
+        return fetch(`https://apidkem.hoteletiada.com/api/stock`,
         {
           headers: {
             'Accept': 'application/json',

@@ -1,3 +1,4 @@
+import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -8,7 +9,9 @@ import { ClientsComponent } from "./clients.component";
     imports: [
         CommonModule,
         ClientsRoutingModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        FormsModule,
+        NgbDatepickerModule
     ],
     declarations: [ClientsComponent]
 })

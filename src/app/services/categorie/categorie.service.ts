@@ -36,7 +36,7 @@ export class CategorieService {
   }
 
   fs_saisieCategorie(data){
-    return this.http.put(`${apiServer.url}/categories`, JSON.stringify(data), this.httpOptions).pipe(
+    return this.http.post(`${apiServer.url}/categories`, JSON.stringify(data), this.httpOptions).pipe(
       retry(1),
       catchError(this.handleError)
     )

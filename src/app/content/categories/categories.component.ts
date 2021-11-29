@@ -135,12 +135,12 @@ export class CategoriesComponent implements OnInit {
     switch (this.modeAppel) {
 
       case 'creation':
-        console.log(this.userInfos.r_i, this.userInfos);
 
         //Envoie vers le serveur api
         const idpart = ( this.userInfos.r_profil == 4 )? this.selectedLevel : this.userInfos.r_partenaire;
         this.categorieData.value.p_utilisateur = this.userInfos.r_i;
         this.categorieData.value.p_partenaire = idpart;
+
         this.categorieServices.fs_saisieCategorie(this.categorieData.value).subscribe(
           (res: any = {}) =>{
             if( res.status === 1){
