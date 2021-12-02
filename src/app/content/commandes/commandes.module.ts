@@ -1,3 +1,4 @@
+import { NgxMaskModule } from 'ngx-mask';
 import { LoaderComponent } from './../loader/loader.component';
 import { ArchwizardModule } from 'angular-archwizard';
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
@@ -14,7 +15,8 @@ import { CommandesComponent } from "./commandes.component";
       ReactiveFormsModule,
       NgbNavModule,
       ArchwizardModule,
-      CommandesRoutingModule
+      CommandesRoutingModule,
+      NgxMaskModule.forRoot({validation: true})
     ],
     declarations: [CommandesComponent, LoaderComponent]
 })

@@ -1,3 +1,4 @@
+import { NgxMaskModule } from 'ngx-mask';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
@@ -16,7 +17,8 @@ import { FeahterIconModule } from 'src/app/core/feather-icon/feather-icon.module
       CommonModule,
       NgxDatatableModule,
       FeahterIconModule,
-      HttpClientModule
+      HttpClientModule,
+      NgxMaskModule.forRoot({ validation: true})
     ],
     declarations: [UtilisateurComponent]
 })

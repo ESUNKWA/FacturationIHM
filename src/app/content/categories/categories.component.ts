@@ -90,10 +90,12 @@ export class CategoriesComponent implements OnInit {
   }
 
   fc_add_categorie(): void {
-    this.categorieData.reset();
-    this.categorieData.enable();
+    this.detailsCategories = {};
+    this.modeAppel = 'creation';
     this.modalTitle = 'Saisir une nouvelle catégorie';
-    this.registerBtnStatus = false;
+    this.registerBtnStatus = true;
+    this.categorieData.enable()
+
   }
 
   fc_details_categorie(data: any = {}, mode){
@@ -119,10 +121,6 @@ export class CategoriesComponent implements OnInit {
 
   }
 
-  addCategorie(){
-    this.modalTitle = 'Saisie une nouvelle catégorie de produit';
-    this.modeAppel = 'creation';
-  }
 
   resgister(){
     //Controlle des champs

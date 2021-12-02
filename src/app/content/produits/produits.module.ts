@@ -11,7 +11,7 @@ import { ProduitsComponent } from "./produits.component";
       ReactiveFormsModule,
       ProduitsRoutingModule,
       FormsModule,
-      NgxMaskModule.forRoot()
+      NgxMaskModule.forRoot({ validation: true})
     ],
     declarations: [ProduitsComponent]
 })

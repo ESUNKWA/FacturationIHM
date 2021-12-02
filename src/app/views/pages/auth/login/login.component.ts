@@ -29,6 +29,11 @@ export class LoginComponent implements OnInit {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/privilege';
   }
 
+  linklogin(){
+    const link = ['/home']
+    this.router.navigate(link);
+  }
+
   onLoggedin() {
 
     if( this.logInData.value.p_login == '' || this.logInData.value.p_login == undefined ){

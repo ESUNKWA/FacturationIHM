@@ -7,6 +7,8 @@ import { PartenairesService } from 'src/app/services/partenaires/partenaires.ser
 import { ProduitService } from 'src/app/services/produit/produit.service';
 import { UserInfosService } from 'src/app/services/userInfos/user-infos.service';
 import Swal from 'sweetalert2';
+import * as api from '../../module/urlserver';
+
 @Component({
   selector: 'app-produits',
   templateUrl: './produits.component.html',
@@ -40,6 +42,7 @@ updatestockData: any = {};
   selectedLevel: any;
   details: any = {};
   chargementEncours: boolean;
+  desacStock: boolean = false;
 
   constructor( private fb: FormBuilder, private produitServices: ProduitService,
                 private swalServices: ModalService, private infosUtilisateur: UserInfosService,
@@ -98,10 +101,10 @@ updatestockData: any = {};
   }
 
   fc_add_produit(){
-
+    this.desacStock = false;
     this.modeAppel = 'creation';
     this.modalTitle = 'Saisir une nouveau produit';
-    this.produitData.reset();
+    this.detailsProduit = {}
     this.produitData.enable();
     this.registerBtnStatus = true;
 
@@ -110,6 +113,7 @@ updatestockData: any = {};
 
     this.modalTitle = `Modification de la catégorie [ ${data.r_libelle} ]`;
     this.detailsProduit = data;
+    this.desacStock = true;
     switch( mode ){
       case 1://Modification
         this.produitData.enable();
@@ -224,7 +228,8 @@ updatestockData: any = {};
           return;
         }
 
-        return fetch(`https://apidkem.hoteletiada.com/api/stock`,
+        //return fetch(`https://apidkem.hoteletiada.com/api/stock`,
+        return fetch(`${api.url}/stock`,
         {
           headers: {
             'Accept': 'application/json',

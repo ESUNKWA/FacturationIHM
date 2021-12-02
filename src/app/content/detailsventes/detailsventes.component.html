@@ -76,9 +76,9 @@
 <div [ngSwitch]="dataRetour" *ngIf="chargementEncours == false" >
   <div *ngSwitchCase = 0 >
 
-    <div class="card" >  
+    <div class="card" >
       <div class="card-body text-center" >
-        <h1>Pas de données</h1>
+        <h1 style="color: red;">Pas de données</h1>
       </div>
     </div>
 
@@ -86,7 +86,7 @@
 
   <div *ngSwitchCase = 1 >
 
-    
+
     <div class="row mt-2">
       <!-- Liste des produits vendus -->
       <div class="col-md-7 stretch-card">
@@ -173,9 +173,9 @@
           </div>
         </div>
       </div>
-      
+
     </div>
-   
+
 
   </div>
 </div>

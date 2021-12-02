@@ -84,7 +84,7 @@
     </div>
     <div class="modal-body">
 
-      <form [formGroup]="produitData" >
+      <form [formGroup]="produitData" id="myForm" >
         <div class="form-group row" >
 
           <ng-template [ngIf]="userInfos.r_profil == 4" >
@@ -115,12 +115,12 @@
         <div class="form-group row">
           <div class="col-sm-6">
             <label class="col-form-label">Stock produit</label>
-              <input type="number" min="1" class="form-control" [(ngModel)]="detailsProduit.r_stock" formControlName="p_stock" placeholder="">
+              <input type="number" min="1" [readonly]="desacStock" class="form-control" [(ngModel)]="detailsProduit.r_stock" formControlName="p_stock" placeholder="">
               <span class="messages"></span>
           </div>
           <div class="col-sm-6">
             <label class="col-form-label">Prix de vente</label>
-              <input type="text" min="1" class="form-control" [(ngModel)]="detailsProduit.r_prix_vente" formControlName="p_prix_vente" placeholder="">
+              <input type="text" min="1" class="form-control" [(ngModel)]="detailsProduit.r_prix_vente" suffix=" fcfa" mask="separator" formControlName="p_prix_vente" placeholder="">
               <span class="messages"></span>
           </div>
       </div>

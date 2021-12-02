@@ -1,6 +1,6 @@
 
 
-
+<!-- Saisie des ventes -->
 <ng-template [ngIf]=" saisieVente === true " >
   <div class="row">
     <div class="col-md-12">
@@ -48,7 +48,7 @@
                           </div></td>
                           <td>{{item.r_libelle}}</td>
                           <td>{{item.r_stock}}</td>
-                          <td><b>{{item.r_prix_vente}}</b></td>
+                          <td><b>{{item.r_prix_vente| mask: 'separator':' '}} fcfa</b></td>
                           <td>
                             <input #QteSelect type="number" [disabled]="true" [id]="'qte-'+i" min="0" [value]="0" (change)="choixqteProduit(QteSelect, i, item)" class="form-control" placeholder="">
                           </td>
@@ -92,37 +92,42 @@
                   <hr>
 
                   <!-- Rémise & paiement partiel -->
-                  <div class="form-group">
-                    <div class="form-check">
-                      <label class="form-check-label">
-                        <input #remise type="radio" class="form-check-input" (change)="isCheckRemise(remise.checked)" name="optionsRadios" id="optionsRadios" value="option1" checked="">
-                        <i class="input-frame"></i>
-                        Remise
-                      </label>
+                  <div class="form-group row m-3">
+                    <div class="col">
+                      <div class="form-check">
+                        <label class="form-check-label">
+                          <input #remise type="radio" class="form-check-input" (change)="isCheckRemise(remise.checked)" name="optionsRadios" id="optionsRadios" value="option1" checked="">
+                          <i class="input-frame"></i>
+                          Remise
+                        </label>
+                      </div>
                     </div>
-                    <div class="form-check">
-                      <label class="form-check-label">
-                        <input #paiement type="radio" class="form-check-input" (change)="isCheckPaiement(paiement.checked)" name="optionsRadios" id="optionsRadios1" value="option1">
-                        <i class="input-frame"></i>
-                        Paiement partiel
-                      </label>
+                    <div class="col">
+                      <div class="form-check">
+                        <label class="form-check-label">
+                          <input #paiement type="radio" class="form-check-input" (change)="isCheckPaiement(paiement.checked)" name="optionsRadios" id="optionsRadios1" value="option1">
+                          <i class="input-frame"></i>
+                          Paiement partiel
+                        </label>
+                      </div>
                     </div>
                   </div>
 
 
 
                   <hr>
-
+                  <!-- Paiement montant partiel -->
                   <ng-template [ngIf]=" InputPaiementPartiel === true " >
                     <div class="form-row" >
                       <div class="col-md-12" >
-                        <label class="col-form-label">Montant </label>
-                        <input #paiementPartielMnt (keyup)="valMntPartiel()" class="form-control text-danger" type="text" placeholder="Ex: 150 000">
+                        <label class="col-form-label">Montant partiel </label>
+                        <input #paiementPartielMnt (keyup)="valMntPartiel(paiementPartielMnt)" suffix=" fcfa" mask="separator" class="form-control" style="color: red; font-weight: bold;" placeholder="Ex: 150 000">
                       </div>
                     </div>
-                  </ng-template >
+                  </ng-template > <!-- Paiement montant partiel -->
 
-                  <ng-template [ngIf]=" InputPaiementPartiel === false ">
+                  <!-- Remise -->
+                  <ng-template [ngIf]=" InputsRemise === true ">
                     <table class="table" >
                       <div class="form-group">
                         <div class="form-check">
@@ -132,7 +137,7 @@
                                 <label class="form-check-label">
                                   <input type="radio" class="form-check-input" (change)="etatInputRemise()" name="optionsRadios" id="optionsRadios" value="option1" checked="">
                                   <i class="input-frame"></i>
-                                  Remise
+                                  Remise en %
                                 </label>
                               </div>
                             </td>
@@ -173,10 +178,10 @@
                   </table>
 
                   <div class="text-center">
-                    <input class="form-control" [(ngModel)]="MntRemise" suffix=" fcfa" mask="separator"  >
+                    <input class="form-control" style="color: red; font-weight: bold;" [(ngModel)]="MntRemise" suffix=" fcfa" mask="separator"  >
                   </div>
 
-                  </ng-template>
+                  </ng-template><!-- Remise -->
 
 
 
@@ -200,7 +205,7 @@
 
                 <div class="col-sm-4">
                   <label class="col-form-label styleInput" >Type de client </label>
-                  <select class="form-control" aria-label=".form-select-lg example" formControlName="p_type_person" >
+                  <select class="form-control" aria-label=".form-select-lg example" ngModel="1" formControlName="p_type_person" >
                     <option selected>---Sélectionnez---</option>
                     <option value="1">Personne physique</option>
                     <option value="2">Personne morale</option>
@@ -225,13 +230,13 @@
 
               <div class="col-sm-4">
                 <label class="col-form-label styleInput" >Numéro de téléphone 1 </label>
-                  <input type="text" placeholder="00-00-00-00-00" class="form-control" formControlName="p_phone">
+                  <input type="text" placeholder="00-00-00-00-00" prefix="+225 " mask="00 00 00 00 00" [showMaskTyped] = "true" class="form-control" formControlName="p_phone">
                   <span class="messages"></span>
               </div>
 
               <div class="col-sm-4">
                 <label class="col-form-label styleInput" >Numéro de téléphone 2 </label>
-                  <input type="text" class="form-control" formControlName="p_phone2" placeholder="00-00-00-00-00">
+                  <input type="text" class="form-control" formControlName="p_phone2" placeholder="00-00-00-00-00" prefix="+225 " mask="00 00 00 00 00" [showMaskTyped] = "true">
                   <span class="messages"></span>
               </div>
 
@@ -272,7 +277,7 @@
                     </div>
 
                     <div class="text-center">
-                        <h4 class="text-c-red"  >{{ sommes || 'Panier vide' }}</h4>
+                        <h4 class="text-c-red"  >{{ sommesRecap || 'Panier vide' }}</h4>
                     </div>
 
                 </div>
@@ -327,7 +332,7 @@
 
                   <div class="form-group row">
                     <div class="col-sm-12">
-                      <label class="col-form-label styleInput">Description</label>
+                      <label class="col-form-label styleInput">Situation géographique</label>
                         <textarea rows="5" cols="5" class="form-control" formControlName="p_situation_geo" placeholder=""></textarea>
                     </div>
                   </div>
@@ -360,6 +365,9 @@
 </div>
 <!-- Loader -->
 
+
+
+<!-- Recherche -->
 <div class="row" *ngIf="afficheVente === true && chargementEncours == false">
 
   <div class="col" *ngIf="userInfos.r_profil == 4" >
@@ -471,7 +479,7 @@
             <thead>
               <tr>
                 <th style="width: 20%;" >Date</th>
-                <th style="width: 20%;" >Numéro de facture</th>
+                <th style="width: 20%;" >N° de facture</th>
                 <th style="width: 20%;">Montant total</th>
                 <th style="width: 20%;">Status</th>
                 <th style="width: 20%; text-align: center;">Actions</th>
@@ -482,7 +490,7 @@
               <tr *ngFor="let item of data; let i = index" >
                 <td>{{item.created_at | date: 'dd/MM/yyyy à hh:mm:ss' }}</td>
                 <td>{{item.r_num}}</td>
-                <td><b>{{item.r_mnt}}</b></td>
+                <td><b>{{item.r_mnt| mask: 'separator':' '}} fcfa</b></td>
                 <td *ngIf = " item.r_status == 0 " ><span class="badge badge-pill badge-danger" style="width: 100%;" >Non soldée</span></td>
                   <td *ngIf = " item.r_status == 1 " ><span class="badge badge-pill badge-success" style="width: 100%;" >Soldée</span></td>
 
@@ -514,7 +522,7 @@
 </div>
 
 
-<!-- Modal -->
+<!-- Modal Modification des ventes -->
 <ng-template #verticalCenteredModal let-modal>
   <div class="modal-header">
     <h5 class="modal-title" id="exampleModalLabel">{{ modalTitle }}</h5>
@@ -666,7 +674,7 @@
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-secondary" id="close" (click)="modal.close('by: close button')">Fermer</button>
-    <button type="button" class="btn btn-primary" (click)="registerUpdateVente();modal.close('by: close button')"
+    <button type="button" class="btn btn-primary" (click)="registerUpdateVente();"
             *ngIf=" tabs == 2 " title="Enregistrer la modification de de la ventes" >Enregistrer</button>
     <button type="button" class="btn btn-success" (click)="registerUpdateClient();"
     *ngIf=" tabs == 1 " title="Enregistrer la modification des informations du clients" >Enregistrer</button>

@@ -25,13 +25,13 @@ export class NavbarComponent implements OnInit {
 
     if( navigator.onLine ){
 
-      setInterval(()=>{
+      /* setInterval(()=>{
         this.alertStockProduit.alertStock(this.userInfos.r_partenaire).subscribe(
           ( res: any = {} )=>{
             this.data = res.result;
           }
         )
-      }, 5000);
+      }, 5000); */
 
     }
 
@@ -60,7 +60,8 @@ export class NavbarComponent implements OnInit {
     localStorage.removeItem('isLoggedin');
 
     if (!localStorage.getItem('isLoggedin')) {
-      this.router.navigate(['/auth/login']);
+      //this.router.navigate(['/auth/login']);
+      this.router.navigate(['/home']);
     }
   }
 

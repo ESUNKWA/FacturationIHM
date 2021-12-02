@@ -102,6 +102,9 @@ export class VenteproduitsComponent implements OnInit {
   viewAction: boolean = true;
   tabs: number;
   formLivraion: boolean = false;
+  modeDetail: string;
+  InputsRemise: boolean;
+  sommesRecap: any;
 
   constructor( private produitServices: ProduitService, private excelService: ExcelService,
                 private fb: FormBuilder, private venteServices: FactureService,
@@ -120,14 +123,14 @@ export class VenteproduitsComponent implements OnInit {
     this.listVentes(this.userInfos.r_partenaire, this.today, this.today);
     this.listPartenaire();
     this.list_produits();
-
-    console.log(this.formLivraion);
-
+    //this.InputsRemise = false;
+    //this.InputPaiementPartiel = false;
   }
 
 
   saisieVentes(){
     this.list_produits();
+    this.choixProduits.length = 0
     this.saisieVente = true;
     this.afficheVente = false;
     this.chargementEncours = false;
@@ -300,9 +303,20 @@ export class VenteproduitsComponent implements OnInit {
 
   }
 
-  
+
   tabsActive(tabs){
-    this.tabs = tabs;
+
+    switch (this.modeDetail) {
+      case 'edit':
+        this.tabs = tabs;
+        break;
+
+      default:
+        this.tabs = 0;
+        break;
+    }
+
+
   }
 
   selectPartenaire(){
@@ -430,7 +444,7 @@ export class VenteproduitsComponent implements OnInit {
   }
 
   stepControl1(){
-    console.log(this.formLivraion);
+
     if( this.choixProduits.length === 0 ){
       this.swalServices.fs_modal('Veuillez choisir au moins 1 article', 'warning');
       return;
@@ -442,14 +456,13 @@ export class VenteproduitsComponent implements OnInit {
   }
 
   step1(){
-    console.log(this.formLivraion);
+
     if( this.choixProduits.length == 0 ){
       this.swalServices.fs_modal('Veuillez choisir au moins 1 article', 'warning');
       return;
     }
-    console.log('this.MntRemise',this.MntRemise,'this.sommes====',this.sommes);
 
-
+    this.sommesRecap = this.MntRemise || this.sommes;
     this.filterParmas(this.choixProduits);
     this.wizardForm.goToNextStep();
 
@@ -514,7 +527,6 @@ export class VenteproduitsComponent implements OnInit {
     this.infosClient.value.p_utilisateur = this.userInfos.r_i
 
     this.infosClient.value.p_livraison =  ( this.formLivraion )? this.livraisonData.value : null;
-    console.log(this.infosClient.value);
 
     this.venteServices.fs_saisie_facture(this.infosClient.value).subscribe(
       (res: any)=> {
@@ -563,6 +575,7 @@ export class VenteproduitsComponent implements OnInit {
   detailsVente(data: any = {}, mode: string){
     this.modiVentes = true;
     this.viewsBtnUpdate = mode;
+    this.modeDetail = mode;
 
     this.detailsFacture = data;
     this.modalTitle = ( mode == 'edit' )?`Modification de la vente N° [ ${data.r_num} ] _______ Montant : ${data.r_mnt} ${this.devise}`:`Consultation de la vente N° [ ${data.r_num} ] _______ Montant : ${data.r_mnt} ${this.devise}`;
@@ -580,6 +593,7 @@ export class VenteproduitsComponent implements OnInit {
       this.modifCmd = true;
       this.viewAction = true;
     }else{
+      this.tabs = 0;
       this.formDetailsfacture.enable();
       this.modifCmd = false;
       this.viewAction = false;
@@ -587,20 +601,24 @@ export class VenteproduitsComponent implements OnInit {
   }
 
   isCheckPaiement(value: any){
-    this.InputPaiementPartiel = value;
-    this.remise = !value;
+    //this.InputPaiementPartiel = value;
+    //this.remise = !value;
+    this.InputPaiementPartiel = true;
+    this.InputsRemise = false
     this.mntPartiel = 0;
   }
 
   isCheckRemise(value: any){
-    this.remise = value;
-    this.InputPaiementPartiel = !value;
-
+    this.InputsRemise = true
+    this.InputPaiementPartiel = false;
+    this.MntRemise = 0
 
   }
 
-  valMntPartiel(){
-    this.mntPartiel = +this.paiementPartielMnt.nativeElement.value;
+  valMntPartiel(val){
+
+    this.mntPartiel = this.getRemise(val);
+
   }
 
 //Eportation au format excel

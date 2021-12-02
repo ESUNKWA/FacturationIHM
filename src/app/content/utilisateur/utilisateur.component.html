@@ -125,7 +125,7 @@
         <div class="form-group row">
           <div class="col-sm-6">
             <label class="">Numéro de téléphone </label>
-              <input type="text" class="form-control" placeholder="00-00-00-00-00" [(ngModel)]="details.r_phone" formControlName="p_phone"
+              <input type="text" class="form-control" placeholder="00-00-00-00-00" prefix="+225 " mask="00 00 00 00 00" [showMaskTyped] = "true" [(ngModel)]="details.r_phone" formControlName="p_phone"
             >
           </div>
           <div class="col-sm-6">

@@ -7,7 +7,9 @@ import { ErrorPageComponent } from './views/pages/error-page/error-page.componen
 
 
 const routes: Routes = [
-  { path:'', loadChildren: () => import('./views/pages/auth/auth.module').then(m => m.AuthModule) },
+  //{ path:'login', loadChildren: () => import('./views/pages/auth/auth.module').then(m => m.AuthModule) },
+  { path:'', loadChildren: () => import('./content/homepage/homepage.module').then(m => m.HomeModue)},
+  { path:'home', loadChildren: () => import('./content/homepage/homepage.module').then(m => m.HomeModue)},
   { path:'auth', loadChildren: () => import('./views/pages/auth/auth.module').then(m => m.AuthModule) },
   {
     path: 'privilege',
@@ -57,10 +59,10 @@ const routes: Routes = [
       {
         path: 'clients',
         loadChildren: () => import('./content/clients/clients.module').then(m => m.ClientsModule)
-      },{
+      },/* {
         path: 'home',
         loadChildren: () => import('./content/homepage/homepage.module').then(m => m.HomeModue)
-      },
+      }, */
 
 
 
@@ -109,8 +111,8 @@ const routes: Routes = [
     component: ErrorPageComponent,
     data: {
       'type': 404,
-      'title': 'Page Not Found',
-      'desc': 'Oopps!! The page you were looking for doesn\'t exist.'
+      'title': 'Page non trouvée',
+      'desc': 'Oups !! La page que vous cherchiez n\'existe pas.'
     }
   },
   {

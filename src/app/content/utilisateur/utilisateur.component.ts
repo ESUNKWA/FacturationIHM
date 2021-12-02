@@ -200,9 +200,51 @@ export class UtilisateurComponent implements OnInit {
     switch( this.modeAppel ){
       case 'creation':
         this.utilisateurData.value.p_tous_droits = false;
+        this.utilisateurData.value.p_phone = '+225' + this.utilisateurData.value.p_phone;
+        console.log(this.utilisateurData.value);
         //Controlle des champs
-        if( this.utilisateurData.value.p_nom === undefined ){
+        if( this.utilisateurData.value.p_profil === undefined || this.utilisateurData.value.p_profil == 0 ){
+          this.swalServices.fs_modal('Le profil de l\'utilisateur est réquis','warning');
+          return;
+        }
+
+        if( this.utilisateurData.value.p_partenaire === undefined || this.utilisateurData.value.p_partenaire == 0 ){
+          this.swalServices.fs_modal('Veuillez selectionner le partenaire','warning');
+          return;
+        }
+
+        if( this.utilisateurData.value.p_nom === undefined || this.utilisateurData.value.p_nom.trim() == "" ){
           this.swalServices.fs_modal('Le nom est réquis','warning');
+          return;
+        }
+
+        if( this.utilisateurData.value.p_prenoms === undefined || this.utilisateurData.value.p_prenoms.trim() == ""){
+          this.swalServices.fs_modal('Le prénom est réquis','warning');
+          return;
+        }
+
+        if( this.utilisateurData.value.p_phone === undefined || this.utilisateurData.value.p_phone.trim() == ""){
+          this.swalServices.fs_modal('Le nom est réquis','warning');
+          return;
+        }
+
+        if( (this.utilisateurData.value.p_phone.length -1) !== 13 ){
+          this.swalServices.fs_modal('Le numéro de téléphone est invalide','warning');
+          return;
+        }
+
+        if( this.utilisateurData.value.p_login === undefined || this.utilisateurData.value.p_login.trim() == ""){
+          this.swalServices.fs_modal('Le login est réquis','warning');
+          return;
+        }
+
+        if( this.utilisateurData.value.password === undefined || this.utilisateurData.value.password.trim() == "" ){
+          this.swalServices.fs_modal('Le mot de passe est réquis','warning');
+          return;
+        }
+
+        if( this.utilisateurData.value.password !== this.utilisateurData.value.password_confirmation ){
+          this.swalServices.fs_modal('Le mots de passes ne correspondent pas est réquis','warning');
           return;
         }
 
