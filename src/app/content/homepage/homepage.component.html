@@ -1,10 +1,22 @@
+<button (click)="generatePdf('download');"
+            class="btn btn-secondary d-flex align-items-center justify-content-center  mb-1">
+            <i class="material-icons">
+              cloud_download
+            </i><span>&nbsp;Download PDF</span></button>
+
+            <button (click)="generatePdf('open');"
+            class="btn btn-secondary d-flex align-items-center justify-content-center mb-1">
+            <i class="material-icons">
+              picture_as_pdf
+            </i> <span>&nbsp;Open PDF</span></button>
+
+
 <div class="container" >
   <div class="row p-5" style="display: flex; align-items: center; justify-content: center;">
     <div class="col-12 col-md-12 col-xl-12">
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title text-danger-muted">Système de gestion de ventes et de facturations</h5>
-
+          <h6 class="card-title text-danger-muted">Système de gestion de ventes et de facturations <button class="btn btn-info-muted" style="float: right;" >(00225) 07 59 94 71 36</button></h6>
 
           <!-- Début Bloc carousel -->
           <ngb-carousel *ngIf="images" [showNavigationArrows]="true" [showNavigationIndicators]="true">
@@ -12,27 +24,27 @@
               <div class="picsum-img-wrapper" style="height: 500px" >
                 <img [src]="images[0]" class="d-block w-100 img-responsive"alt="Random first slide">
               </div>
-              <div class="carousel-caption" style="font-weight: bold; color: rgb(3, 167, 38); font-size: larger;" >
-                <h5>First slide label</h5>
-                <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+              <div class="carousel-caption" style="font-weight: bold; background-color: rgb(172, 224, 226);" >
+                <h5>Actvités</h5>
+                <p>Suivez l'état de votre activité de manière plus intuitif et simplifié..</p>
               </div>
             </ng-template>
             <ng-template ngbSlide>
               <div class="picsum-img-wrapper" style="height: 500px">
                 <img [src]="images[1]" class="d-block w-100" alt="Random second slide">
               </div>
-              <div class="carousel-caption">
-                <h5>Second slide label</h5>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+              <div class="carousel-caption" style="font-weight: bold; background-color: rgb(172, 224, 226);">
+                <h5>Ventes</h5>
+                <p>Suivez l'état de vos ventes.</p>
               </div>
             </ng-template>
             <ng-template ngbSlide>
               <div class="picsum-img-wrapper" style="height: 500px">
                 <img [src]="images[2]" class="d-block w-100" alt="Random third slide">
               </div>
-              <div class="carousel-caption">
-                <h5>Third slide label</h5>
-                <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
+              <div class="carousel-caption" style="font-weight: bold; background-color: rgb(172, 224, 226);">
+                <h5>Impressions et états</h5>
+                <p>Imprimer les réçus de vos clients .</p>
               </div>
             </ng-template>
           </ngb-carousel>

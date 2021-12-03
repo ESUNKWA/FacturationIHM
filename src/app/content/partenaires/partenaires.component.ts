@@ -5,10 +5,6 @@ import { ModalService } from 'src/app/services/modal/modal.service';
 import { PartenairesService } from 'src/app/services/partenaires/partenaires.service';
 import { UserInfosService } from 'src/app/services/userInfos/user-infos.service';
 
-/* Module jspdf */
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
-
 @Component({
   selector: 'app-partenaires',
   templateUrl: './partenaires.component.html',
@@ -59,23 +55,6 @@ villes: any = [
 
   }
 
-  /* Impression */
-  public openPDF():void {
-    let DATA = document.getElementById('htmlData');
-
-    html2canvas(DATA).then(canvas => {
-
-        let fileWidth = 208;
-        let fileHeight = canvas.height * fileWidth / canvas.width;
-
-        const FILEURI = canvas.toDataURL('image/png')
-        let PDF = new jsPDF('p', 'mm', 'a4');
-        let position = 25;
-        PDF.addImage(FILEURI, 'PNG', 0, position, fileWidth, fileHeight)
-
-        PDF.save('partenaire.pdf');
-    });
-    }
 
   openVerticalCenteredModal(content) {
     this.modalService.open(content, {centered: true, size:'lg'}).result.then((result) => {
