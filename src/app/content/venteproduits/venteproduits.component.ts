@@ -9,6 +9,10 @@ import { ProduitService } from 'src/app/services/produit/produit.service';
 import { UserInfosService } from 'src/app/services/userInfos/user-infos.service';
 import { WizardComponent as BaseWizardComponent } from 'angular-archwizard';
 import { ClientsService } from 'src/app/services/clients/clients.service';
+/* Importation du module PDF */
+import pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
+
 
 @Component({
   selector: 'app-venteproduits',
@@ -106,6 +110,12 @@ export class VenteproduitsComponent implements OnInit {
   InputsRemise: boolean;
   sommesRecap: any;
 
+  infoPartenaire: any = {};
+  tableTitle: any = [ 'Désignation', 'Quantité', 'Prix unitaire', 'Prix total' ];
+  tableBody: any = [];
+  printData: any = {};
+  infosPatenaire: any;
+
   constructor( private produitServices: ProduitService, private excelService: ExcelService,
                 private fb: FormBuilder, private venteServices: FactureService,
                 private swalServices: ModalService, private infosUtilisateur: UserInfosService,
@@ -114,9 +124,15 @@ export class VenteproduitsComponent implements OnInit {
                 public formatter: NgbDateParserFormatter, private calendar: NgbCalendar,) {
                   this.fromDate = calendar.getToday();
                 this.toDate = calendar.getNext(calendar.getToday(), 'd', 10);
+                pdfMake.vfs = pdfFonts.pdfMake.vfs;
                 }
 
   ngOnInit() {
+    
+    this.infosPatenaire = JSON.parse(localStorage.getItem('infosPartenaire'));
+    console.log(this.infosPatenaire);
+    
+
     this.today = this.myDate.getFullYear()+'-'+ (this.myDate.getMonth() + 1) + '-'+ this.myDate.getDate();
 
     this.userInfos = this.infosUtilisateur.fs_informationUtilisateur();
@@ -125,6 +141,8 @@ export class VenteproduitsComponent implements OnInit {
     this.list_produits();
     //this.InputsRemise = false;
     //this.InputPaiementPartiel = false;
+
+    this.tableBody.push(  this.tableTitle);
   }
 
 
@@ -576,28 +594,55 @@ export class VenteproduitsComponent implements OnInit {
     this.modiVentes = true;
     this.viewsBtnUpdate = mode;
     this.modeDetail = mode;
-
     this.detailsFacture = data;
-    this.modalTitle = ( mode == 'edit' )?`Modification de la vente N° [ ${data.r_num} ] _______ Montant : ${data.r_mnt} ${this.devise}`:`Consultation de la vente N° [ ${data.r_num} ] _______ Montant : ${data.r_mnt} ${this.devise}`;
+    console.log(data);
+    
+    switch (mode) {
+      case 'edit':
+        this.getDetailsventes(this.detailsFacture.r_i);
+        this.formDetailsfacture.disable();
+        this.modifCmd = true;
+        this.viewAction = true;
+        this.modalTitle = `Modification de la vente N° [ ${data.r_num} ] _______ Montant : ${data.r_mnt} ${this.devise}`;
+        break;
 
-    //Récupération des détails de la facture
-    this.venteServices.fs_details_facture(data.r_i).subscribe(
+      case 'views':
+        this.getDetailsventes(this.detailsFacture.r_i);
+        this.tabs = 0;
+        this.formDetailsfacture.enable();
+        this.modifCmd = false;
+        this.viewAction = false;
+        this.modalTitle = `Consultation de la vente N° [ ${data.r_num} ] _______ Montant : ${data.r_mnt} ${this.devise}`;
+      break;
+    
+      default:
+        this.getDetailsventes(this.detailsFacture.r_i);
+        if( this.tableBody.length > 1 ){
+          this.generatePdf('open');
+        }
+        
+        break;
+    }
+  }
+ //Récupération des détails de la facture
+  getDetailsventes(venteId){
+   let tab = [];
+    this.venteServices.fs_details_facture(venteId).subscribe(
       ( res: any = {} ) => {
         this.ligneVentes = res.result;
-
+        this.tableBody = [];
+        this.tableBody.push(this.tableTitle);
+        this.ligneVentes.forEach(el => {
+          tab = [];
+          tab.push(el.libelle_produit, el.r_quantite, el.r_prix_vente, el.r_total);
+          this.tableBody.push(tab);
+        });
+        this.tableBody.push(
+          [ '','','',{ text: this.detailsFacture.r_mnt_total_achat + ' fcfa', bold: true } ]);
+        
       },
       ( err ) => console.log(err)
     );
-    if( mode !== 'edit' ){
-      this.formDetailsfacture.disable();
-      this.modifCmd = true;
-      this.viewAction = true;
-    }else{
-      this.tabs = 0;
-      this.formDetailsfacture.enable();
-      this.modifCmd = false;
-      this.viewAction = false;
-    }
   }
 
   isCheckPaiement(value: any){
@@ -624,6 +669,216 @@ export class VenteproduitsComponent implements OnInit {
 //Eportation au format excel
   exportAsXLSX():void {
     this.excelService.exportAsExcelFile(this.data, 'vente');
+  }
+
+  //Exportation du réçu au format PDF
+  generatePdf(action = 'open') {
+    console.log(pdfMake);
+    const documentDefinition = this.getDocumentDefinition();
+
+    switch (action) {
+      case 'open': pdfMake.createPdf(documentDefinition).open(); break;
+      case 'print': pdfMake.createPdf(documentDefinition).print(); break;
+      case 'download': pdfMake.createPdf(documentDefinition).download('factune_'+this.infoPartenaire.num); break;
+
+      default: pdfMake.createPdf(documentDefinition).open(); break;
+    }
+
+  }
+
+  getDocumentDefinition() {
+    sessionStorage.setItem('infoPartenaire', JSON.stringify(this.infoPartenaire));
+    return {
+
+      pageSize: 'A4',
+      /* Entête et pieds de page */
+    /*   header: {
+        columns: [
+
+          {
+            text:'simple text',
+            style:'dkem',
+
+          }
+
+        ]
+      }, */
+
+      /* footer: {
+        columns: [
+          'Left part',
+          { text: 'Right part', alignment: 'right' }
+        ]
+      }, */
+      /* Corps du PDF */
+      content: [
+        /* {
+          columns: [
+            [
+              {
+                text: 'Intitulé: Produits facturésdgffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
+              }
+            ]
+          ],
+          style: 'entete'
+        }, */
+        {
+          columns: [
+            [
+              {
+                text: 'Facture N° : ' + this.detailsFacture.r_num,
+                
+              },
+              {
+                text: this.detailsFacture.created_at
+              }
+            ]
+          ],
+          style: 'facture'
+        },
+
+        {
+          columns: [
+            [{
+              text: 'Boutique/Commerce :',
+              decoration: 'underline'
+            },
+            {
+              text: this.infosPatenaire[0].r_nom,
+            },
+            {
+              text: this.infosPatenaire[0].r_quartier
+            },
+            {
+              text:this.infosPatenaire[0].email || '',
+            },
+            {
+              text: this.infosPatenaire[0].phone || '',
+            }
+            ],
+          ],
+
+        },
+        {
+          columns: [
+            [{
+              text: 'A : Client/ Destinataire :',
+              decoration: 'underline'
+            },
+              {
+                text: this.detailsFacture.r_nom + ' ' + this.detailsFacture.r_prenoms,
+                style: 'nomclient'
+              },
+              {
+                text: this.detailsFacture.r_phone || 'Pas de numéro',
+                style: 'phoneclient'
+              },
+              {
+                text: 'Abidjan',
+                style: 'ville'
+              }
+            ]
+          ],
+          alignment: 'right'
+        },
+        {
+          text: 'Intitulé: Produits facturés',
+          style: 'header'
+        },
+        {
+          columns : [
+            {
+              layout: 'lightHorizontalLines', // optional
+              table: { 
+                // headers are automatically repeated if the table spans over multiple pages
+                // you can declare how many rows should be treated as headers
+               // headerRows: 1,
+                widths: [ '*', 'auto', 100, '*' ],
+                border: true,
+
+                body: this.tableBody
+              }
+            }
+          ]
+        },
+        {
+          columns: [
+            [{
+              text: 'En votre aimable règlement'
+            },
+            {
+              text: 'Cordialement'
+            },
+            {
+              text: 'Devise de l’opération est le Franc cfa (Fcfa).'
+            }]
+          ],
+          style: 'note'
+        },
+        {
+          columns: [
+            {
+              text: this.infosPatenaire[0].r_quartier + ' '+ this.infosPatenaire[0].r_situation_geo
+            }
+          ],
+          style: 'piedpage'
+        }
+      ],
+
+
+      info: {
+        title: "recu" + '_facture',
+        author: "VentePro",
+        subject: 'infoPartenaire',
+        keywords: 'infoPartenaire, ONLINE infoPartenaire',
+      },
+      /* Style du PDf */
+        styles: {
+          header: {
+            fontSize: 12,
+            /*bold: true,*/
+            margin: [0, 20, 0, 10],
+            decoration: 'underline',
+            color: 'blue',
+            alignment: 'left',
+          },
+          name: {
+            fontSize: 16,
+            bold: true,
+            color: 'red',
+            marginleft: '200'
+          },
+          jobTitle: {
+            fontSize: 14,
+            bold: true,
+            italics: true
+          },
+          sign: {
+            margin: [0, 50, 0, 10],
+            alignment: 'right',
+            italics: true
+          },
+          tableHeader: {
+            bold: true,
+          },
+          dkem:{
+            color: 'red',
+            height: '200',
+
+          },
+          piedpage: {
+            margin:[0, 350, 0, 0],
+            alignment: 'center'
+          },
+          note:{
+            margin: [0, 50, 0, 0]
+          },
+          facture: {
+            bold: true,
+                alignment: 'right',
+          }
+        }
+    };
   }
 
   //Alerte stock

@@ -67,8 +67,7 @@ export class LoginComponent implements OnInit {
           case 1:
             localStorage.setItem('isLoggedin', 'true');
             localStorage.setItem('userInfos', JSON.stringify(res.result[0]));
-
-
+            localStorage.setItem('infosPartenaire', JSON.stringify(res.result[1]));
 
             setTimeout(() => {
               this.spinner = false;
