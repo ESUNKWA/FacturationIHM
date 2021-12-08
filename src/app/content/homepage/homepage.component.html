@@ -3,7 +3,7 @@
     <div class="col-12 col-md-12 col-xl-12">
       <div class="card">
         <div class="card-body">
-          <h6 class="card-title text-danger-muted">Système de gestion de ventes et de facturations <button class="btn btn-info-muted" style="float: right;" >(00225) 07 59 94 71 36</button></h6>
+          <h6 class="card-title text-danger-muted">Système de gestion de ventes et de facturations  <a style="float: right;" (click)="linklogin()" class="btn btn-primary">Accéder à la plateforme</a></h6>
 
           <!-- Début Bloc carousel -->
           <ngb-carousel *ngIf="images" [showNavigationArrows]="true" [showNavigationIndicators]="true">
@@ -11,7 +11,7 @@
               <div class="picsum-img-wrapper" style="height: 500px" >
                 <img [src]="images[0]" class="d-block w-100 img-responsive"alt="Random first slide">
               </div>
-              <div class="carousel-caption" style="font-weight: bold; background-color: rgb(172, 224, 226);" >
+              <div class="carousel-caption" style="font-weight: bold; background-color: rgb(63, 129, 131);" >
                 <h5>Actvités</h5>
                 <p>Suivez l'état de votre activité de manière plus intuitif et simplifié..</p>
               </div>
@@ -20,7 +20,7 @@
               <div class="picsum-img-wrapper" style="height: 500px">
                 <img [src]="images[1]" class="d-block w-100" alt="Random second slide">
               </div>
-              <div class="carousel-caption" style="font-weight: bold; background-color: rgb(172, 224, 226);">
+              <div class="carousel-caption" style="font-weight: bold; background-color: rgb(63, 129, 131);">
                 <h5>Ventes</h5>
                 <p>Suivez l'état de vos ventes.</p>
               </div>
@@ -29,16 +29,14 @@
               <div class="picsum-img-wrapper" style="height: 500px">
                 <img [src]="images[2]" class="d-block w-100" alt="Random third slide">
               </div>
-              <div class="carousel-caption" style="font-weight: bold; background-color: rgb(172, 224, 226);">
+              <div class="carousel-caption" style="font-weight: bold; background-color: rgb(63, 129, 131);">
                 <h5>Impressions et états</h5>
                 <p>Imprimer les réçus de vos clients .</p>
               </div>
             </ng-template>
           </ngb-carousel>
           <!-- Fin Boc carousel -->
-
-          <div class="clearfix" >&nbsp;&nbsp;</div>
-          <a (click)="linklogin()" class="btn btn-primary">Accéder à la plateforme</a>
+          <a href="">Développé par Privilège-Dev</a>
         </div>
       </div>
     </div>

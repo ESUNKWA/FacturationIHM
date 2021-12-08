@@ -13,13 +13,13 @@ import { ClientsService } from 'src/app/services/clients/clients.service';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 
-
 @Component({
   selector: 'app-venteproduits',
   templateUrl: './venteproduits.component.html',
   styleUrls: ['./venteproduits.component.scss']
 })
 export class VenteproduitsComponent implements OnInit {
+
    choixProduits: any = [];
   desabledInputQteProduit: any = true;
   choixProduitsFinal: any = [];
@@ -602,7 +602,7 @@ export class VenteproduitsComponent implements OnInit {
         this.getDetailsventes(this.detailsFacture.r_i);
         this.formDetailsfacture.disable();
         this.modifCmd = true;
-        this.viewAction = true;
+        this.viewAction = false;
         this.modalTitle = `Modification de la vente N° [ ${data.r_num} ] _______ Montant : ${data.r_mnt} ${this.devise}`;
         break;
 
@@ -611,7 +611,7 @@ export class VenteproduitsComponent implements OnInit {
         this.tabs = 0;
         this.formDetailsfacture.enable();
         this.modifCmd = false;
-        this.viewAction = false;
+        this.viewAction = true;
         this.modalTitle = `Consultation de la vente N° [ ${data.r_num} ] _______ Montant : ${data.r_mnt} ${this.devise}`;
       break;
     
@@ -712,16 +712,7 @@ export class VenteproduitsComponent implements OnInit {
       }, */
       /* Corps du PDF */
       content: [
-        /* {
-          columns: [
-            [
-              {
-                text: 'Intitulé: Produits facturésdgffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
-              }
-            ]
-          ],
-          style: 'entete'
-        }, */
+       
         {
           columns: [
             [
