@@ -17,8 +17,8 @@ export class ClientsService {
 
   constructor( private http: HttpClient ) { }
 
-  fs_listeClient(){
-    return this.http.get(apiServer.url+'/client', this.httpOptions).pipe(
+  fs_listeClient(idpartenaire, date1, date2){
+    return this.http.get(`${apiServer.url}/client/list/${idpartenaire}/${date1}/${date2}`, this.httpOptions).pipe(
       retry(1),
       catchError(this.handleError)
     );;

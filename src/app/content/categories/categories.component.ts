@@ -83,7 +83,7 @@ export class CategoriesComponent implements OnInit {
 
         setTimeout(() => {
           this.chargementEncours = false;
-        }, 2000);
+        }, 1000);
       },
       (err) => console.log(err),
     );

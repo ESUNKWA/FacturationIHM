@@ -94,8 +94,6 @@ export class LivraisonComponent implements OnInit {
   }
 
   updateStatus(ligneLivraison, action: number){
-console.log(ligneLivraison);
-
     Swal.fire({
       title: 'Livraison terminée ?',
       text: 'Livraison à ' + ligneLivraison.r_quartier,
@@ -115,7 +113,7 @@ console.log(ligneLivraison);
               'success'
             )
           }
-          this.listLivraison(this.selectedLevel = this.userInfos.r_partenaire, this.today, this.today);
+          this.listLivraison(this.selectedLevel = this.userInfos.r_partenaire, this.date3, this.date4);
         }
       )
 

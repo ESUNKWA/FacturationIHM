@@ -253,6 +253,66 @@
   </div>
 
   <div class="col">
+    <form class="form-inline range-selection">
+      <div class="form-group hidden">
+        <div class="input-group">
+          <input name="datepicker"
+                class="form-control"
+                ngbDatepicker
+                #datepicker="ngbDatepicker"
+                [autoClose]="'outside'"
+                (dateSelect)="onDateSelection($event)"
+                [displayMonths]="2"
+                [dayTemplate]="t"
+                outsideDays="hidden"
+                [startDate]="fromDate!">
+          <ng-template #t let-date let-focused="focused">
+            <span class="custom-day"
+                  [class.focused]="focused"
+                  [class.range]="isRange(date)"
+                  [class.faded]="isHovered(date) || isInside(date)"
+                  (mouseenter)="hoveredDate = date"
+                  (mouseleave)="hoveredDate = null">
+              {{ date.day }}
+            </span>
+          </ng-template>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="input-group" (click)="datepicker.toggle()">
+          <input #dpFromDate
+                class="form-control" placeholder="yyyy-mm-dd"
+                name="dpFromDate"
+                [value]="formatter.format(fromDate)"
+                (input)="fromDate = validateInput(fromDate, dpFromDate.value)">
+          <div class="input-group-append">
+            <button class="btn btn-outline-light btn-icon" type="button">
+              <i data-feather="calendar" appFeatherIcon class="text-secondary"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="form-group ml-2">
+        <div class="input-group" (click)="datepicker.toggle()">
+          <input #dpToDate
+                class="form-control" placeholder="yyyy-mm-dd"
+                name="dpToDate"
+                [value]="formatter.format(toDate)"
+                (input)="toDate = validateInput(toDate, dpToDate.value)">
+          <div class="input-group-append">
+            <button class="btn btn-outline-light btn-icon" type="button">
+              <i data-feather="calendar" appFeatherIcon class="text-secondary"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+  
+    </form>
+  </div>
+
+
+
+  <div class="col">
     <button style="float: right;"
                 title="Ajouter un nouveau produit"
                 type="button" class="btn btn-primary btn-round"
@@ -263,6 +323,7 @@
 
 </div>
 
+<!-- Liste des commandes -->
 <div class="mt-2" [ngSwitch]="dataRetour" *ngIf=" afficheVente === true && chargementEncours == false " >
   <div *ngSwitchCase = 0 >
 
@@ -321,9 +382,6 @@
     </div>
   </div>
 </div>
-
-<!-- Liste des commandes -->
-
 
 
 <!-- Modal -->

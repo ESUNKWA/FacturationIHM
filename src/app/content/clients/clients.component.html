@@ -93,33 +93,32 @@
         <div class="col-md-12 stretch-card">
           <div class="card">
             <div class="card-body">
-              <h6 class="card-title">Liste des livraisons</h6>
+              <h6 class="card-title">Liste des clients</h6>
               <div class="table-responsive">
                 <table class="table" >
                   <thead>
                     <tr>
-                      <th style="width: 10%;" >Date</th>
-                      <th style="width: 20%;" >Nom</th>
-                      <th style="width: 20%;" >Prénoms</th>
-                      <th style="width: 20%;" >Téléphone</th>
-                      <th style="width: 20%; text-align: center;" >Action</th>
+                      <th style="width: 25%;" >Date</th>
+                      <th style="width: 25%;" >Nom</th>
+                      <th style="width: 25%;" >Prénoms</th>
+                      <th style="width: 25%;" >Téléphone</th>
+                      <!-- <th style="width: 20%; text-align: center;" >Action</th> -->
                     </tr>
                   </thead>
                   <tbody>
                     <tr *ngFor="let item of data; let i = index;" >
                       <td>{{item.created_at | date: 'dd-MM-YYYY à hh:mm:ss'}}</td>
-                      <td>{{item.r_nom}}</td>
-                      <td>{{item.r_prenoms}}</td>
-                      <td>{{item.r_phone}}</td>
-                     <td style="display: flex; flex-direction: row;" >
+                      <td>{{item.r_nom || '---'}}</td>
+                      <td>{{item.r_prenoms || '---'}}</td>
+                      <td>{{item.r_phone || '---'}}</td>
+                    <!--  <td style="display: flex; flex-direction: row;" >
                           <button (click)="openVerticalCenteredModal(verticalCenteredModal);" class="btn btn-primary btn-icon"><i class="feather icon-info"></i></button>&nbsp;
                           <button class="btn btn-danger btn-icon"><i class="feather icon-trash-2"></i></button>&nbsp;
-                      </td>
+                      </td> -->
                     </tr>
                   </tbody>
                   <tfoot>
                     <tr>
-                      <th></th>
                       <th></th>
                       <th></th>
                       <th></th>

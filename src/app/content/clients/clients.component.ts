@@ -3,6 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import { NgbCalendar, NgbDate, NgbDateParserFormatter, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ClientsService } from 'src/app/services/clients/clients.service';
 import { ExcelService } from 'src/app/services/excel/excel.service';
+import { UserInfosService } from 'src/app/services/userInfos/user-infos.service';
 @Component({
   selector: 'app-clients',
   templateUrl: './clients.component.html',
@@ -42,19 +43,27 @@ export class ClientsComponent implements OnInit {
   dataRetour: any;
 
   constructor( private clientServices: ClientsService, private excelService: ExcelService, private fb: FormBuilder,
-    private modalService: NgbModal, public formatter: NgbDateParserFormatter, private calendar: NgbCalendar) {
+    private modalService: NgbModal, public formatter: NgbDateParserFormatter, private calendar: NgbCalendar,
+    private infosUtilisateur: UserInfosService) {
       this.fromDate = calendar.getToday();
                 this.toDate = calendar.getNext(calendar.getToday(), 'd', 10);
     }
 
   ngOnInit() {
-    this.listeClient();
+    this.today = this.myDate.getFullYear()+'-'+ (this.myDate.getMonth() + 1) + '-'+ this.myDate.getDate();
+    this.userInfos = this.infosUtilisateur.fs_informationUtilisateur();
+    this.listeClient(this.userInfos.r_partenaire, this.today, this.today);
   }
 
-  listeClient(){
-    this.clientServices.fs_listeClient().subscribe(
+  listeClient(idpart, datedebut, datefin){
+    this.chargementEncours = true;
+    this.clientServices.fs_listeClient(idpart, datedebut, datefin).subscribe(
       ( res: any = {} ) => {
         this.data = res.result;
+        this.dataRetour = ( res.status === 1 )? 1 : 0;
+        setTimeout(() => {
+          this.chargementEncours = false;
+        }, 1000);
       }
     );
   }
@@ -95,9 +104,9 @@ export class ClientsComponent implements OnInit {
     this.date3 = this.date1;
     this.date4 = this.date2;
     if( this.userInfos.r_profil !== 4 ){
-        //( this.date1 !== undefined && this.date2 !== undefined )? this.listLivraison(this.userInfos.r_partenaire, this.date1, this.date2) : null;
+        ( this.date1 !== undefined && this.date2 !== undefined )? this.listeClient(this.userInfos.r_partenaire, this.date1, this.date2) : null;
     }else{
-       // ( this.date1 !== undefined && this.date2 !== undefined )? this.listLivraison(this.selectedLevel, this.date1, this.date2) : null;
+       ( this.date1 !== undefined && this.date2 !== undefined )? this.listeClient(this.selectedLevel, this.date1, this.date2) : null;
     }
 
   }

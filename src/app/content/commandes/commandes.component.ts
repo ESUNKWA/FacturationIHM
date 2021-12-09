@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbCalendar, NgbDate, NgbDateParserFormatter, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ExcelService } from 'src/app/services/excel/excel.service';
 import { FactureService } from 'src/app/services/facture/facture.service';
 import { ModalService } from 'src/app/services/modal/modal.service';
@@ -81,10 +81,22 @@ export class CommandesComponent implements OnInit {
 
   dataRetour: any;
 
+  fromDate: NgbDate | null;
+  toDate: NgbDate | null;
+  date1: any;
+  date2: any;
+  date3: any;
+  date4: any;
+  hoveredDate: NgbDate | null = null;
+
   constructor( private produitServices: ProduitService, private excelService: ExcelService,
                 private fb: FormBuilder, private venteServices: FactureService,
                 private swalServices: ModalService, private infosUtilisateur: UserInfosService,
-                private partenaireServices: PartenairesService, private modalService: NgbModal ) { }
+                private partenaireServices: PartenairesService, private modalService: NgbModal,
+                public formatter: NgbDateParserFormatter, private calendar: NgbCalendar ) { 
+                  this.fromDate = calendar.getToday();
+                this.toDate = calendar.getNext(calendar.getToday(), 'd', 10);
+                }
 
   ngOnInit() {
 
@@ -92,7 +104,7 @@ export class CommandesComponent implements OnInit {
 
     this.userInfos = this.infosUtilisateur.fs_informationUtilisateur();
 
-    this.listVentes(this.userInfos.r_partenaire, this.today);
+    this.listVentes(this.userInfos.r_partenaire, this.today, this.today);
 
     this.listPartenaire();
   }
@@ -124,7 +136,7 @@ export class CommandesComponent implements OnInit {
 
   viewsCmd(){
     
-    this.listVentes(this.userInfos.r_partenaire, this.today);
+    this.listVentes(this.userInfos.r_partenaire, this.today, this.today);
     this.saisieVente = false;
     this.afficheVente = true;
     this.chargementEncours = true;
@@ -140,14 +152,14 @@ export class CommandesComponent implements OnInit {
   }
 
 
-  listVentes(partenaireId, today){
+  listVentes(partenaireId, date1, date2){
 
     this.chargementEncours = true;
 
     if( this.userInfos.r_profil !== 4 ){
       partenaireId = this.userInfos.r_partenaire;
     }
-    this.venteServices.fs_list_factures(1,partenaireId, today, today).subscribe(
+    this.venteServices.fs_list_factures(1,partenaireId, date1, date2).subscribe(
       (res: any = {}) => {
         if( res.status == 1 ){
           this.dataRetour = 1;
@@ -155,7 +167,8 @@ export class CommandesComponent implements OnInit {
           this.dataRetour = 0;
         }
         this.data = res.result;
-        
+        this.date1 = undefined;
+        this.date2 = undefined;
         setTimeout(() => {
           this.chargementEncours = false;
         }, 1000);
@@ -337,7 +350,7 @@ export class CommandesComponent implements OnInit {
 
   selectProduitPartenaire(){
     console.log(this.selectedLevel);
-    this.listVentes(parseInt(this.selectedLevel), this.today);
+    this.listVentes(parseInt(this.selectedLevel), this.today, this.today);
   }
 
   listPartenaire(){
@@ -347,6 +360,52 @@ export class CommandesComponent implements OnInit {
       }
     )
   }
+
+
+
+   //   Datepicker select période
+   onDateSelection(date: NgbDate) {
+    if (!this.fromDate && !this.toDate) {
+      this.fromDate = date;
+    } else if (this.fromDate && !this.toDate && date && date.after(this.fromDate)) {
+      this.toDate = date;
+      const datefin = ( this.toDate.day < 10 )? '0'+this.toDate.day : this.toDate.day;
+      this.date2 = `${this.toDate.year}-${this.toDate.month}-${datefin}`;
+    } else {
+      this.toDate = null;
+      this.fromDate = date;
+      const datedebut = ( this.fromDate.day < 10 )? '0'+this.fromDate.day : this.fromDate.day;
+      this.date1 = `${this.fromDate.year}-${this.fromDate.month}-${datedebut}`;
+
+    }
+    this.date3 = this.date1;
+    this.date4 = this.date2;
+    if( this.userInfos.r_profil !== 4 ){
+        ( this.date1 !== undefined && this.date2 !== undefined )? this.listVentes(this.userInfos.r_partenaire, this.date1, this.date2) : null;
+    }else{
+        ( this.date1 !== undefined && this.date2 !== undefined )? this.listVentes(this.selectedLevel, this.date1, this.date2) : null;
+    }
+
+  }
+
+  isHovered(date: NgbDate) {
+    return this.fromDate && !this.toDate && this.hoveredDate && date.after(this.fromDate) && date.before(this.hoveredDate);
+  }
+
+  isInside(date: NgbDate) {
+    return this.toDate && date.after(this.fromDate) && date.before(this.toDate);
+  }
+
+  isRange(date: NgbDate) {
+    return date.equals(this.fromDate) || (this.toDate && date.equals(this.toDate)) || this.isInside(date) || this.isHovered(date);
+  }
+
+  validateInput(currentValue: NgbDate | null, input: string): NgbDate | null {
+    const parsed = this.formatter.parse(input);
+    return parsed && this.calendar.isValid(NgbDate.from(parsed)) ? NgbDate.from(parsed) : currentValue;
+  }
+
+  //   Datepicker select période Fin
 
 
 //Eportation au format excel

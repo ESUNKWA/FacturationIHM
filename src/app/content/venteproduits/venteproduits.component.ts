@@ -103,6 +103,8 @@ export class VenteproduitsComponent implements OnInit {
 
   date1: any;
   date2: any;
+  date3: any;
+  date4: any;
   viewAction: boolean = true;
   tabs: number;
   formLivraion: boolean = false;
@@ -114,7 +116,7 @@ export class VenteproduitsComponent implements OnInit {
   tableTitle: any = [ 'Désignation', 'Quantité', 'Prix unitaire', 'Prix total' ];
   tableBody: any = [];
   printData: any = {};
-  infosPatenaire: any;
+  infosPatenaire: any = {};
 
   constructor( private produitServices: ProduitService, private excelService: ExcelService,
                 private fb: FormBuilder, private venteServices: FactureService,
@@ -130,7 +132,6 @@ export class VenteproduitsComponent implements OnInit {
   ngOnInit() {
     
     this.infosPatenaire = JSON.parse(localStorage.getItem('infosPartenaire'));
-    console.log(this.infosPatenaire);
     
 
     this.today = this.myDate.getFullYear()+'-'+ (this.myDate.getMonth() + 1) + '-'+ this.myDate.getDate();
@@ -190,7 +191,8 @@ export class VenteproduitsComponent implements OnInit {
           this.dataRetour = 0;
         }
         this.data = res.result;
-
+        this.date1 = undefined;
+        this.date2 = undefined;
         setTimeout(()=>{
           this.chargementEncours = false;
         }, 1);
@@ -283,7 +285,6 @@ export class VenteproduitsComponent implements OnInit {
 
     let tabIdLigneVentes = [];
     this.dkem.forEach(item => tabIdLigneVentes.push(item.p_idlignevente) );
-    console.log(tabIdLigneVentes);
 
     this.getNewTotal(tabIdLigneVentes);
   }
@@ -300,7 +301,7 @@ export class VenteproduitsComponent implements OnInit {
     this.venteServices.update_vente(this.venteUpdateData).subscribe(
       (res: any = {})=>{
         ( res.status == 1 )? this.swalServices.fs_modal(res.result,'success') : this.swalServices.fs_modal(res.result,'warning');
-        this.listVentes(this.userInfos.r_partenaire, this.today, this.today);
+        this.listVentes(this.userInfos.r_partenaire, this.date3, this.date4);
       }
     )
 
@@ -315,7 +316,7 @@ export class VenteproduitsComponent implements OnInit {
       (res: any = {})=>{
         if( res.status == 1 ) {
           this.swalServices.fs_modal(res.result,'success');
-        } this.listVentes(this.userInfos.r_partenaire, this.today, this.today);
+        } this.listVentes(this.userInfos.r_partenaire, this.date3, this.date4);
       }
     )
 
@@ -349,13 +350,15 @@ export class VenteproduitsComponent implements OnInit {
       this.toDate = date;
       const datefin = ( this.toDate.day < 10 )? '0'+this.toDate.day : this.toDate.day;
       this.date2 = `${this.toDate.year}-${this.toDate.month}-${datefin}`;
+      this.date4 = this.date1;
     } else {
       this.toDate = null;
       this.fromDate = date;
       const datedebut = ( this.fromDate.day < 10 )? '0'+this.fromDate.day : this.fromDate.day;
       this.date1 = `${this.fromDate.year}-${this.fromDate.month}-${datedebut}`;
-
+      this.date3 = this.date1;
     }
+
 
     if( this.userInfos.r_profil !== 4 ){
         ( this.date1 !== undefined && this.date2 !== undefined )? this.listVentes(this.userInfos.r_partenaire, this.date1, this.date2) : null;
@@ -600,7 +603,7 @@ export class VenteproduitsComponent implements OnInit {
     switch (mode) {
       case 'edit':
         this.getDetailsventes(this.detailsFacture.r_i);
-        this.formDetailsfacture.disable();
+        this.formDetailsfacture.enable();
         this.modifCmd = true;
         this.viewAction = false;
         this.modalTitle = `Modification de la vente N° [ ${data.r_num} ] _______ Montant : ${data.r_mnt} ${this.devise}`;
@@ -609,7 +612,7 @@ export class VenteproduitsComponent implements OnInit {
       case 'views':
         this.getDetailsventes(this.detailsFacture.r_i);
         this.tabs = 0;
-        this.formDetailsfacture.enable();
+        this.formDetailsfacture.disable();
         this.modifCmd = false;
         this.viewAction = true;
         this.modalTitle = `Consultation de la vente N° [ ${data.r_num} ] _______ Montant : ${data.r_mnt} ${this.devise}`;

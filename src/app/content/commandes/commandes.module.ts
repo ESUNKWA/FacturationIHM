@@ -1,7 +1,7 @@
 import { NgxMaskModule } from 'ngx-mask';
 import { LoaderComponent } from './../loader/loader.component';
 import { ArchwizardModule } from 'angular-archwizard';
-import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDatepickerModule, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -16,7 +16,8 @@ import { CommandesComponent } from "./commandes.component";
       NgbNavModule,
       ArchwizardModule,
       CommandesRoutingModule,
-      NgxMaskModule.forRoot({validation: true})
+      NgxMaskModule.forRoot({validation: true}),
+      NgbDatepickerModule
     ],
     declarations: [CommandesComponent, LoaderComponent]
 })
