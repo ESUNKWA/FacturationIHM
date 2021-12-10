@@ -48,6 +48,7 @@ updatestockData: any = {};
   details: any = {};
   chargementEncours: boolean;
   desacStock: boolean = false;
+  tableBody: any = [];
 
   constructor( private fb: FormBuilder, private produitServices: ProduitService,
                 private swalServices: ModalService, private infosUtilisateur: UserInfosService,
@@ -311,8 +312,19 @@ updatestockData: any = {};
 
 //Exportation du réçu au format PDF
 generatePdf(action = 'open') {
-  console.log(pdfMake);
-  const documentDefinition = this.exportpdf.getDocumentDefinition(["nom","prenoms"],["test","Salut"]);
+  
+  this.tableBody = [];
+  this.data.forEach((produit)=>{
+    let tab = [];
+    tab.push(produit.r_libelle, produit.r_stock, produit.r_prix_vente);
+    this.tableBody.push(tab);
+  });
+console.log(this.tableBody);
+
+  const documentDefinition = this.exportpdf.getDocumentDefinition(
+    [[ 'Libellé du produit', 'Stock', 'Prix unitaire'],
+    this.tableBody]
+    );
 
   switch (action) {
     case 'open': pdfMake.createPdf(documentDefinition).open(); break;

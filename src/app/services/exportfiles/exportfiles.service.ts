@@ -7,7 +7,7 @@ export class ExportfilesService {
 
   constructor() { }
 
-  getDocumentDefinition(columnstitles: any = [], tableBody: any = []) {
+  getDocumentDefinition(tableBody: any = []) {
     return {
 
       pageSize: 'A4',
@@ -37,17 +37,15 @@ export class ExportfilesService {
           columns : [
             {
               layout: 'lightHorizontalLines', // optional
-              table: { 
+              width: '100%',
+              table: {
                 // headers are automatically repeated if the table spans over multiple pages
                 // you can declare how many rows should be treated as headers
-               // headerRows: 1,
-                widths: [ '*', 'auto', 100, '*' ],
-                border: true,
-
-                body: [
-                  columnstitles,
-                  tableBody
-                ]
+                headerRows: 1,
+                //widths: [ '*', 'auto', 100, '*' ],
+                widths: [ 'auto', '*', '*', '*','*', '*'],
+        
+                body: tableBody
               }
             }
           ]
@@ -90,11 +88,6 @@ export class ExportfilesService {
           tableHeader: {
             bold: true,
           },
-          dkem:{
-            color: 'red',
-            height: '200',
-
-          },
           piedpage: {
             margin:[0, 350, 0, 0],
             alignment: 'center'
@@ -105,6 +98,10 @@ export class ExportfilesService {
           facture: {
             bold: true,
                 alignment: 'right',
+          },
+          tableExample: {
+            margin: [0, 5, 0, 15],
+            widths: [ '*', 'auto', 100, '*' ]
           }
         }
     };
