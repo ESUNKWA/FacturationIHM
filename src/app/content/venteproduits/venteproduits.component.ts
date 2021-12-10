@@ -682,7 +682,7 @@ export class VenteproduitsComponent implements OnInit {
     switch (action) {
       case 'open': pdfMake.createPdf(documentDefinition).open(); break;
       case 'print': pdfMake.createPdf(documentDefinition).print(); break;
-      case 'download': pdfMake.createPdf(documentDefinition).download('factune_'+this.infoPartenaire.num); break;
+      case 'download': pdfMake.createPdf(documentDefinition).download('facture_'+this.infoPartenaire.num); break;
 
       default: pdfMake.createPdf(documentDefinition).open(); break;
     }

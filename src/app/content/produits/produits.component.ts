@@ -9,6 +9,11 @@ import { UserInfosService } from 'src/app/services/userInfos/user-infos.service'
 import Swal from 'sweetalert2';
 import * as api from '../../module/urlserver';
 
+/* Importation du module PDF */
+import pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
+import { ExportfilesService } from 'src/app/services/exportfiles/exportfiles.service';
+
 @Component({
   selector: 'app-produits',
   templateUrl: './produits.component.html',
@@ -46,7 +51,10 @@ updatestockData: any = {};
 
   constructor( private fb: FormBuilder, private produitServices: ProduitService,
                 private swalServices: ModalService, private infosUtilisateur: UserInfosService,
-                private partenaireServices: PartenairesService, private categorieServices: CategorieService, private modalService: NgbModal ) { }
+                private partenaireServices: PartenairesService, private categorieServices: CategorieService, 
+                private modalService: NgbModal, private exportpdf: ExportfilesService ) {
+                  pdfMake.vfs = pdfFonts.pdfMake.vfs;
+                 }
 
   ngOnInit() {
     this.userInfos = this.infosUtilisateur.fs_informationUtilisateur();
@@ -300,4 +308,24 @@ updatestockData: any = {};
   closeMyModal(event) {
     ((event.target.parentElement.parentElement).parentElement).classList.remove('md-show');
   }
+
+//Exportation du réçu au format PDF
+generatePdf(action = 'open') {
+  console.log(pdfMake);
+  const documentDefinition = this.exportpdf.getDocumentDefinition(["nom","prenoms"],["test","Salut"]);
+
+  switch (action) {
+    case 'open': pdfMake.createPdf(documentDefinition).open(); break;
+    case 'print': pdfMake.createPdf(documentDefinition).print(); break;
+    case 'download': pdfMake.createPdf(documentDefinition).download('facture_'); break;
+
+    default: pdfMake.createPdf(documentDefinition).open(); break;
+  }
+
+}
+
+print(){
+  this.exportpdf.getDocumentDefinition("");
+}
+
 }
