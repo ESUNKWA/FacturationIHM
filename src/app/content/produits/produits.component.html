@@ -20,6 +20,7 @@
 
 
         <div class="col">
+          <button class="btn btn-danger btn-icon " title="Imprimer la liste des produits" (click)="generatePdf();" ><i class="mdi mdi-file-pdf"></i></button>
           <!-- Button trigger modal -->
           <button class="btn btn-primary"
           (click)="fc_add_produit();openVerticalCenteredModal(verticalCenteredModal)"
@@ -34,7 +35,7 @@
       <div class="card">
         <div class="card-body">
           <h6 class="card-title">Liste des produits</h6>
-          <button class="btn btn-danger btn-icon " (click)="generatePdf();" ><i class="mdi mdi-file-pdf"></i></button>
+          
           <div class="table-responsive">
             <table class="table" >
               <thead>

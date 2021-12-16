@@ -12,6 +12,7 @@ import { ClientsService } from 'src/app/services/clients/clients.service';
 /* Importation du module PDF */
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
+import { ExportfilesService } from 'src/app/services/exportfiles/exportfiles.service';
 
 @Component({
   selector: 'app-venteproduits',
@@ -123,7 +124,7 @@ export class VenteproduitsComponent implements OnInit {
                 private swalServices: ModalService, private infosUtilisateur: UserInfosService,
                 private partenaireServices: PartenairesService, private modalService: NgbModal,
                 private alertStockProduit: ProduitService, private clientServices: ClientsService,
-                public formatter: NgbDateParserFormatter, private calendar: NgbCalendar,) {
+                public formatter: NgbDateParserFormatter, private calendar: NgbCalendar, private exportpdf: ExportfilesService) {
                   this.fromDate = calendar.getToday();
                 this.toDate = calendar.getNext(calendar.getToday(), 'd', 10);
                 pdfMake.vfs = pdfFonts.pdfMake.vfs;
@@ -598,7 +599,6 @@ export class VenteproduitsComponent implements OnInit {
     this.viewsBtnUpdate = mode;
     this.modeDetail = mode;
     this.detailsFacture = data;
-    console.log(data);
     
     switch (mode) {
       case 'edit':
@@ -874,6 +874,36 @@ export class VenteproduitsComponent implements OnInit {
         }
     };
   }
+
+
+  //Exportation du réçu au format PDF
+generationPdf(action = 'open') {
+  this.tableBody = [];
+  this.tableBody.push([ 'N° facture', 'Montant total vente', 'Status']);// Titre des colonnes
+
+
+  this.data.forEach((vente)=>{
+    let tab = [];
+    tab.push(vente.r_num, vente.r_mnt_total_achat, (vente.r_status == 1)?'Soldée' :'Non solder');
+    this.tableBody.push(tab);
+  });
+
+  if( this.tableBody.length > 1 ){
+      const documentDefinition = this.exportpdf.getDocumentDefinition(
+      this.tableBody
+      );
+      switch (action) {
+        case 'open': pdfMake.createPdf(documentDefinition).open(); break;
+        case 'print': pdfMake.createPdf(documentDefinition).print(); break;
+        case 'download': pdfMake.createPdf(documentDefinition).download('facture_'); break;
+    
+        default: pdfMake.createPdf(documentDefinition).open(); break;
+      }
+  }else{
+    this.swalServices.fs_modal('Aucune données à imprimer', 'warning');
+  }
+
+}
 
   //Alerte stock
   alerteStockProduit(){

@@ -37,13 +37,13 @@ export class ExportfilesService {
           columns : [
             {
               layout: 'lightHorizontalLines', // optional
-              width: '100%',
               table: {
                 // headers are automatically repeated if the table spans over multiple pages
                 // you can declare how many rows should be treated as headers
                 headerRows: 1,
+               // widths: [ '*', '*', 100, '*' ],
                 //widths: [ '*', 'auto', 100, '*' ],
-                widths: [ 'auto', '*', '*', '*','*', '*'],
+                widths: [ '*', '*', '*'],
         
                 body: tableBody
               }

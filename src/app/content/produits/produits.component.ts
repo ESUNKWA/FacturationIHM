@@ -312,32 +312,30 @@ updatestockData: any = {};
 
 //Exportation du réçu au format PDF
 generatePdf(action = 'open') {
-  
   this.tableBody = [];
+  this.tableBody.push([ 'Libellé du produit', 'Stock', 'Prix unitaire']);// Titre des colonnes
+
   this.data.forEach((produit)=>{
     let tab = [];
     tab.push(produit.r_libelle, produit.r_stock, produit.r_prix_vente);
     this.tableBody.push(tab);
   });
-console.log(this.tableBody);
 
-  const documentDefinition = this.exportpdf.getDocumentDefinition(
-    [[ 'Libellé du produit', 'Stock', 'Prix unitaire'],
-    this.tableBody]
-    );
-
-  switch (action) {
-    case 'open': pdfMake.createPdf(documentDefinition).open(); break;
-    case 'print': pdfMake.createPdf(documentDefinition).print(); break;
-    case 'download': pdfMake.createPdf(documentDefinition).download('facture_'); break;
-
-    default: pdfMake.createPdf(documentDefinition).open(); break;
+  if( this.tableBody.length > 1 ){
+      const documentDefinition = this.exportpdf.getDocumentDefinition(
+      this.tableBody
+      );
+      switch (action) {
+        case 'open': pdfMake.createPdf(documentDefinition).open(); break;
+        case 'print': pdfMake.createPdf(documentDefinition).print(); break;
+        case 'download': pdfMake.createPdf(documentDefinition).download('facture_'); break;
+    
+        default: pdfMake.createPdf(documentDefinition).open(); break;
+      }
+  }else{
+    this.swalServices.fs_modal('Aucune données à imprimer', 'warning');
   }
 
-}
-
-print(){
-  this.exportpdf.getDocumentDefinition("");
 }
 
 }
