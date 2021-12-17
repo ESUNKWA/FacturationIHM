@@ -23,6 +23,10 @@ export const MENU: MenuItem[] = [
       {
         label: 'Produits',
         link: '/privilege/produits'
+      },
+      {
+        label: 'Achat des produits',
+        link: '/privilege/produits'
       }
     ]
   },
