@@ -216,11 +216,7 @@ updatestockData: any = {};
   ajoutStock(produit){
     Swal.fire({
       title: `[ ${produit.r_libelle} ] </br></br> Stock actuel : ${produit.r_stock}`,
-      /* input: 'number',
-      inputLabel:'Quantité achetée',
-      inputAttributes: {
-        autocapitalize: 'off'
-      }, */
+    
       html:'<input id="swal-input1" placeholder="Quantité achetée" type="number" min="0" class="swal2-input">' +
       '<input id="swal-input2" placeholder="Montant" class="swal2-input" type="number" min="0">',
       showCancelButton: true,
@@ -231,26 +227,27 @@ updatestockData: any = {};
         this.qteAchat = (<HTMLInputElement>document.getElementById('swal-input1')).value;
         this.mntAchat = (<HTMLInputElement>document.getElementById('swal-input2')).value;
 
-        console.log(this.qteAchat, this.mntAchat);
-        
-        /* this.updatestockData.p_newStock     = parseInt(produit.r_stock) + parseInt(newQte);
-        this.updatestockData.p_newStock     = parseInt(produit.r_stock) + parseInt(newQte); */
-
-        this.updatestockData.p_newStock     = parseInt(produit.r_stock) + parseInt(this.qteAchat);
-        this.updatestockData.p_partenaire   = this.userInfos.r_partenaire;
-        this.updatestockData.p_utilisateur  = this.userInfos.r_i;
-        this.updatestockData.p_quantite     = parseInt(this.qteAchat);
-        this.updatestockData.p_produit     = produit.r_i;
-
-
-        if( this.qteAchat == 0 || this.mntAchat == undefined ){
+        if( this.qteAchat == 0 || this.qteAchat == undefined ){
           Swal.showValidationMessage(
             `Veuillez saisir une quantité valide`
           );
           return;
         }
 
-        //return fetch(`https://apidkem.hoteletiada.com/api/stock`,
+        if( this.mntAchat == 0 || this.mntAchat == undefined ){
+          Swal.showValidationMessage(
+            `Veuillez saisir une montant valide`
+          );
+          return;
+        }
+
+        this.updatestockData.p_newStock     = parseInt(produit.r_stock) + parseInt(this.qteAchat);
+        this.updatestockData.p_partenaire   = this.userInfos.r_partenaire;
+        this.updatestockData.p_utilisateur  = this.userInfos.r_i;
+        this.updatestockData.p_quantite     = parseInt(this.qteAchat);
+        this.updatestockData.p_mnt     = parseInt(this.mntAchat);
+        this.updatestockData.p_produit     = produit.r_i;
+
         return fetch(`${api.url}/stock`,
         {
           headers: {

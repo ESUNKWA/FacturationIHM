@@ -23,24 +23,9 @@ export const MENU: MenuItem[] = [
       {
         label: 'Produits',
         link: '/privilege/produits'
-      },
-      {
-        label: 'Achat des produits',
-        link: '/privilege/produits'
       }
     ]
   },
-
-  /* {
-    label: 'Partenanaire',
-    isTitle: true
-  },
-
-  {
-    label: 'Partenanaire',
-    icon: 'user-plus',
-    link: '/privilege/partenaires',
-  }, */
 
   {
     label: 'Ventes et commandes',
