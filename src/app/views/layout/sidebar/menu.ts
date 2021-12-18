@@ -58,12 +58,16 @@ export const MENU: MenuItem[] = [
     isTitle: true
   },
   {
-    label: 'Bilan financiers',
+    label: 'Consultation',
     icon: 'activity',
     subItems: [
       {
         label: 'Détails des ventes',
         link: '/privilege/details-ventes',
+      },
+      {
+        label: 'Détails des achats',
+        link: '/privilege/achat',
       },
       {
         label: 'Statistiques',

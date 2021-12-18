@@ -46,6 +46,25 @@ export class ProduitService {
     )
   }
 
+  consult_achat_produit(idpartenaire, date1, date2){
+    return this.http.get(`${apiServer.url}/viewsachats/${idpartenaire}/${date1}/${date2}`, this.httpOptions).pipe(
+      retry(1),
+      catchError(this.handleError)
+    )
+  }
+  consult_achat_produit_rgpmt(idpartenaire, date1, date2){
+    return this.http.get(`${apiServer.url}/viewsachatsrgpmt/${idpartenaire}/${date1}/${date2}`, this.httpOptions).pipe(
+      retry(1),
+      catchError(this.handleError)
+    )
+  }
+  consult_achat_par_produit(idpartenaire,idproduit, date1, date2){
+    return this.http.get(`${apiServer.url}/viewsachatsparproduit/${idpartenaire}/${idproduit}/${date1}/${date2}`, this.httpOptions).pipe(
+      retry(1),
+      catchError(this.handleError)
+    )
+  }
+
   alertStock(idpartenaire){
     return this.http.get(`${apiServer.url}/produit.alerte/${idpartenaire}`, this.httpOptions).pipe(
       retry(1),

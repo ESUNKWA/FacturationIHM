@@ -248,6 +248,7 @@ updatestockData: any = {};
         this.updatestockData.p_mnt     = parseInt(this.mntAchat);
         this.updatestockData.p_produit     = produit.r_i;
 
+
         return fetch(`${api.url}/stock`,
         {
           headers: {
