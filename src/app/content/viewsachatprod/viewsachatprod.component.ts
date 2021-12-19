@@ -30,7 +30,9 @@ export class ViewsachatprodComponent implements OnInit {
   partenaires: any = [];
   modeAchat: any = ['Liste de achats','Liste de achats par regroupement', 'Liste de achats par produit'];
   produits: any = [];
-  
+  valMode: number;
+  afficheCBOprod: boolean = false;
+
   constructor(private infosUtilisateur: UserInfosService,
     private modalService: NgbModal, private partenaireServices: PartenairesService,
     private consultAchatProd: ProduitService, public formatter: NgbDateParserFormatter, 
@@ -44,7 +46,7 @@ export class ViewsachatprodComponent implements OnInit {
     this.date3 = this.date4 = this.today;
     this.userInfos = this.infosUtilisateur.fs_informationUtilisateur()
 
-    this.listAchatProd(this.selectedMode = 1, this.selectedLevel = this.userInfos.r_partenaire, this.today, this.today);
+    this.listAchatProd(this.selectedMode = 0, this.selectedLevel = this.userInfos.r_partenaire, this.today, this.today);
     this.listPartenaire();
     this.list_produits(this.userInfos.r_partenaire);
   }
@@ -80,8 +82,8 @@ export class ViewsachatprodComponent implements OnInit {
      val = ( this.userInfos.r_profil == 4 )? this.selectedLevel : idpartenaire;
 
     this.chargementEncours = true;
-   
-    switch (parseInt(selectedMode)) {
+   this.valMode = parseInt(selectedMode);
+    switch (this.valMode) {
       case 0:
         
         this.consultAchatProd.consult_achat_produit(val, date1, date2).subscribe(
@@ -168,7 +170,15 @@ export class ViewsachatprodComponent implements OnInit {
     
   }
 
-
+  etatCBOproduit(){
+    
+    if( this.selectedMode == 2 ){
+      this.afficheCBOprod = true;
+    }else{
+      this.afficheCBOprod = false;
+    }
+    
+  }
   //   Datepicker select période
   onDateSelection(date: NgbDate) {
     if (!this.fromDate && !this.toDate) {

@@ -7,7 +7,7 @@
   
   <div class="row" *ngIf="chargementEncours == false">
   
-    <div class="col" >
+    <div class="col-lg-3" *ngIf="userInfos.r_tous_droits == 1" >
       <select class="form-control"
               aria-label=".form-select-lg example"
               [(ngModel)]="selectedLevel" >
@@ -16,19 +16,19 @@
       </select>
     </div>
 
-    <div class="col" >
+    <div class="col-lg-3" >
         <select class="form-control"
                 aria-label=".form-select-lg example"
-                [(ngModel)]="selectedMode" >
+                [(ngModel)]="selectedMode" (change)="etatCBOproduit()" >
           <option value="0" selected>---Mode de consultation---</option>
           <option value="{{ i }}"  *ngFor=" let value of modeAchat; let i = index " >{{ value }}</option>
         </select>
       </div>
 
-      <div class="col" >
+      <div class="col-lg-3" *ngIf="afficheCBOprod == true" >
         <select class="form-control"
                 aria-label=".form-select-lg example"
-                [(ngModel)]="selectedproduit" >
+                [(ngModel)]="selectedproduit">
           <option value="0" selected>---Sélectionnez le produit---</option>
           <option value="{{ value.r_i }}"  *ngFor=" let value of produits " >{{ value.r_libelle }}</option>
         </select>
@@ -95,7 +95,7 @@
   </div>
   
   
-  <!-- Liste des livraisons -->
+  <!-- Liste des consutations -->
   <div class="mt-2" [ngSwitch]="dataRetour" *ngIf="chargementEncours == false " >
     <div *ngSwitchCase = 0 >
       <div class="card" >
@@ -111,44 +111,110 @@
         <div class="col-md-12 stretch-card">
           <div class="card">
             <div class="card-body">
-              <h6 class="card-title">Liste des achats</h6>
-              <div class="table-responsive">
-                <table class="table" >
-                  <thead>
-                    <tr>
-                      <th style="width: 10%;" >Date</th>
-                      <th style="width: 35%;" >Produits</th>
-                      <th style="width: 20%;" >Quantité</th>
-                      <th style="width: 25%;" >Montant</th>
-                      <th style="width: 10%;" >Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let item of data; let i = index;" >
-                      <td>{{item.created_at | date: 'dd-MM-YYYY à hh:mm:ss'}}</td>
-                      <td>{{item.r_libelle}}</td>
-                      <td>{{item.r_quantite}}</td>
-                      <td>{{item.r_mnt| mask: 'separator':' '}} fcfa</td>
-                      <td>
-                        <button (click)="fc_details_produit(item, 1);openVerticalCenteredModal(verticalCenteredModal);" class="btn btn-primary btn-icon"><i class="feather icon-edit"></i></button>&nbsp;
-                        <button (click)="fc_details_produit(item, 2);openVerticalCenteredModal(verticalCenteredModal);" class="btn btn-info btn-icon"><i class="feather icon-info"></i></button>&nbsp;
-                        <button class="btn btn-danger btn-icon"><i class="feather icon-trash-2"></i></button>
-  
-                      </td>
-                     
-                    </tr>
-                  </tbody>
-                  <tfoot>
-                    <tr>
-                      <th></th>
-                      <th></th>
-                      <th></th>
-                      <th></th>
-                      <th></th>
-                    </tr>
-                  </tfoot>
-                </table>
-              </div>
+              
+
+                <div [ngSwitch]="valMode">
+                    <!-- Mode 0 -->
+                    <div *ngSwitchCase="0">
+                        <h6 class="card-title">Liste des achats</h6>
+                        <div class="table-responsive">
+                            <table class="table" >
+                            <thead>
+                              <tr>
+                                <th style="width: 10%;" >Date</th>
+                                <th style="width: 35%;" >Produits</th>
+                                <th style="width: 20%;" >Quantité</th>
+                                <th style="width: 25%;" >Montant</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor="let item of data; let i = index;" >
+                                <td>{{item.created_at | date: 'dd-MM-YYYY à hh:mm:ss'}}</td>
+                                <td>{{item.r_libelle}}</td>
+                                <td>{{item.r_quantite}}</td>
+                                <td>{{item.r_mnt| mask: 'separator':' '}} fcfa</td>
+                              </tr>
+                            </tbody>
+                            <tfoot>
+                              <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                              </tr>
+                            </tfoot>
+                          </table>
+                        </div>
+                    </div>
+
+                    <!-- Mode 1 -->
+                    <div *ngSwitchCase="1">
+                        <h6 class="card-title">Liste des achats par regroupement</h6>
+                        <div class="table-responsive">
+                        <table class="table" >
+                            <thead>
+                              <tr>
+                                <th style="width: 50%;" >Produits</th>
+                                <th style="width: 25%;" >Quantité achetée</th>
+                                <th style="width: 25%;" >Montant</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor="let item of data; let i = index;" >
+                                <td>{{item.r_libelle}}</td>
+                                <td>{{item.nbre_achat}}</td>
+                                <td>{{item.mnt_achat| mask: 'separator':' '}} fcfa</td>
+                               
+                              </tr>
+                            </tbody>
+                            <tfoot>
+                              <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                              </tr>
+                            </tfoot>
+                          </table>
+                        </div>
+                    </div>
+
+                    <!-- Mode 2 -->
+                    <div *ngSwitchDefault>
+                        <h6 class="card-title">Liste des achats par produits</h6>
+                        <div class="table-responsive">
+                        <table class="table" >
+                            <thead>
+                              <tr>
+                                <th style="width: 10%;" >Date</th>
+                                <th style="width: 35%;" >Produits</th>
+                                <th style="width: 20%;" >Quantité</th>
+                                <th style="width: 25%;" >Montant</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor="let item of data; let i = index;" >
+                                <td>{{item.created_at | date: 'dd-MM-YYYY à hh:mm:ss'}}</td>
+                                <td>{{item.r_libelle}}</td>
+                                <td>{{item.r_quantite}}</td>
+                                <td>{{item.r_mnt| mask: 'separator':' '}} fcfa</td>
+                               
+                              </tr>
+                            </tbody>
+                            <tfoot>
+                              <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                              </tr>
+                            </tfoot>
+                          </table>
+                        </div>
+                    </div>
+                </div>
+
+                
+              
             </div>
           </div>
         </div>
