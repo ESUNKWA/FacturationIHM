@@ -27,6 +27,7 @@ export class DetailsventesComponent implements OnInit {
   dataventeProdut: any [];
     partenaires: any = [];
     selectedLevel: number;
+  selectedMode: number;
 
   transform(value: number | string, locale?: string): string {
     return new Intl.NumberFormat(locale, {
@@ -48,6 +49,8 @@ export class DetailsventesComponent implements OnInit {
   date2: any;
   dataRetour: number;
   chargementEncours: boolean;
+  modeConsult: any = ['Liste de ventes','Liste des ventes par regroupement'];
+  afficheCBOprod: boolean = false;
   
   constructor( private suiviventesServices: SuiviventescmdService, private infosUtilisateur: UserInfosService,
               private swalServices: ModalService, private calendar: NgbCalendar, public formatter: NgbDateParserFormatter,
@@ -72,9 +75,18 @@ export class DetailsventesComponent implements OnInit {
     this.partenaireServices.listPartenaires().subscribe(
       (res: any = {})=>{
         this.partenaires = res.result;
-        
-      }
+      } 
     )
+  }
+
+  etatCBOproduit(){
+    
+    if( this.selectedMode == 2 ){
+      this.afficheCBOprod = true;
+    }else{
+      this.afficheCBOprod = false;
+    }
+    
   }
 
 //   Datepicker select période 
