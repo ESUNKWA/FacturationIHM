@@ -2,6 +2,7 @@ import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { NgbDatepickerModule, NgbDropdownModule } from "@ng-bootstrap/ng-bootstrap";
+import { NgxMaskModule } from "ngx-mask";
 import { PerfectScrollbarConfigInterface, PerfectScrollbarModule, PERFECT_SCROLLBAR_CONFIG } from "ngx-perfect-scrollbar";
 import { DetailsVenteRoutingModule } from "./detailsventes-routing.module";
 import { DetailsventesComponent } from "./detailsventes.component";
@@ -17,7 +18,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         ReactiveFormsModule,
         NgbDatepickerModule,
         NgbDropdownModule,
-        PerfectScrollbarModule
+        PerfectScrollbarModule,
+        NgxMaskModule.forRoot({ validation: true})
     ],
     providers: [
       {

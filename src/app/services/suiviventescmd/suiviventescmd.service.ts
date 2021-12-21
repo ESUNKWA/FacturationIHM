@@ -16,15 +16,22 @@ export class SuiviventescmdService {
 
   constructor(private http: HttpClient) { }
 
-  detailsVentesCmd(idpartenaire, date1, date2, iscmd){
+  ventes_par_rgpmnt(idpartenaire, date1, date2, iscmd){
     return this.http.get(`${api.url}/detailsvente/${idpartenaire}/${date1}/${date2}/${iscmd}`, this.httpOptions).pipe(
       retry(1),
       catchError(this.handleError)
     )
   }
 
-  detailsVentesCmdProduits(idpartenaire, idproduits, iscmd, date1, date2){
+  produitVenduParID(idpartenaire, idproduits, iscmd, date1, date2){
     return this.http.get(`${api.url}/produitsVendus/${idpartenaire}/${idproduits}/${iscmd}/${date1}/${date2}`, this.httpOptions).pipe(
+      retry(1),
+      catchError(this.handleError)
+    )
+  }
+
+  liste_produit_vendu(idpartenaire, iscmd, date1, date2){
+    return this.http.get(`${api.url}/liste_ventes/${idpartenaire}/${iscmd}/${date1}/${date2}`, this.httpOptions).pipe(
       retry(1),
       catchError(this.handleError)
     )

@@ -27,7 +27,8 @@ export class DetailsventesComponent implements OnInit {
   dataventeProdut: any [];
     partenaires: any = [];
     selectedLevel: number;
-  selectedMode: number;
+  selectedMode: any;
+  afficheTable: number = 0;
 
   transform(value: number | string, locale?: string): string {
     return new Intl.NumberFormat(locale, {
@@ -47,6 +48,8 @@ export class DetailsventesComponent implements OnInit {
   today: any;
   date1: any;
   date2: any;
+  date3: any;
+  date4: any;
   dataRetour: number;
   chargementEncours: boolean;
   modeConsult: any = ['Liste de ventes','Liste des ventes par regroupement'];
@@ -62,8 +65,9 @@ export class DetailsventesComponent implements OnInit {
   ngOnInit() {
     this.userInfos = this.infosUtilisateur.fs_informationUtilisateur();
     this.modalTitle = `Ventes sur la période du ${this.today} au ${this.today}`;
-    this.detailsVentesCmd(this.userInfos.r_partenaire, this.today,this.today,0);
+    //this.detailsVentesCmd(this.userInfos.r_partenaire, this.today,this.today,0);
     this.listPartenaire();
+    this.selectedMode = 0;
   }
 
   selectPartenaire(){
@@ -79,13 +83,9 @@ export class DetailsventesComponent implements OnInit {
     )
   }
 
-  etatCBOproduit(){
+  affichtable(){
     
-    if( this.selectedMode == 2 ){
-      this.afficheCBOprod = true;
-    }else{
-      this.afficheCBOprod = false;
-    }
+    
     
   }
 
@@ -105,8 +105,13 @@ export class DetailsventesComponent implements OnInit {
       
     }
 
+    this.date3 = this.date1;
+    this.date4 = this.date2;
     if( this.userInfos.r_profil !== 4 ){
         ( this.date1 !== undefined && this.date2 !== undefined )? this.detailsVentesCmd(this.userInfos.r_partenaire, this.date1, this.date2, 0) : null;
+    }else{
+      ( this.date1 !== undefined && this.date2 !== undefined )? this.detailsVentesCmd(this.selectedLevel, this.date1, this.date2, 0) : null;
+
     }
 
   }
@@ -131,29 +136,65 @@ export class DetailsventesComponent implements OnInit {
   //   Datepicker select période Fin
 
   detailsVentesCmd(idpartenaire,datedebut,datefin,iscmd){
-    this.chargementEncours = true;
-    this.suiviventesServices.detailsVentesCmd(idpartenaire,datedebut,datefin,iscmd).subscribe(
-      (res: any) => {
-        if( res.status == 1 ){
-          this.dataRetour = 1;
-        }else{
-          this.dataRetour = 0;
-        }
-        this.data = res.result;
 
-        setTimeout(() => {
-          this.chargementEncours = false;
-        }, 2000);
-        
-      }
-      
-    )
+    this.data = [];
+    this.chargementEncours = true;
+
+    ( this.selectedMode == 1 )? this.afficheTable = 1 : this.afficheTable = 0;
+
+    
+
+    switch (parseInt(this.selectedMode)) {
+      case 1:
+        this.suiviventesServices.ventes_par_rgpmnt(idpartenaire,datedebut,datefin,iscmd).subscribe(
+          (res: any) => {
+            if( res.status == 1 ){
+              this.dataRetour = 1;
+            }else{
+              this.dataRetour = 0;
+            }
+            this.data = res.result;
+
+            setTimeout(() => {
+              this.date1 = undefined;
+                this.date2 = undefined
+              this.chargementEncours = false;
+            }, 500);
+            
+          }
+          
+        )
+        break;
+    
+      case 0:
+        this.suiviventesServices.liste_produit_vendu(idpartenaire,iscmd,datedebut,datefin).subscribe(
+          (res: any) => {
+            if( res.status == 1 ){
+              this.dataRetour = 1;
+            }else{
+              this.dataRetour = 0;
+            }
+            this.data = res.result;
+    
+            setTimeout(() => {
+              this.date1 = undefined;
+                this.date2 = undefined
+              this.chargementEncours = false;
+            }, 500);
+            
+          }
+          
+        )
+        break;
+    }
+
   }
 
   voirLesVentes(produit){
+    
       const userid = (this.userInfos.r_profil == 4)? this.selectedLevel : this.userInfos.r_partenaire;
       
-      this.suiviventesServices.detailsVentesCmdProduits(userid, produit.r_i, 0, this.date1,this.date2).subscribe(
+      this.suiviventesServices.produitVenduParID(userid, produit.r_i, 0, this.date3,this.date4).subscribe(
         ( res: any = {} ) =>{
 
             this.dataventeProdut = res.result;

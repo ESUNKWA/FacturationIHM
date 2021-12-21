@@ -14,8 +14,8 @@
   <div class="col-lg-3" >
     <select class="form-control"
             aria-label=".form-select-lg example"
-            [(ngModel)]="selectedMode" (change)="etatCBOproduit()" >
-      <option value="0" selected>---Mode de consultation---</option>
+            [(ngModel)]="selectedMode" (change)="affichtable()" >
+      <option value="0" selected>---Sélectionner le mode de consultation---</option>
       <option value="{{ i }}"  *ngFor=" let value of modeConsult; let i = index " >{{ value }}</option>
     </select>
   </div>
@@ -105,89 +105,138 @@
 
   <div *ngSwitchCase = 1 >
 
-
     <div class="row mt-2">
       <!-- Liste des produits vendus -->
-      <div class="col-md-7 stretch-card">
+      <div class="col-md-12 stretch-card">
         <div class="card">
           <div class="card-body">
-            <h6 class="card-title">Produits vendus</h6>
-            <div class="table-responsive">
-              <table class="table" >
-                <thead>
-                  <tr>
-                    <th>Produits</th>
-                    <th>Quantité</th>
-                    <th>Monatnt</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let item of data" >
-                    <td>{{item.r_libelle}}</td>
-                    <td>{{item.totalVendu}}</td>
-                    <td>{{item.r_total}}</td>
-                    <td>
-                        <div class="btn-group" role="group" ngbDropdown>
-                          <button id="btnGroupDrop1" type="button" ngbDropdownToggle class="btn btn-info">
-                            Action
-                          </button>
-                          <div ngbDropdownMenu aria-labelledby="btnGroupDrop1">
-                            <a ngbDropdownItem (click)="voirLesVentes(item)">Voir les ventes</a>
-                          </div>
-                        </div>
 
-                    </td>
-                  </tr>
-                </tbody>
-                <tfoot>
-                  <tr>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                  </tr>
-                </tfoot>
-              </table>
+            <div [ngSwitch]="afficheTable" >
+              <!-- Liste des ventes par regroupement -->
+              <div *ngSwitchCase="1">
+
+                <div class="row">
+
+                  <div class="col-lg-7">
+                    <h6 class="card-title">Liste des produits vendus par regroupement</h6>
+                    <div class="table-responsive">
+                      <table class="table" >
+                        <thead>
+                          <tr>
+                            <th>Produits</th>
+                            <th>Quantité</th>
+                            <th>Monatnt</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let item of data" >
+                            <td>{{item.r_libelle}}</td>
+                            <td>{{item.totalVendu}}</td>
+                            <td>{{item.r_total | mask: 'separator':' '}} fcfa</td>
+                            <td>
+                                <div class="btn-group" role="group" ngbDropdown>
+                                  <button id="btnGroupDrop1" type="button" ngbDropdownToggle class="btn btn-info">
+                                    Action
+                                  </button>
+                                  <div ngbDropdownMenu aria-labelledby="btnGroupDrop1">
+                                    <a ngbDropdownItem (click)="voirLesVentes(item)">Voir les ventes</a>
+                                  </div>
+                                </div>
+
+                            </td>
+                          </tr>
+                        </tbody>
+                        <tfoot>
+                          <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                          </tr>
+                        </tfoot>
+                      </table>
+                    </div>
+                  </div>
+
+                  <!-- Détails des produits vendus -->
+                <div class="col-lg-5 stretch-card" style="background-color: khaki; border-radius: 5px;">
+                  <div class="perfect-scrollbar-example p-4" [perfectScrollbar]>
+                    <div class="table-responsive">
+                      <table class="table" >
+                        <thead>
+                          <tr>
+                            <th>N Récu</th>
+                            <th>Vendu le</th>
+                            <th>Produits</th>
+                            <th>Quantité</th>
+                            <th>Montant</th>
+                            <th>Client</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let item of dataventeProdut" >
+                            <td>{{item.r_num}}</td>
+                            <td>{{item.created_at | date: 'dd/MM/yyyy à hh:mm:ss'}}</td>
+                            <td>{{item.r_libelle}}</td>
+                            <td>{{item.r_quantite}}</td>
+                            <td>{{item.r_total | mask: 'separator':' '}} fcfa</td>
+                            <td>{{item.r_nom}} {{item.r_prenoms}}</td>
+                          </tr>
+                        </tbody>
+                        <tfoot>
+                          <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                          </tr>
+                        </tfoot>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+
+                </div>
+
+              </div>
+
+              <div  *ngSwitchDefault>
+                
+
+                <div class="col-lg-12">
+                  <h6 class="card-title">Liste des produits vendus</h6>
+                  <div class="table-responsive">
+                    <table class="table" >
+                      <thead>
+                        <tr>
+                          <th>Date</th>
+                          <th>Produit</th>
+                          <th>Montant</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let item of data" >
+                          <td>{{item.created_at | date: 'dd-MM-yyyy à hh:mm:ss' }}</td>
+                          <td>{{item.r_libelle}}</td>
+                          <td>{{item.r_total | mask: 'separator':' '}} fcfa</td>
+                        </tr>
+                      </tbody>
+                      <tfoot>
+                        <tr>
+                          <th></th>
+                          <th></th>
+                          <th></th>
+                          <th></th>
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+                </div>
+
             </div>
-          </div>
-        </div>
-      </div>
+              
 
-       <!-- Détails des produits vendus -->
-      <div class="col-md-5 stretch-card" style="background-color: khaki; border-radius: 5px;">
-        <div class="perfect-scrollbar-example p-4" [perfectScrollbar]>
-          <div class="table-responsive">
-            <table class="table" >
-              <thead>
-                <tr>
-                  <th>N Récu</th>
-                  <th>Vendu le</th>
-                  <th>Produits</th>
-                  <th>Quantité</th>
-                  <th>Montant</th>
-                  <th>Client</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let item of dataventeProdut" >
-                  <td>{{item.r_num}}</td>
-                  <td>{{item.created_at | date: 'dd/MM/yyyy à hh:mm:ss'}}</td>
-                  <td>{{item.r_libelle}}</td>
-                  <td>{{item.r_quantite}}</td>
-                  <td>{{item.r_total}}</td>
-                  <td>{{item.r_nom}} {{item.r_prenoms}}</td>
-                </tr>
-              </tbody>
-              <tfoot>
-                <tr>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                </tr>
-              </tfoot>
-            </table>
           </div>
         </div>
       </div>
@@ -195,5 +244,5 @@
     </div>
 
 
-  </div>
+    </div>
 </div>
