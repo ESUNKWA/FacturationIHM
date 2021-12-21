@@ -68,6 +68,8 @@ export class DetailsventesComponent implements OnInit {
     //this.detailsVentesCmd(this.userInfos.r_partenaire, this.today,this.today,0);
     this.listPartenaire();
     this.selectedMode = 0;
+    this.dataRetour = 0;
+    this.chargementEncours = false;
   }
 
   selectPartenaire(){
