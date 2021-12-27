@@ -41,6 +41,8 @@ export class ClientsComponent implements OnInit {
   today: any;
   myDate = new Date();
   dataRetour: any;
+  data2: any[];
+  r_nom: any;
 
   constructor( private clientServices: ClientsService, private excelService: ExcelService, private fb: FormBuilder,
     private modalService: NgbModal, public formatter: NgbDateParserFormatter, private calendar: NgbCalendar,
@@ -55,11 +57,25 @@ export class ClientsComponent implements OnInit {
     this.listeClient(this.userInfos.r_partenaire, this.today, this.today);
   }
 
+  Search(){
+    if(this.r_nom == ""){
+      this.data = this.data2;
+    }else{
+      
+      this.data = this.data.filter(res=>{   
+        if( res.r_nom !== null ){
+          return res.r_nom.toLocaleLowerCase().match(this.r_nom.toLocaleLowerCase());
+        }
+      })
+    }
+  }
+
   listeClient(idpart, datedebut, datefin){
     this.chargementEncours = true;
     this.clientServices.fs_listeClient(idpart, datedebut, datefin).subscribe(
       ( res: any = {} ) => {
         this.data = res.result;
+        this.data2 = res.result;
         this.dataRetour = ( res.status === 1 )? 1 : 0;
         setTimeout(() => {
           this.chargementEncours = false;

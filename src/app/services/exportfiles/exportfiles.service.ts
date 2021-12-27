@@ -1,13 +1,15 @@
+import { style } from '@angular/animations';
 import { Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ExportfilesService {
+date = new Date();
 
   constructor() { }
 
-  getDocumentDefinition(tableBody: any = []) {
+  getDocumentDefinition(tableBody: any = [], title) {
     return {
 
       pageSize: 'A4',
@@ -32,6 +34,17 @@ export class ExportfilesService {
       }, */
       /* Corps du PDF */
       content: [
+        {
+          columns: [
+            [
+              {
+                text: title,
+                
+              }
+            ]
+          ],
+          style: 'title'
+        },
        
         {
           columns : [
@@ -46,15 +59,17 @@ export class ExportfilesService {
                 widths: [ '*', '*', '*'],
         
                 body: tableBody
-              }
-            }
+              },
+              style: 'table'
+            },
+            
           ]
         }
       ],
 
 
       info: {
-        title: "recu" + '_facture',
+        title: "doc" + this.date,
         author: "VentePro",
         subject: 'infoPartenaire',
         keywords: 'infoPartenaire, ONLINE infoPartenaire',
@@ -69,22 +84,6 @@ export class ExportfilesService {
             color: 'blue',
             alignment: 'left',
           },
-          name: {
-            fontSize: 16,
-            bold: true,
-            color: 'red',
-            marginleft: '200'
-          },
-          jobTitle: {
-            fontSize: 14,
-            bold: true,
-            italics: true
-          },
-          sign: {
-            margin: [0, 50, 0, 10],
-            alignment: 'right',
-            italics: true
-          },
           tableHeader: {
             bold: true,
           },
@@ -92,16 +91,14 @@ export class ExportfilesService {
             margin:[0, 350, 0, 0],
             alignment: 'center'
           },
-          note:{
-            margin: [0, 50, 0, 0]
-          },
-          facture: {
+          title: {
             bold: true,
-                alignment: 'right',
+            alignment: 'left',
+            fontSize: '18'
           },
-          tableExample: {
-            margin: [0, 5, 0, 15],
-            widths: [ '*', 'auto', 100, '*' ]
+          table: {
+            margin: [0, 15, 0, 15],
+            widths: [ '*', 'auto', 100, '*' ],
           }
         }
     };

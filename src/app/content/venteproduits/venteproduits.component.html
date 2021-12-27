@@ -326,7 +326,7 @@
 
                     <div class="col-sm-6">
                       <label class="col-form-label styleInput" >Frais de livraison </label>
-                        <input type="text" class="form-control" formControlName="p_frais">
+                        <input type="number" min="0" class="form-control" formControlName="p_frais">
                     </div>
                   </div>
 
@@ -456,6 +456,12 @@
         </button>
   </div>
 
+</div>
+
+<div class="row mt-2" *ngIf="afficheVente === true && chargementEncours == false">
+  <div class="col-lg-12">
+    <input type="text" class="form-control" name="card-holder-name"  placeholder="Rechercher une vente par le numéro de la facture" [(ngModel)]="r_num" (ngModelChange)="Search()">      
+  </div>
 </div>
 
 <!-- Liste des ventes -->

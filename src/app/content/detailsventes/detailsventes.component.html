@@ -1,3 +1,4 @@
+
 <div class="row">
 
   <div class="col-lg-3" *ngIf="userInfos.r_profil == 4" >
@@ -14,13 +15,13 @@
   <div class="col-lg-3" >
     <select class="form-control"
             aria-label=".form-select-lg example"
-            [(ngModel)]="selectedMode" (change)="affichtable()" >
+            [(ngModel)]="selectedMode">
       <option value="0" selected>---Sélectionner le mode de consultation---</option>
       <option value="{{ i }}"  *ngFor=" let value of modeConsult; let i = index " >{{ value }}</option>
     </select>
   </div>
 
-  <div class="col">
+  <div class="col-lg-6">
     <form class="form-inline range-selection">
       <div class="form-group hidden">
         <div class="input-group">
@@ -78,9 +79,17 @@
     </form>
   </div>
 
+  <div class="col">
+    <button class="btn btn-danger btn-icon " title="Imprimer la liste des ventes" (click)="generatePdf();" ><i class="mdi mdi-file-pdf"></i></button>
+  </div>
+
 </div>
 
-
+<div class="row mt-2">
+  <div class="col-lg-12">
+    <input type="text" class="form-control" name="card-holder-name"  placeholder="Rechercher un produit" [(ngModel)]="r_libelle" (ngModelChange)="Search()">      
+  </div>
+</div>
 
 
 

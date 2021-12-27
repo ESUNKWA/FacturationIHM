@@ -118,6 +118,8 @@ export class VenteproduitsComponent implements OnInit {
   tableBody: any = [];
   printData: any = {};
   infosPatenaire: any = {};
+  data2: any = [];
+  r_num: any;
 
   constructor( private produitServices: ProduitService, private excelService: ExcelService,
                 private fb: FormBuilder, private venteServices: FactureService,
@@ -144,7 +146,18 @@ export class VenteproduitsComponent implements OnInit {
     //this.InputsRemise = false;
     //this.InputPaiementPartiel = false;
 
-    this.tableBody.push(  this.tableTitle);
+    this.tableBody.push(this.tableTitle);
+  }
+
+  Search(){
+    if(this.r_num == ""){
+      this.data = this.data2;
+    }else{
+      
+      this.data = this.data.filter(res=>{    
+        return res.r_num.toLocaleLowerCase().match(this.r_num.toLocaleLowerCase());
+      })
+    }
   }
 
 
@@ -192,6 +205,7 @@ export class VenteproduitsComponent implements OnInit {
           this.dataRetour = 0;
         }
         this.data = res.result;
+        this.data2 = res.result;
         this.date1 = undefined;
         this.date2 = undefined;
         setTimeout(()=>{
@@ -490,17 +504,11 @@ export class VenteproduitsComponent implements OnInit {
 
   }
 
-  step2(){
-
-
-
-  }
-
 //Récupération du montant sans la dévise
   getRemise(remise){
-    let mnt, tab, lastElt;
-    mnt = remise.value;//Récupération du montant avec la dévise
-    tab = mnt.split(' ');//Convertion du montant en tableau
+    let valremise, tab, lastElt;
+    valremise = remise.value;//Récupération du montant avec la dévise
+    tab = valremise.split(' ');//Convertion du montant en tableau
     lastElt = tab.pop();
 
     return +tab.join('');
@@ -508,16 +516,19 @@ export class VenteproduitsComponent implements OnInit {
 
   valReduction(modeRemise, remise){
    let a, b, c;
+   
     switch (modeRemise) {
       case 1:
         a = this.getRemise(remise);
         this.MntRemise = this.sommes - (this.sommes * (a/100));
+        this.infosClient.value.p_remise = a;
         break;
 
       case 2:
         b = this.getRemise(remise);
 
         this.MntRemise = this.sommes - b;
+        this.infosClient.value.p_remise = b;
         break;
 
       default:
@@ -525,15 +536,7 @@ export class VenteproduitsComponent implements OnInit {
         this.MntRemise = c;
         break;
     }
-//this.sommes = this.MntRemise;
-    console.log('this.MntRemise',this.MntRemise,'this.sommes====',this.sommes);
-
-
-  }
-
-  etatInputRemise(){
-    console.log(this.etat);
-
+  
   }
 
   registerVente(){
@@ -549,9 +552,10 @@ export class VenteproduitsComponent implements OnInit {
     this.infosClient.value.p_utilisateur = this.userInfos.r_i
 
     this.infosClient.value.p_livraison =  ( this.formLivraion )? this.livraisonData.value : null;
-
+    
     this.venteServices.fs_saisie_facture(this.infosClient.value).subscribe(
       (res: any)=> {
+        this.MntRemise = 0;
         this.swalServices.fs_modal(res.result, 'success');
         this.resetventForm();
         this.spinner = false;
@@ -629,7 +633,9 @@ export class VenteproduitsComponent implements OnInit {
   }
  //Récupération des détails de la facture
   getDetailsventes(venteId){
-   let tab = [];
+   let tab = [], remise: any;
+   remise = ( this.detailsFacture.r_remise == 1 || this.detailsFacture.r_remise <= 100)? this.detailsFacture.r_remise +'%' : this.detailsFacture.r_remise+' fcfa';
+  
     this.venteServices.fs_details_facture(venteId).subscribe(
       ( res: any = {} ) => {
         this.ligneVentes = res.result;
@@ -641,7 +647,11 @@ export class VenteproduitsComponent implements OnInit {
           this.tableBody.push(tab);
         });
         this.tableBody.push(
-          [ '','','',{ text: this.detailsFacture.r_mnt_total_achat + ' fcfa', bold: true } ]);
+          [ '-','-','-','-' ],
+          [ '','','Total Hors Taxes',{ text: this.detailsFacture.r_mnt_total_achat + ' fcfa', bold: true } ],
+          [ '','',{text:'Remise', color: 'blue'},{ text: remise, bold: true, color: 'blue' } ],
+          [ '','','Total TTC en FCFA',{ text: this.detailsFacture.r_mnt + ' fcfa', bold: true } ],
+          );
         
       },
       ( err ) => console.log(err)
@@ -676,9 +686,8 @@ export class VenteproduitsComponent implements OnInit {
 
   //Exportation du réçu au format PDF
   generatePdf(action = 'open') {
-    console.log(pdfMake);
     const documentDefinition = this.getDocumentDefinition();
-
+    
     switch (action) {
       case 'open': pdfMake.createPdf(documentDefinition).open(); break;
       case 'print': pdfMake.createPdf(documentDefinition).print(); break;
@@ -861,7 +870,7 @@ export class VenteproduitsComponent implements OnInit {
 
           },
           piedpage: {
-            margin:[0, 350, 0, 0],
+            margin:[0, 300, 0, 0],
             alignment: 'center'
           },
           note:{
@@ -890,7 +899,7 @@ generationPdf(action = 'open') {
 
   if( this.tableBody.length > 1 ){
       const documentDefinition = this.exportpdf.getDocumentDefinition(
-      this.tableBody
+      this.tableBody, 'Liste des factures'
       );
       switch (action) {
         case 'open': pdfMake.createPdf(documentDefinition).open(); break;

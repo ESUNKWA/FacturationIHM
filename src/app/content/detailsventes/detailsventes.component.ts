@@ -5,14 +5,13 @@ import { ModalService } from 'src/app/services/modal/modal.service';
 import { SuiviventescmdService } from 'src/app/services/suiviventescmd/suiviventescmd.service';
 import { UserInfosService } from 'src/app/services/userInfos/user-infos.service';
 
-import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
-import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
-import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { PartenairesService } from 'src/app/services/partenaires/partenaires.service';
 
-const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
-  suppressScrollX: true
-};
+/* Importation du module PDF */
+import pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
+import { ExportfilesService } from 'src/app/services/exportfiles/exportfiles.service';
+
 
 @Pipe({
   name: 'amountConverter'
@@ -29,6 +28,7 @@ export class DetailsventesComponent implements OnInit {
     selectedLevel: number;
   selectedMode: any;
   afficheTable: number = 0;
+  r_libelle: any;
 
   transform(value: number | string, locale?: string): string {
     return new Intl.NumberFormat(locale, {
@@ -41,7 +41,8 @@ export class DetailsventesComponent implements OnInit {
   fromDate: NgbDate | null;
   toDate: NgbDate | null;
 
-  data: any;
+  data: any = [];
+  data2: any = [];
   modalTitle: any;
   userInfos: any = {};
   mydate = new Date();
@@ -54,12 +55,15 @@ export class DetailsventesComponent implements OnInit {
   chargementEncours: boolean;
   modeConsult: any = ['Liste de ventes','Liste des ventes par regroupement'];
   afficheCBOprod: boolean = false;
+
+  tableBody: any = [];
   
   constructor( private suiviventesServices: SuiviventescmdService, private infosUtilisateur: UserInfosService,
               private swalServices: ModalService, private calendar: NgbCalendar, public formatter: NgbDateParserFormatter,
-              private partenaireServices: PartenairesService) { 
+              private partenaireServices: PartenairesService, private exportpdf: ExportfilesService) { 
                 this.fromDate = calendar.getToday();
                 this.toDate = calendar.getNext(calendar.getToday(), 'd', 10);
+                pdfMake.vfs = pdfFonts.pdfMake.vfs;
               }
 
   ngOnInit() {
@@ -70,6 +74,17 @@ export class DetailsventesComponent implements OnInit {
     this.selectedMode = 0;
     this.dataRetour = 0;
     this.chargementEncours = false;
+  }
+
+  Search(){
+    if(this.r_libelle == ""){
+      this.data = this.data2;
+    }else{
+      
+      this.data = this.data.filter(res=>{        
+        return res.r_libelle.toLocaleLowerCase().match(this.r_libelle.toLocaleLowerCase());
+      })
+    }
   }
 
   selectPartenaire(){
@@ -83,12 +98,6 @@ export class DetailsventesComponent implements OnInit {
         this.partenaires = res.result;
       } 
     )
-  }
-
-  affichtable(){
-    
-    
-    
   }
 
 //   Datepicker select période 
@@ -156,6 +165,7 @@ export class DetailsventesComponent implements OnInit {
               this.dataRetour = 0;
             }
             this.data = res.result;
+            this.data2 = res.result;
 
             setTimeout(() => {
               this.date1 = undefined;
@@ -177,7 +187,7 @@ export class DetailsventesComponent implements OnInit {
               this.dataRetour = 0;
             }
             this.data = res.result;
-    
+            this.data2 = res.result;
             setTimeout(() => {
               this.date1 = undefined;
                 this.date2 = undefined
@@ -204,5 +214,39 @@ export class DetailsventesComponent implements OnInit {
         }
       )
   }
+
+  //Exportation du réçu au format PDF
+generatePdf(action = 'open') {
+  let title;
+  this.tableBody = [];
+  if( this.data.length > 1 ){
+    (this.selectedMode == 0)? this.tableBody.push([ 'Date de vente', 'Produits', 'Montant']) : this.tableBody.push([ 'Produits vendu', 'Quantités', 'Montant total']);// Titre des colonnes;
+  this.data.forEach((produit)=>{
+    let tab = [];
+    if( this.selectedMode == 0  ){
+      title = 'Liste des ventes';
+      tab.push(produit.created_at, produit.r_libelle, produit.r_total)
+    }else{
+      title = 'Liste des ventes par produits';
+      tab.push(produit.r_libelle, produit.totalVendu, produit.r_total)
+    }
+    this.tableBody.push(tab);
+  });
+    const documentDefinition = this.exportpdf.getDocumentDefinition(
+    this.tableBody, title
+    );
+    switch (action) {
+      case 'open': pdfMake.createPdf(documentDefinition).open(); break;
+      case 'print': pdfMake.createPdf(documentDefinition).print(); break;
+      case 'download': pdfMake.createPdf(documentDefinition).download('facture_'); break;
+  
+      default: pdfMake.createPdf(documentDefinition).open(); break;
+    }
+}else{
+  this.swalServices.fs_modal('Aucune données à imprimer', 'warning');
+}
+
+
+}
 
 }

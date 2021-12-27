@@ -51,6 +51,8 @@ updatestockData: any = {};
   tableBody: any = [];
   qteAchat: any;
   mntAchat: any;
+  r_libelle: any;
+  data2: any[];
 
   constructor( private fb: FormBuilder, private produitServices: ProduitService,
                 private swalServices: ModalService, private infosUtilisateur: UserInfosService,
@@ -64,6 +66,17 @@ updatestockData: any = {};
     this.list_produits(this.userInfos.r_partenaire);
     this.listPartenaire();
     this.listCategories();
+  }
+
+  Search(){
+    if(this.r_libelle == ""){
+      this.data = this.data2;
+    }else{
+      
+      this.data = this.data.filter(res=>{        
+        return res.r_libelle.toLocaleLowerCase().match(this.r_libelle.toLocaleLowerCase());
+      })
+    }
   }
 
 
@@ -87,9 +100,10 @@ updatestockData: any = {};
     this.produitServices.fs_listProduit(val).subscribe(
       (res: any = {}) => {
         this.data = res.result;
+        this.data2 = res.result;
         setTimeout(() => {
           this.chargementEncours = false
-        }, 1000);
+        }, 500);
       },
       (err) => this.swalServices.fs_modal(err, 'error')
     );
@@ -272,19 +286,22 @@ updatestockData: any = {};
       },
       allowOutsideClick: () => !Swal.isLoading()
     }).then((res: any) => {
-      if (res.value.status == 1) {
-        Swal.fire(
-          'Succès!',
-          res.value.result,
-          'success'
-        );
-        this.list_produits(this.userInfos.r_partenaire);
-      }else{
-        Swal.fire(
-          'Oups!',
-          res.value.result,
-          'error'
-        )
+      
+      if( res.value !== undefined ){
+        if (res.value.status == 1) {
+          Swal.fire(
+            'Succès!',
+            res.value.result,
+            'success'
+          );
+          this.list_produits(this.userInfos.r_partenaire);
+        }else{
+          Swal.fire(
+            'Oups!',
+            res.value.result,
+            'error'
+          )
+        }
       }
 
     })
@@ -334,7 +351,7 @@ generatePdf(action = 'open') {
 
   if( this.tableBody.length > 1 ){
       const documentDefinition = this.exportpdf.getDocumentDefinition(
-      this.tableBody
+      this.tableBody,'Liste des produits'
       );
       switch (action) {
         case 'open': pdfMake.createPdf(documentDefinition).open(); break;
