@@ -258,7 +258,7 @@ export class CommandesComponent implements OnInit {
 
 
   registerCmd(){
-
+    this.CmdData.value.p_mnt_partiel_payer = (this.mntPartiel !== 0 )? this.mntPartiel : 0;
     this.CmdData.value.p_mnt = this.sommes;
     this.CmdData.value.p_ligneFacture = this.choixProduits;
     this.CmdData.value.p_mnt_partiel = this.mntPartiel;
@@ -299,6 +299,11 @@ export class CommandesComponent implements OnInit {
     this.venteServices.fs_reglementPartiel(this.detailsFacture.r_i, this.mntRgl, this.solder, this.detailsFacture.r_partenaire).subscribe(
       ( res: any = {} ) => {
         this.swalServices.fs_modal(res.result, 'success');
+        this.listVentes(this.userInfos.r_partenaire, this.today, this.today);
+        //Exécute automatiquement le btn step
+    var evt = document.createEvent("MouseEvents");
+    evt.initMouseEvent("click", true, true, window,0, 0, 0, 0, 0, false, false, false, false, 0, null);
+    (<HTMLButtonElement>document.getElementById('close')).dispatchEvent(evt)
       }
     );
   }
@@ -335,9 +340,18 @@ export class CommandesComponent implements OnInit {
     this.mntPartiel = 0;
   }
 
-  valMntPartiel(){
-    this.mntPartiel = +this.paiementPartielMnt.nativeElement.value;
+  //Récupération du montant sans la dévise
+   valMntPartiel(mnt){
+    let valremise, tab, lastElt;
+    valremise = mnt.value;//Récupération du montant avec la dévise
+    tab = valremise.split(' ');//Convertion du montant en tableau
+    lastElt = tab.pop();
+
+    this.mntPartiel = +tab.join('');
   }
+
+  
+
 
   reglementCmd(){
     this.venteServices.fs_updateStatusFacture(this.detailsFacture.r_i).subscribe(

@@ -21,9 +21,7 @@ import { map, startWith } from 'rxjs/operators';
 })
 export class CategoriesComponent implements OnInit {
 
-
-  ////////////
-  dataRetour: any = {};
+  dataRetour: any ;
   data: any = [];
 
   modalTitle: string;
@@ -77,13 +75,13 @@ export class CategoriesComponent implements OnInit {
     this.chargementEncours = true;
     const idpart = ( this.userInfos.r_profil == 4 )? this.selectedLevel : this.userInfos.r_partenaire;
     this.categorieServices.listCategoriePart(idpart).subscribe(
-      (res) => {
-        this.dataRetour = res,
-        this.data = this.dataRetour.result;
-
+      (res: any = {}) => {
+        this.data = res.result;
+        this.dataRetour = ( res.status === 1 )? 1 : 0;
+        
         setTimeout(() => {
           this.chargementEncours = false;
-        }, 1000);
+        }, 500);
       },
       (err) => console.log(err),
     );

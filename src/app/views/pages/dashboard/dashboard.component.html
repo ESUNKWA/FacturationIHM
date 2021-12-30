@@ -161,7 +161,7 @@
             <tbody>
               <tr *ngFor="let produits of topProduitMois" >
                 <td>{{produits.name}}</td>
-                <td >{{produits.value}} fcfa</td>
+                <td >{{produits.value| mask: 'separator':' '}} fcfa</td>
               </tr>
             </tbody>
             <tfoot>

@@ -120,6 +120,10 @@ export class VenteproduitsComponent implements OnInit {
   infosPatenaire: any = {};
   data2: any = [];
   r_num: any;
+  checkMode = this.fb.group({
+    remiseCheck: [false],
+    paiemantPartielCheck: [false]
+  });
 
   constructor( private produitServices: ProduitService, private excelService: ExcelService,
                 private fb: FormBuilder, private venteServices: FactureService,
@@ -498,7 +502,7 @@ export class VenteproduitsComponent implements OnInit {
       return;
     }
 
-    this.sommesRecap = this.MntRemise || this.sommes;
+    this.sommesRecap = this.MntRemise || this.mntPartiel || this.sommes;
     this.filterParmas(this.choixProduits);
     this.wizardForm.goToNextStep();
 
@@ -529,6 +533,7 @@ export class VenteproduitsComponent implements OnInit {
 
         this.MntRemise = this.sommes - b;
         this.infosClient.value.p_remise = b;
+        
         break;
 
       default:
@@ -542,7 +547,8 @@ export class VenteproduitsComponent implements OnInit {
   registerVente(){
 
     this.spinner = true
-
+    
+    this.infosClient.value.p_mnt_partiel_payer = (this.mntPartiel !== 0 )? this.mntPartiel : 0;
     this.infosClient.value.p_mnt = ( this.MntRemise == 0 )? this.sommes : this.MntRemise;
     this.infosClient.value.p_ligneFacture = this.choixProduits;
     this.infosClient.value.p_mnt_partiel = this.mntPartiel;
@@ -573,6 +579,9 @@ export class VenteproduitsComponent implements OnInit {
     this.choixProduits.length = 0;
     this.sommes = 0;
     this.InputPaiementPartiel = false;
+    this.InputsRemise = false;
+    this.mntPartiel = 0;
+    this.MntRemise = 0;
   }
 
   reglemntPartiel(mntPartiel){
@@ -634,7 +643,8 @@ export class VenteproduitsComponent implements OnInit {
  //Récupération des détails de la facture
   getDetailsventes(venteId){
    let tab = [], remise: any;
-   remise = ( this.detailsFacture.r_remise == 1 || this.detailsFacture.r_remise <= 100)? this.detailsFacture.r_remise +'%' : this.detailsFacture.r_remise+' fcfa';
+   this.detailsFacture.r_remise = (this.detailsFacture.r_remise == null)? 0 : this.detailsFacture.r_remise
+   remise = (this.detailsFacture.r_remise <= 100)? this.detailsFacture.r_remise +'%' : this.detailsFacture.r_remise+' fcfa';
   
     this.venteServices.fs_details_facture(venteId).subscribe(
       ( res: any = {} ) => {
@@ -659,24 +669,31 @@ export class VenteproduitsComponent implements OnInit {
   }
 
   isCheckPaiement(value: any){
-    //this.InputPaiementPartiel = value;
-    //this.remise = !value;
-    this.InputPaiementPartiel = true;
-    this.InputsRemise = false
-    this.mntPartiel = 0;
+    if( this.checkMode.value.paiemantPartielCheck == true ){
+      this.checkMode.value.remiseCheck = !this.checkMode.value.paiemantPartielCheck;
+      this.InputsRemise = false
+      this.mntPartiel = 0;
+    }else{
+      this.mntPartiel = 0;
+      this.MntRemise = 0;
+    }
   }
 
   isCheckRemise(value: any){
-    this.InputsRemise = true
-    this.InputPaiementPartiel = false;
-    this.MntRemise = 0
-
+    if( this.checkMode.value.remiseCheck == true ){
+      this.checkMode.value.paiemantPartielCheck = !this.checkMode.value.remiseCheck;
+      this.InputPaiementPartiel = false;
+      this.MntRemise = 0;
+    }else{
+      this.mntPartiel = 0;
+      this.MntRemise = 0;
+    }
   }
 
   valMntPartiel(val){
-
     this.mntPartiel = this.getRemise(val);
-
+    console.log(this.mntPartiel);
+    
   }
 
 //Eportation au format excel
@@ -889,15 +906,16 @@ export class VenteproduitsComponent implements OnInit {
 generationPdf(action = 'open') {
   this.tableBody = [];
   this.tableBody.push([ 'N° facture', 'Montant total vente', 'Status']);// Titre des colonnes
+console.log(this.data);
 
+  if( Array.isArray(this.data) ){
+      this.data.forEach((vente)=>{
+        let tab = [];
+        tab.push(vente.r_num, vente.r_mnt_total_achat, (vente.r_status == 1)?'Soldée' :'Non solder');
+        this.tableBody.push(tab);
+      });
 
-  this.data.forEach((vente)=>{
-    let tab = [];
-    tab.push(vente.r_num, vente.r_mnt_total_achat, (vente.r_status == 1)?'Soldée' :'Non solder');
-    this.tableBody.push(tab);
-  });
-
-  if( this.tableBody.length > 1 ){
+ 
       const documentDefinition = this.exportpdf.getDocumentDefinition(
       this.tableBody, 'Liste des factures'
       );

@@ -20,7 +20,7 @@ import { ExportfilesService } from 'src/app/services/exportfiles/exportfiles.ser
   styleUrls: ['./produits.component.scss']
 })
 export class ProduitsComponent implements OnInit {
-
+dataRetour: any ;
 data: any[];
 modalTitle: string
 detailsProduit: any = {};
@@ -101,6 +101,7 @@ updatestockData: any = {};
       (res: any = {}) => {
         this.data = res.result;
         this.data2 = res.result;
+        this.dataRetour = ( res.status === 1 )? 1 : 0;
         setTimeout(() => {
           this.chargementEncours = false
         }, 500);
@@ -163,15 +164,12 @@ updatestockData: any = {};
       return;
     }
 
-    if( this.produitData.value.r_libelle === '' || ! this.produitData.value.r_libelle ){
+    if( this.produitData.value.r_libelle === '' || !this.produitData.value.r_libelle ){
       this.swalServices.fs_modal('Le libellé du produit est réquis', 'warning');
       return;
     }
-    if( this.produitData.value.p_stock === '' || ! this.produitData.value.p_stock ){
-      this.swalServices.fs_modal('Le stock du produit est réquis', 'warning');
-      return;
-    }
-    if( this.produitData.value.p_prix_vente === '' || ! this.produitData.value.p_prix_vente ){
+    
+    if( this.produitData.value.p_prix_vente === '' || !this.produitData.value.p_prix_vente ){
       this.swalServices.fs_modal('Le prix de vente est réquis', 'warning');
       return;
     }
@@ -182,6 +180,11 @@ updatestockData: any = {};
 
     switch( this.modeAppel ){
       case 'creation':
+        this.produitData.value.p_stock = 0;
+        if( this.produitData.value.p_stock !== 0 ){
+          this.swalServices.fs_modal('Veuillez ne pas saisir le stock du produit', 'warning');
+          return;
+        }
           this.produitServices.fs_saisieProduit(this.produitData.value).subscribe(
             (res: any = {}) =>{
               if( res.status === 1){
@@ -342,14 +345,14 @@ updatestockData: any = {};
 generatePdf(action = 'open') {
   this.tableBody = [];
   this.tableBody.push([ 'Libellé du produit', 'Stock', 'Prix unitaire']);// Titre des colonnes
-
+  if( Array.isArray(this.data) ){
   this.data.forEach((produit)=>{
     let tab = [];
     tab.push(produit.r_libelle, produit.r_stock, produit.r_prix_vente);
     this.tableBody.push(tab);
   });
 
-  if( this.tableBody.length > 1 ){
+  
       const documentDefinition = this.exportpdf.getDocumentDefinition(
       this.tableBody,'Liste des produits'
       );

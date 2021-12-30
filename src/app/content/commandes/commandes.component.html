@@ -108,7 +108,7 @@
                     <div class="form-row" >
                       <div class="col-md-12" >
                         <label class="col-form-label">Montant </label>
-                        <input #paiementPartielMnt (keyup)="valMntPartiel()" style="font-weight: bold; color: red;" suffix=" fcfa" mask="separator" class="form-control" type="text" placeholder="Ex: 150 000">
+                        <input #paiementPartielMnt (keyup)="valMntPartiel(paiementPartielMnt)" style="font-weight: bold; color: red;" suffix=" fcfa" mask="separator" class="form-control" type="text" placeholder="Ex: 150 000">
                       </div>
                     </div>
                   </ng-template>
@@ -525,7 +525,7 @@
 
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" (click)="modal.close('by: close button')">Fermer</button>
+    <button type="button" class="btn btn-secondary" id="close" (click)="modal.close('by: close button')">Fermer</button>
     <button type="button" class="btn btn-primary">Enregistrer</button>
   </div>
 </ng-template>

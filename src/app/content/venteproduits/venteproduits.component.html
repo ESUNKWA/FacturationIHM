@@ -1,5 +1,3 @@
-
-
 <!-- Saisie des ventes -->
 <ng-template [ngIf]=" saisieVente === true " >
   <div class="row">
@@ -92,26 +90,29 @@
                   <hr>
 
                   <!-- Rémise & paiement partiel -->
-                  <div class="form-group row m-3">
-                    <div class="col">
-                      <div class="form-check">
-                        <label class="form-check-label">
-                          <input #remise type="radio" class="form-check-input" (change)="isCheckRemise(remise.checked)" name="optionsRadios" id="optionsRadios" value="option1" checked="">
-                          <i class="input-frame"></i>
-                          Remise
-                        </label>
+                  <form [formGroup]="checkMode" >
+                    <div class="form-group row m-3">
+                      <div class="col">
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input #remise type="checkbox" class="form-check-input" (change)="isCheckRemise(remise.checked)" formControlName="remiseCheck" [(ngModel)]="InputsRemise">
+                            <i class="input-frame"></i>
+                            Remise
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col">
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input #paiement type="checkbox" class="form-check-input" (change)="isCheckPaiement(paiement.checked)" formControlName="paiemantPartielCheck" [(ngModel)]="InputPaiementPartiel">
+                            <i class="input-frame"></i>
+                            Paiement partiel
+                          </label>
+                        </div>
                       </div>
                     </div>
-                    <div class="col">
-                      <div class="form-check">
-                        <label class="form-check-label">
-                          <input #paiement type="radio" class="form-check-input" (change)="isCheckPaiement(paiement.checked)" name="optionsRadios" id="optionsRadios1" value="option1">
-                          <i class="input-frame"></i>
-                          Paiement partiel
-                        </label>
-                      </div>
-                    </div>
-                  </div>
+                  </form>
+                  
 
 
 
@@ -358,7 +359,6 @@
 </ng-template>
 
 
-
 <!-- Loader -->
 <div *ngIf="chargementEncours == true" class="spinner-wrapper">
   <div class="spinner">Loading...</div>
@@ -486,9 +486,11 @@
             <thead>
               <tr>
                 <th style="width: 20%;" >Date</th>
-                <th style="width: 20%;" >N° de facture</th>
+                <th style="width: 10%;" >N° de facture</th>
                 <th style="width: 20%;">Montant total</th>
-                <th style="width: 20%;">Status</th>
+                <th style="width: 10%;">Remise</th>
+                <th style="width: 20%;">Montant Net payé</th>
+                <th style="width: 10%;">Status</th>
                 <th style="width: 20%; text-align: center;">Actions</th>
 
               </tr>
@@ -497,7 +499,18 @@
               <tr *ngFor="let item of data; let i = index" >
                 <td>{{item.created_at | date: 'dd/MM/yyyy à hh:mm:ss' }}</td>
                 <td>{{item.r_num}}</td>
-                <td><b>{{item.r_mnt| mask: 'separator':' '}} fcfa</b></td>
+                <td>{{item.r_mnt_total_achat| mask: 'separator':' '}} fcfa</td>
+                <td style="color: coral; font-weight: bold;" *ngIf="item.r_remise <= 100" >{{ (item.r_remise == null)? 0 : item.r_remise}}%</td>
+                <td style="color: coral; font-weight: bold;" *ngIf="item.r_remise > 100">{{item.r_remise| mask: 'separator':' '}} fcfa</td>
+                <div [ngSwitch]="item.r_status">
+                  <div *ngSwitchCase="0">
+                    <td><b>{{item.r_mnt_partiel_payer| mask: 'separator':' '}} fcfa</b></td>
+                  </div>
+                  <div *ngSwitchDefault>
+                    <td><b>{{item.r_mnt| mask: 'separator':' '}} fcfa</b></td>
+                  </div>
+                </div>
+                
                 <td *ngIf = " item.r_status == 0 " ><span class="badge badge-pill badge-danger" style="width: 100%;" >Non soldée</span></td>
                   <td *ngIf = " item.r_status == 1 " ><span class="badge badge-pill badge-success" style="width: 100%;" >Soldée</span></td>
 
@@ -511,6 +524,8 @@
             </tbody>
             <tfoot>
               <tr>
+                <th></th>
+                <th></th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -641,7 +656,7 @@
               </div>
 
 
-              <ng-template [ngIf]="modifCmd" >
+              
                 <div class="row card-block" style="text-align: center;">
                   <div class="col-md-12 col-lg-6">
                       <h4 class="sub-title text-center">Montant payé</h4>
@@ -652,6 +667,7 @@
                        <h4 class="text-danger text-center">{{ ( ligneVentes[0].mnt_paye == null )? 0 + this.devise : detailsFacture.r_mnt - +ligneVentes[0].mnt_paye + this.devise}}</h4>
                   </div>
                 </div>
+                <ng-template [ngIf]="modifCmd == false " >
                 <!-- Formulaire de saisir pour solder la facture -->
                 <div class="form-group row" *ngIf=" ligneVentes[0].r_status === 0 " >
                   <div class="col-md-8">

@@ -23,47 +23,60 @@
   </div>
 </div>
 
-  <div class="row mt-2" *ngIf="chargementEncours == false" >
-    <div class="col-md-12 stretch-card">
-      <div class="card">
-        <div class="card-body">
-          <h6 class="card-title">Liste des catégories</h6>
-          <div class="table-responsive">
-            <table class="table" >
-              <thead>
-                <tr>
-                  <th style="width: 40%;" >Libellé</th>
-                  <th style="width: 45%;" >Description</th>
-                  <th style="width: 15%; text-align: center;" >Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let item of data" >
-                  <td>{{item.r_libelle}}</td>
-                  <td>{{item.r_description}}</td>
-                  <td>
-                      <button (click)="fc_details_categorie(item,1);openVerticalCenteredModal(verticalCenteredModal);" class="btn btn-primary btn-icon"><i class="feather icon-edit"></i></button>&nbsp;
-                      <button (click)="fc_details_categorie(item,2);openVerticalCenteredModal(verticalCenteredModal);"
-                             class="btn btn-info btn-icon"
-                             ><i class="feather icon-info"></i></button>&nbsp;
-                      <button class="btn btn-danger btn-icon"><i class="feather icon-trash-2"></i></button>
+<!-- Liste des catégories de produits -->
+<div class="mt-2" [ngSwitch]="dataRetour" *ngIf="chargementEncours == false " >
+  <div *ngSwitchCase = 0 >
+    <div class="card" >
+      <div class="card-body text-center" >
+        <h1 style="color: red;">{{ data }}</h1>
+      </div>
+    </div>
+  </div>
 
-                  </td>
-                </tr>
-              </tbody>
-              <tfoot>
-                <tr>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                </tr>
-              </tfoot>
-            </table>
+  <div *ngSwitchCase = 1 >
+    <div class="row mt-2" *ngIf="chargementEncours == false" >
+      <div class="col-md-12 stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <h6 class="card-title">Liste des catégories de produits</h6>
+            <div class="table-responsive">
+              <table class="table" >
+                <thead>
+                  <tr>
+                    <th style="width: 40%;" >Libellé</th>
+                    <th style="width: 45%;" >Description</th>
+                    <th style="width: 15%; text-align: center;" >Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of data" >
+                    <td>{{item.r_libelle}}</td>
+                    <td>{{item.r_description}}</td>
+                    <td>
+                        <button (click)="fc_details_categorie(item,1);openVerticalCenteredModal(verticalCenteredModal);" class="btn btn-primary btn-icon"><i class="feather icon-edit"></i></button>&nbsp;
+                        <button (click)="fc_details_categorie(item,2);openVerticalCenteredModal(verticalCenteredModal);"
+                              class="btn btn-info btn-icon"
+                              ><i class="feather icon-info"></i></button>&nbsp;
+                        <button class="btn btn-danger btn-icon"><i class="feather icon-trash-2"></i></button>
+
+                    </td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>
 
   <ng-template #verticalCenteredModal let-modal>
     <div class="modal-header">

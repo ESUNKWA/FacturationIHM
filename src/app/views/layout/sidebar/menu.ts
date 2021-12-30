@@ -70,7 +70,7 @@ export const MENU: MenuItem[] = [
         link: '/privilege/achat',
       },
       {
-        label: 'Statistiques',
+        label: 'Etats des reglements partiels',
         link: '/apps/email/read'
       }
     ]
